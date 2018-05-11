@@ -1,0 +1,17 @@
+---
+title: "Truthiness Pilot Study"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Truthiness is defined as "Truth that comes from the gut, not books," as coined by Stephen Colbert. When individuals evaluate claims, they use both rational approaches to evaluating evidence and gut feelings about the overall trustworthiness of both the person making the claim and the claim itself. 
+
+The "truthiness effect" is present in situations in which individuals must rapidly evaluate the truth of a claim. In these situations, nonprobative or auxiliary information about the situation or stimulus causes individuals to more readily evaluate the claim as truthful. This effect is thought to stem primarily from semantic priming; that is, when provided with additional information which is not relevant to the claim but is related to the topic, the brain retrieves related information from memory and evaluates the total set of information (relevant and irrelevant) in order to establish the trustworthiness of the claim and claimant. In addition, the ease of retrieval of information is thought to relate to the percieved veracity of the claim - thus, priming the retrieval of related information may provide not only a greater quantity of information, but also decrease the effort required to locate information in long term memory.
+
+This "bootstrapping" effect has been shown to exist in the following situations:
+
+- The Alive/Dead status of familiar and unfamiliar celebrities. When pictures of the celebrities were provided along with a statement such as "Name is alive/dead", participants were more likely to believe claims about unfamiliar celebrities. This effect was not tied to the credibility of the photos or the source of the additional information.
+- 
