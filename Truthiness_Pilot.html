@@ -144,12 +144,84 @@ $(document).ready(function () {
 </ul>
 <div id="pilot-study-options" class="section level2">
 <h2>Pilot Study Options</h2>
+<p>Initial pre-pilot studies should involve a think-aloud protocol where participants talk through their reasoning - this will identify any issues with the task/stimuli combinations.</p>
+<div id="possible-questions" class="section level3">
+<h3>Possible Questions</h3>
+<ul>
+<li>The Sun consists of mostly which two elements? (Medium difficulty)
+<ul>
+<li>Stacked bar chart or regular bar chart or pie chart :-/</li>
+<li>Photo of the sun</li>
+<li>Chart of distance from the sun (truthiness)</li>
+</ul></li>
+<li>What is the same in Celsius and Fahrenheit? (Hard difficulty)
+<ul>
+<li>Line chart of temperature scales</li>
+<li>Thermometer graphic</li>
+<li>Map of the world - which countries use which system</li>
+</ul></li>
+<li>Scientists accidentally killed the once known world’s oldest living creature, a mollusc, known to be aged as 507 years old. (Medium difficulty)
+<ul>
+<li>Worlds oldest creatures chart</li>
+<li>Picture of a mollusk</li>
+</ul></li>
+<li></li>
+</ul>
+</div>
+<div id="questions-from-the-original-study-that-can-be-data-graphic-based" class="section level3">
+<h3>Questions from the original study that can be data graphic based</h3>
+<ul>
+<li>The first heart-lung machine was commissioned in the Netherlands (F)
+<ul>
+<li>Timeline of medical developments?</li>
+<li>Picture of the machine</li>
+<li>Timeline of medical developments with country information added?</li>
+</ul></li>
+<li>The cobra is the largest snake in the world (F)
+<ul>
+<li>Picture of a cobra</li>
+<li>Map of cobra population density</li>
+<li>Chart of snake weight/length values?</li>
+<li>Issue: Cobra is not well defined…</li>
+</ul></li>
+<li>The hummingbird is the bird that lays the largest egg in relation to its own size (F)
+<ul>
+<li>Picture of a hummingbird</li>
+<li>scatterplot of egg size relative to bird size with labeled points</li>
+<li>scatterplot of bird size relative to top speed</li>
+</ul></li>
+<li>Macadamia nuts are in the same evolutionary family as peaches (F)
+<ul>
+<li>Picture of a bowl of macademia nuts</li>
+<li>evolutionary tree with common ancestor? <a href="http://www.onezoom.org/life/@Gunneridae=853757#x1174,y344,w0.5941" class="uri">http://www.onezoom.org/life/@Gunneridae=853757#x1174,y344,w0.5941</a></li>
+<li>Sales data? Growing regions?</li>
+</ul></li>
+<li>The color green has the longest wavelength in the visual spectrum (F)
+<ul>
+<li>Color mixing diagram</li>
+<li>Photo of Kermit</li>
+<li>Visual spectrum w/ rainbow</li>
+</ul></li>
+<li>Honeybees kill more people worldwide each year than all poisonous snakes combined (T)
+<ul>
+<li>Picture of honeybee</li>
+<li>Chart of deaths by animals</li>
+<li>Bee population decline line graph?</li>
+</ul></li>
+<li>The largest European glacier is Vatnajokull on Iceland (T)
+<ul>
+<li>Size of european glaciers</li>
+<li>picture of a glacier</li>
+<li>Size of european volcanos or mountains?</li>
+</ul></li>
+</ul>
+</div>
 <div id="plot-based-truthiness" class="section level3">
 <h3>Plot-based Truthiness</h3>
 <p>Goal: Establish truthiness effect (or lack thereof) for statistical graphics</p>
 <div id="experiment-1-standard-truthiness-protocol" class="section level4">
 <h4>Experiment 1: Standard truthiness protocol</h4>
-<p>Generate a set of ~30 trivia questions which relate to numerical/plottable information</p>
+<p>Generate a set of ~20 trivia questions which relate to numerical/plottable information</p>
 <p>Participants are shown each claim in one of the following scenarios:</p>
 <ol style="list-style-type: decimal">
 <li>Text only</li>
@@ -160,6 +232,7 @@ $(document).ready(function () {
 <li>Graph related to the subject of the claim (probative) + text</li>
 </ol>
 <p>Scenarios 1-3 are the classic truthiness protocol, where the claim is more likely to be believed in scenario 2, but scenarios 1 and 3 behave fairly similarly (e.g. participants ignore the unrelated picture).</p>
+<p>This study can be easily conducted on Amazon Mechanical Turk. Participants would be asked to evaluate ~20 trivia questions; ~150 participants would produce 3000 evaluations, corresponding to about 25 evaluations of each scenario x trivia question.</p>
 <table>
 <tr>
 <td colspan="3" style="text-align:center;vertical-align:middle;font-weight:bold;font-size:large;">
@@ -218,6 +291,7 @@ Scenario 6
 <p>Experiment Steps (participant perspective): 1. Pre-test assessment of their knowledge of each topic 2. Presented with text, images, or graphs plus a factual statement 3. Post-test assessment of their knowledge of each topic</p>
 <p>In this experiment, we measure the change in the assessment of the veracity of a claim before and after presentation of additional corroborating information. Repetition is known to increase the perception of truth, so we would expect a priori that the “truthiness” of the post-test assessment is higher than that of the pre-test assessment. This effect may be mitigated by embedding the target statement in a set of several other statements, so that the repetition effect can be separated from the truthiness effect.</p>
 <p>We will not be able to fully separate the effect of textual information, images, and data graphics, as data graphics and images will require some basic textual information as well; however, we can have a short text passage combined with an image or graph, or a long text passage.</p>
+<p>Each participant would evaluate one topic/question set combination; we would need to use ~200 participants at a minimum.</p>
 <p>In addition, by embedding one target question in a bank of several questions, each stimulus tested can provide data about relevant and not-relevant information. For example,</p>
 <p>Pre-test statements:</p>
 <ol style="list-style-type: decimal">
@@ -266,10 +340,10 @@ Decline of sea star populations in Southeast Alaska <img src="data:image/jpeg;ba
 <p>(Even statements are true)</p>
 <p>The same set of pre/post test statements can be used with accompanying information about turtles, starfish, or the visible light spectrum, with the unmentioned topics serving as controls for the mentioned topic; the difference in the percentage of True answers for the control topics serves as an estimate of the repetition bias.</p>
 </div>
-</div>
-</div>
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="experiment-3-more-realistic-trial-scenario" class="section level4">
+<h4>Experiment 3: More Realistic Trial Scenario</h4>
+<p>This experiment would be a lot more involved and require significant effort to creating stimuli - audio, combined with relevant and not-relevant pictures and charts. On the bright side, it should be possible to create these charts and graphs using other CSAFE projects.</p>
+<p>I think it is best to start with Experiment 1 and then proceed to Experiment 2 before designing and executing Experiment 3 and beyond. # References</p>
 <div id="refs" class="references">
 <div id="ref-Fenn2013">
 <p>Fenn, Elise, Eryn J Newman, Kathy Pezdek, and Maryanne Garry. 2013. “The Effect of Nonprobative Photographs on Truthiness Persists over Time.” <em>Acta Psychologica</em> 144 (1). Elsevier: 207–11.</p>
@@ -282,6 +356,8 @@ Decline of sea star populations in Southeast Alaska <img src="data:image/jpeg;ba
 </div>
 <div id="ref-Newman2012">
 <p>Newman, Eryn J, Maryanne Garry, Daniel M Bernstein, Justin Kantner, and D Stephen Lindsay. 2012. “Nonprobative Photographs (or Words) Inflate Truthiness.” <em>Psychonomic Bulletin &amp; Review</em> 19 (5). Springer: 969–74.</p>
+</div>
+</div>
 </div>
 </div>
 </div>

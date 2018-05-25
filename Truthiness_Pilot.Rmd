@@ -39,6 +39,57 @@ Experimental Design Considerations:
 
 Initial pre-pilot studies should involve a think-aloud protocol where participants talk through their reasoning - this will identify any issues with the task/stimuli combinations.
 
+
+### Possible Questions
+
+- The Sun consists of mostly which two elements? (Medium difficulty)
+    - Stacked bar chart or regular bar chart or pie chart :-/
+    - Photo of the sun
+    - Chart of distance from the sun (truthiness)
+- What is the same in Celsius and Fahrenheit? (Hard difficulty)
+    - Line chart of temperature scales
+    - Thermometer graphic
+    - Map of the world - which countries use which system
+- Scientists accidentally killed the once known world's oldest living creature, a mollusc, known to be aged as 507 years old. (Medium difficulty)
+    - Worlds oldest creatures chart
+    - Picture of a mollusk
+- 
+
+
+### Questions from the original study that can be data graphic based
+- The first heart-lung machine was commissioned in the Netherlands (F)
+    - Timeline of medical developments?
+    - Picture of the machine
+    - Timeline of medical developments with country information added?
+- The cobra is the largest snake in the world (F)
+    - Picture of a cobra
+    - Map of cobra population density
+    - Chart of snake weight/length values?
+    - Issue: Cobra is not well defined...
+- The hummingbird is the bird that lays the largest egg in relation to its own size (F)
+    - Picture of a hummingbird
+    - scatterplot of egg size relative to bird size with labeled points
+    - scatterplot of bird size relative to top speed
+- Macadamia nuts are in the same evolutionary family as peaches (F)
+    - Picture of a bowl of macademia nuts
+    - evolutionary tree with common ancestor? http://www.onezoom.org/life/@Gunneridae=853757#x1174,y344,w0.5941
+    - Sales data? Growing regions?
+- The color green has the longest wavelength in the visual spectrum (F)
+    - Color mixing diagram
+    - Photo of Kermit
+    - Visual spectrum w/ rainbow
+- Honeybees kill more people worldwide each year than all poisonous snakes combined (T)
+    - Picture of honeybee
+    - Chart of deaths by animals
+    - Bee population decline line graph?
+- The largest European glacier is Vatnajokull on Iceland (T)
+    - Size of european glaciers
+    - picture of a glacier
+    - Size of european volcanos or mountains?
+
+
+
+
 ### Plot-based Truthiness
 
 Goal: Establish truthiness effect (or lack thereof) for statistical graphics
