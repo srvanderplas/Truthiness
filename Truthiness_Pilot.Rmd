@@ -87,7 +87,12 @@ Initial pre-pilot studies should involve a think-aloud protocol where participan
     - picture of a glacier
     - Size of european volcanos or mountains?
 
-
+### Questions from other studies
+- Combining probaiblity estimates (2014): from 2013 World Fact book
+    - What percentage of the US land is covered by forest (33%)
+    - What percentage of the US population has O+ blood? (38%)
+    - What percentage of the world's airports are in the US? (34%)
+    - What percentage of the world's energy supply is consumed by Americans? (26%)
 
 
 ### Plot-based Truthiness
