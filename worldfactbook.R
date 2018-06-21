@@ -206,3 +206,6 @@ ggplot(data = .) +
   scale_x_log10("Land Border Length (km)", breaks = c(10, 100, 1000, 5000, 20000, 100000)) + 
   scale_y_log10("Coast Length (km)", breaks = c(10, 100, 1000, 5000, 20000, 100000)) + 
   theme(axis.text.y = element_text(angle = 90, hjust = .5, vjust = .5))
+
+
+

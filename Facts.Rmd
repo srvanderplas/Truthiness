@@ -9,15 +9,39 @@ output: html_document
 knitr::opts_chunk$set(echo = F)
 source("worldfactbook.R")
 library(tidyverse)
+
+library(ggthemes)
+library(ggmap)
+map.world <- map_data("world")
+
 ```
 
-1. Egypt has approximately equal coastal and land borders.
+### 1. Egypt has approximately equal coastal and land borders.
 
 Non-graphical non-probative image:    
 ![pyramids](https://upload.wikimedia.org/wikipedia/commons/a/af/All_Gizah_Pyramids.jpg)
 
 Semi-graphical probative image:    
-![map of egypt](https://upload.wikimedia.org/wikipedia/commons/a/a1/EGY_orthographic.svg)
+```{r}
+egyptlims <- filter(map.world, region == "Egypt") %>%
+  summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
+
+submapegypt <- filter(map.world, 
+                 long > egyptlims$long_min*.90, long < egyptlims$long_max*1.1, 
+                 lat > egyptlims$lat_min*.9, lat < egyptlims$lat_max*1.1)
+mapsubsetegypt <- filter(map.world, region %in% submapegypt$region) %>%
+  mutate(fill = region == "Egypt")
+
+ggplot(data = arrange(mapsubsetegypt, group, order)) + 
+  geom_polygon(aes(x = long, y = lat, group = group, fill = fill), color = "black") + 
+  scale_fill_manual(guide = F, values = c("FALSE" = "grey40", "TRUE" = "darkgreen")) + 
+  coord_map(projection = "ortho", orientation = c(29, 26, 0),
+            xlim = c(egyptlims$long_min*.90, egyptlims$long_max*1.1),
+            ylim = c(egyptlims$lat_min*.90, egyptlims$lat_max*1.1)) + 
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
+
+rm(egyptlims, submapegypt, mapsubsetegypt)
+```
 
 Graphical probative image:    
 ```{r}
@@ -35,33 +59,31 @@ filter(borders, name == "Egypt") %>%
 
 ```
 
-2. Brazil is the 5th largest country (by land area) in the world
+### 2. Brazil is the 5th largest country (by land area) in the world
 
 Non-graphical, non-probative image:    
-![Flag](http://1.bp.blogspot.com/_uNxepaFWz70/SwSZeMvWqKI/AAAAAAAAAHA/Z0CKD4r5qlM/s1600/bandbras.gif)
+![Photo](https://www.planetware.com/photos-large/BRA/brazil-rio-de-janeiro-cristo-redentor.jpg)
 
 Semi-graphical, probative image:    
 ```{r}
-library(ggthemes)
-library(ggmap)
-map.world <- map_data("world")
-
 brazillims <- filter(map.world, region == "Brazil") %>%
   summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
 
-submap <- filter(map.world, 
+submapbrazil <- filter(map.world, 
                  long < brazillims$long_max*.95, long > brazillims$long_min*1.05, 
                  lat > brazillims$lat_min*1.08, lat < brazillims$lat_max*2)
-mapsubset <- filter(map.world, region %in% submap$region) %>%
+mapsubsetbrazil <- filter(map.world, region %in% submapbrazil$region) %>%
   mutate(fill = region == "Brazil")
 
-ggplot(data = arrange(mapsubset, group, order)) + 
+ggplot(data = arrange(mapsubsetbrazil, group, order)) + 
   geom_polygon(aes(x = long, y = lat, group = group, fill = fill), color = "black") + 
   scale_fill_manual(guide = F, values = c("FALSE" = "grey40", "TRUE" = "darkgreen")) + 
   coord_map(projection = "ortho", orientation = c(-25, -55, 0),
             xlim = c(brazillims$long_min*1.05, brazillims$long_max*.95),
             ylim = c(brazillims$lat_min*1.08, brazillims$lat_max*2)) + 
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
+
+rm(brazillims, submapbrazil, mapsubsetbrazil)
 ```
 
 Graphical probative image: 
@@ -75,9 +97,89 @@ areas %>%
   mutate(name = factor(name, levels = unique(name), ordered = T), 
          type = factor(type, levels = c("water", "land"))) %>%
   ggplot() + 
-  geom_bar(aes(x = name, y = value, fill = type), stat = "identity") + 
-  scale_fill_manual(values = c( "lightblue", "darkgreen")) + 
+  geom_bar(aes(x = name, y = value, fill = type), stat = "identity", color = "black") + 
+  scale_fill_manual("", values = c( "#2166AC", "darkgreen")) + 
+  theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.title = element_blank(), legend.background = element_rect(fill = "transparent")) + 
+  coord_flip() + 
   xlab("") + 
   ylab("Area (sq. km)") + 
   ggtitle("Geographic Area, top 10 countries")
 ```
+
+
+### 3. Qatar has the largest discrepancy between the proportion of working-age men and women compared to neighboring countries.
+
+Non-graphical, non-probative image:    
+![Doha, Qatar Skyline](https://upload.wikimedia.org/wikipedia/commons/8/8c/Corniche_Doha_Qatar.jpg)
+
+```{r}
+gender_diff <- population %>%
+  mutate(Female = as.numeric(Female), Male = as.numeric(Male), ratio = Female/Male) %>%
+  arrange(ratio) %>%
+  filter(name %in% c("Qatar", "Oman", "Yemen", "Saudi Arabia", "United Arab Emirates")) 
+
+
+```
+
+Semi-graphical probative image:    
+```{r}
+regionlist <- c("Qatar", "Oman", "Yemen", "Saudi Arabia", "United Arab Emirates")
+qatarlims <- filter(map.world, region %in% regionlist) %>%
+  summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
+
+submapqatar <- filter(map.world, 
+                 long > qatarlims$long_min*.95, long < qatarlims$long_max*1.05, 
+                 lat > qatarlims$lat_min*.95, lat < qatarlims$lat_max*1.05)
+
+gender_diff_sub <- filter(gender_diff, age %in% c("15-24", "25-54")) %>%
+  select(name, Male, Female) %>%
+  group_by(name) %>%
+  summarize(ratio = sum(Male)/sum(Male + Female))
+
+mapsubsetqatar <- filter(map.world, region %in% submapqatar$region) %>%
+  left_join(gender_diff_sub, by = c('region' = 'name')) %>%
+  mutate(fill = ifelse(region %in% regionlist, ratio, NA))
+
+mapavg <- tribble(
+  ~region, ~lat, ~long, 
+  # "Bahrain", 26.216, 50.583, 
+  "Qatar", 25.3, 51.516, 
+  "Saudi Arabia", 24.65, 46.767, 
+  "Yemen", 15.348, 46.206,
+  "Oman", 20.6, 56.05, 
+  "United Arab Emirates", 24.467, 54.367, 
+) %>% left_join(gender_diff_sub, by = c("region" = "name")) %>%
+  filter(!is.na(ratio)) %>%
+  mutate(region = str_replace(region, "United Arab Emirates", "UAE"))
+  
+ggplot(data = arrange(mapsubsetqatar, group, order)) + 
+  geom_polygon(aes(x = long, y = lat, group = group, fill = fill), color = "black") + 
+  scale_fill_gradient2("Male Proportion\nof population,\n15-54", low = "#B2182B", mid = "white", midpoint = .5, high = "#2166AC", limits = c(0, 1)) + 
+  coord_map(projection = "ortho", orientation = c(22, 47, 0),
+            xlim = c(qatarlims$long_min, qatarlims$long_max),
+            ylim = c(qatarlims$lat_min, qatarlims$lat_max)) + 
+  geom_label_repel(aes(x = long, y = lat, label = sprintf("%s:\n%.2f", region, ratio)), data = mapavg, seed = 5, point.padding = .25, direction = "both") + 
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
+
+rm(qatarlims, submapqatar, mapsubsetqatar, gender_diff_sub, regionlist, mapavg)
+
+```
+
+Graphical, probative image:    
+```{r}
+gender_diff %>%
+  gather(key = Gender, value = value, -abbr, -name, -age, -Pct, -ratio) %>%
+  group_by(name) %>%
+  mutate(value = value/sum(value)) %>%
+  ggplot() + 
+  geom_bar(aes(x = age, y = value, fill = Gender), stat = "identity", position = "dodge") + 
+  scale_fill_manual("Gender", values = c("Female" = "#B2182B", "Male" = "#2166AC")) + 
+  facet_wrap(~name) + 
+  ylab("% Population") + 
+  xlab("Age Group") + 
+  ggtitle("Population Demographics - Lower Arabian Peninsula") + 
+  theme(legend.position = c(1, 1), legend.justification = c(1, 1), legend.background = element_rect(fill = "transparent"))
+
+
+```
+
