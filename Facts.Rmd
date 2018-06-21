@@ -1,0 +1,83 @@
+---
+title: "World Facts"
+author: "Susan VanderPlas"
+date: "6/11/2018"
+output: html_document
+---
+
+```{r, include = F}
+knitr::opts_chunk$set(echo = F)
+source("worldfactbook.R")
+library(tidyverse)
+```
+
+1. Egypt has approximately equal coastal and land borders.
+
+Non-graphical non-probative image:    
+![pyramids](https://upload.wikimedia.org/wikipedia/commons/a/af/All_Gizah_Pyramids.jpg)
+
+Semi-graphical probative image:    
+![map of egypt](https://upload.wikimedia.org/wikipedia/commons/a/a1/EGY_orthographic.svg)
+
+Graphical probative image:    
+```{r}
+filter(borders, name == "Egypt") %>%
+  unnest() %>%
+  bind_rows(data_frame(name = "Egypt", country = "Coast", length = unique(.$coast))) %>%
+  arrange(length) %>%
+  select(country, length) %>%
+  mutate(country = factor(country, levels = country, ordered = T)) %>%
+  ggplot() + 
+  geom_bar(aes(x = country, y = length, fill = country), stat = "identity") + 
+  xlab("") + 
+  ylab("Length (km)") + scale_fill_brewer("Border With:", type = "qual", palette = "Dark2") + 
+  ggtitle("Egypt's Border Regions")
+
+```
+
+2. Brazil is the 5th largest country (by land area) in the world
+
+Non-graphical, non-probative image:    
+![Flag](http://1.bp.blogspot.com/_uNxepaFWz70/SwSZeMvWqKI/AAAAAAAAAHA/Z0CKD4r5qlM/s1600/bandbras.gif)
+
+Semi-graphical, probative image:    
+```{r}
+library(ggthemes)
+library(ggmap)
+map.world <- map_data("world")
+
+brazillims <- filter(map.world, region == "Brazil") %>%
+  summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
+
+submap <- filter(map.world, 
+                 long < brazillims$long_max*.95, long > brazillims$long_min*1.05, 
+                 lat > brazillims$lat_min*1.08, lat < brazillims$lat_max*2)
+mapsubset <- filter(map.world, region %in% submap$region) %>%
+  mutate(fill = region == "Brazil")
+
+ggplot(data = arrange(mapsubset, group, order)) + 
+  geom_polygon(aes(x = long, y = lat, group = group, fill = fill), color = "black") + 
+  scale_fill_manual(guide = F, values = c("FALSE" = "grey40", "TRUE" = "darkgreen")) + 
+  coord_map(projection = "ortho", orientation = c(-25, -55, 0),
+            xlim = c(brazillims$long_min*1.05, brazillims$long_max*.95),
+            ylim = c(brazillims$lat_min*1.08, brazillims$lat_max*2)) + 
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
+```
+
+Graphical probative image: 
+```{r}
+areas %>%
+  filter(!abbr %in% c("ay", "xx")) %>%
+  arrange(desc(land)) %>%
+  filter(row_number() < 11) %>%
+  gather(key = type, value = value, land:water) %>%
+  filter(type != "total") %>%
+  mutate(name = factor(name, levels = unique(name), ordered = T), 
+         type = factor(type, levels = c("water", "land"))) %>%
+  ggplot() + 
+  geom_bar(aes(x = name, y = value, fill = type), stat = "identity") + 
+  scale_fill_manual(values = c( "lightblue", "darkgreen")) + 
+  xlab("") + 
+  ylab("Area (sq. km)") + 
+  ggtitle("Geographic Area, top 10 countries")
+```
