@@ -1,5 +1,22 @@
 library(rvest)
+library(measurements)
+library(magrittr)
 library(tidyverse)
+
+na_fill <- function(x) {
+  if (sum(!is.na(x)) == 0) {
+    NA
+  } else if (sum(!is.na(x)) == 1) {
+    x[!is.na(x)]
+  } else {
+    warning("multiple not-NA values.")
+    if (is.numeric(x)) {
+      sum(x, na.rm = T)
+    } else {
+      x[!is.na(x)][1]
+    }
+  }
+}
 
 pg <- read_html("https://www.cia.gov/library/publications/the-world-factbook/fields/2010.html#ar")
 
@@ -33,21 +50,6 @@ population <- population %>%
   spread(key = var, value = value) %>%
   mutate(age = factor(age, levels = c("0.14", "14.24", "25.54", "55.64", "65"), 
                       labels = c("0-14", "15-24", "25-54", "55-64", "65+"), ordered = T))
-
-
-#function definition
-html_text_collapse <- function(x, trim = FALSE, collapse = "\n"){
-  UseMethod("html_text_collapse")
-}
-
-html_text_collapse.xml_nodeset <- function(x, trim = FALSE, collapse = "\n"){
-  vapply(x, html_text_collapse.xml_node, character(1), trim = trim, collapse = collapse)
-}
-
-html_text_collapse.xml_node <- function(x, trim = FALSE, collapse = "\n"){
-  paste(xml2::xml_find_all(x, ".//text()"), collapse = collapse)
-}
-
 
 pg <- read_html("https://www.cia.gov/library/publications/the-world-factbook/fields/2147.html")
 cts <- xml_nodes(pg, "#fieldListing") %>%
@@ -116,21 +118,6 @@ cts <- xml_nodes(pg, "#fieldListing") %>%
   xml_children() %>%
   xml_children()
 
-na_fill <- function(x) {
-  if (sum(!is.na(x)) == 0) {
-    NA
-  } else if (sum(!is.na(x)) == 1) {
-    x[!is.na(x)]
-  } else {
-    warning("multiple not-NA values.")
-    if (is.numeric(x)) {
-      sum(x, na.rm = T)
-    } else {
-      x[!is.na(x)][1]
-    }
-  }
-}
-
 borders <- data_frame(
   abbr = xml_attr(cts, "id")[-1],
   name = xml_find_first(cts, "td")[-1] %>%
@@ -180,7 +167,169 @@ borders <- borders %>%
   full_join(coast) %>%
   nest(-abbr, -name, -land.border, -coast)
 
-rm(cts, pg, na_fill, vars)
+rm(cts, pg, vars)
+
+
+pgs <- paste0("https://www.cia.gov/library/publications/the-world-factbook/fields/", 2237:2240, ".html")
+pg <- purrr::map(pgs, read_html)
+
+cts <- purrr::map(pg, function(x) {
+  xml_nodes(x, "#fieldListing") %>%
+  xml_children() %>%
+  xml_children()
+})
+
+cts2 <- purrr::map(pg, function(x) {
+  xml_nodes(x, ".fieldHeading th:nth-of-type(2)") %>%
+    xml_text() %>%
+    str_replace("ELECTRICITY - FROM (.*?)\\(.*\\)$", "\\1")
+})
+
+pg3 <- read_html("https://www.cia.gov/library/publications/the-world-factbook/fields/2268.html")
+cts3 <- pg3 %>%
+    xml_nodes("#fieldListing") %>%
+      xml_children() %>% 
+      xml_children() %>%
+      (function(x) {
+        data_frame(
+          abbr = xml_attr(x, "id")[-1],
+          name = xml_find_first(x, "td")[-1] %>%
+            xml_text(),
+          facts = xml_find_all(x, "td[@class='fieldData']") %>%
+            xml_text()
+        ) %>%
+          tidyr::extract(facts, keep = T, into = c("pop_no_elec", "total_elec", "urban_elec", "rural_elec"), 
+                  regex = "\\s{0,}(?:population without electricity: ([\\d,]{1,}))?\\s?(?:electrification - total population: ([\\d,\\.]{1,})%)?\\s?(?:electrification - urban areas: ([\\d,\\.]{1,})%)?\\s?(?:electrification - rural areas: ([\\d,\\.]{1,})%)?\\s?(?:\\(\\d{4}\\))?") %>%
+          mutate_at(.vars = vars(pop_no_elec, total_elec, urban_elec, rural_elec), 
+                    .funs = parse_number)
+        
+      }) %>%
+  mutate(
+    pop_no_elec = ifelse(total_elec == 100, 0, pop_no_elec),
+    urban_elec = ifelse(total_elec == 100, 100, urban_elec),
+    rural_elec = ifelse(total_elec == 100, 100, rural_elec)
+  )
+
+
+electricity <- cts %>%
+  purrr::map(
+    .f = function(x) {
+      data_frame(
+        abbr = xml_attr(x, "id")[-1],
+        name = xml_find_first(x, "td")[-1] %>%
+          xml_text(),
+        value = xml_find_all(x, "td[@class='fieldData']") %>%
+          xml_text() %>%
+          str_replace_all(c("(?:\\n){0,}([\\d\\.]{1,})% of total installed capacity ?\\(.*\\)\\s?(note:.*)?$" = "\\1")) %>%
+          parse_number()
+      )
+    }
+  ) 
+
+electricity_all <- map2_df(cts2, electricity, .f = function(x, y) {
+  y$Type = x
+  y
+})  %>%
+  mutate(Type = str_to_title(Type) %>% str_replace_all(" ", "")) %>%
+  spread(Type, value) %>%
+  left_join(cts3)
+
+rm(cts, cts2, cts3, pg, pg3, pgs, electricity)
+
+location <- "https://www.cia.gov/library/publications/the-world-factbook/fields/2144.html" %>%
+  read_html() %>%
+  xml_nodes("#fieldListing") %>%
+  xml_children() %>% 
+  xml_children() %>%
+  map_df(.f = function(x) {
+    data_frame(
+      abbr = xml_attr(x, "id"),
+      name = xml_find_first(x, "td") %>%
+        xml_text(),
+      desc = xml_find_all(x, "td[@class='fieldData']/text()") %>%
+        xml_text() %>%
+        str_replace_all("\\n", "") %>%
+        str_trim() %>%
+        (function(xx) {
+          nc <- nchar(xx) > 0
+          if (sum(nc) > 0) return(xx[nc][1])
+          return("")
+        }),
+      simple = str_replace(desc, "^(.*?)(?:\\(.*\\))?[;,](.*)$", "\\1") %>%
+        str_replace(".* in the (.*)", "\\1") %>%
+        str_replace(".*?((?:South America)|(?:Central America)|(?:North America)|Europe|Antarctica?|(?:Southern Ocean)|(?:Atlantic Ocean)|(?:Pacific Ocean)|(?:Indian Ocean)|(?:Middle East)|Asia|Africa|Oceania|Mediterranean).*", "\\1") %>%
+        str_replace("Antarctic$", "Southern Ocean") %>%
+        str_replace("west and Russia", "Europe") %>%
+        str_replace("Middle America", "Pacific Ocean") %>%
+        str_trim()
+    ) 
+  }) %>%
+  filter(!str_detect(desc, "body of water")) %>%
+  filter(!is.na(abbr))
+
+conv_unit_dir <- function(x) {
+  sgn <- ifelse(str_detect(x, "[SW]"), -1, 1)
+  str_replace(x, " [NSEW]$", "") %>%
+    conv_unit("deg_dec_min", "dec_deg") %>%
+    as.numeric() %>%
+    multiply_by(sgn)
+}
+
+location_center <- "https://www.cia.gov/library/publications/the-world-factbook/fields/2011.html" %>%
+  read_html() %>%
+  xml_nodes("#fieldListing") %>%
+  xml_children() %>% 
+  xml_children() %>%
+  map_df(.f = function(x) {
+    data_frame(
+      abbr = xml_attr(x, "id"),
+      name = xml_find_first(x, "td") %>%
+        xml_text(),
+      loc = xml_find_all(x, "td[@class='fieldData']/text()") %>%
+        xml_text() %>%
+        str_replace_all("\\n", "") %>%
+        str_trim() %>%
+        (function(xx) {
+          nc <- nchar(xx) > 0
+          if (sum(nc) > 0) return(xx[nc][1])
+          return("")
+        }),
+      label_lat = str_replace(loc, "^((?:\\d{1,} ){2}[NSEW]{1}), ((?:\\d{1,} ){2}[NSEW]{1})(.*?)$", "\\1") %>% conv_unit_dir,
+      label_long = str_replace(loc, "^((?:\\d{1,} ){2}[NSEW]{1}), ((?:\\d{1,} ){2}[NSEW]{1})(.*?)$", "\\2") %>% conv_unit_dir
+    ) 
+  }) %>%
+  filter(!is.na(abbr))
+
+urbanization <- "https://www.cia.gov/library/publications/the-world-factbook/fields/2212.html" %>%
+  read_html() %>%
+  xml_nodes("#fieldListing") %>%
+  xml_children() %>% 
+  xml_children() %>%
+  map_df(.f = function(x) {
+    data_frame(
+      abbr = xml_attr(x, "id"),
+      name = xml_find_first(x, "td") %>%
+        xml_text(),
+      urbanPct = xml_find_all(x, "td[@class='fieldData']/text()") %>%
+        xml_text() %>%
+        str_replace_all("\\n", "") %>%
+        str_trim() %>%
+        (function(xx) {
+          nc <- nchar(xx) > 0
+          if (sum(nc) > 0) return(xx[nc][1])
+          return("")
+        }) %>%
+        str_replace("% of total population.*$", "") %>%
+        parse_number()
+    ) 
+  }) %>%
+  filter(!is.na(abbr))
+
+location <- left_join(location, select(location_center, -loc)) %>%
+  left_join(urbanization)
+
+rm(location_center)
+
 
 library(ggplot2)
 borders %>%

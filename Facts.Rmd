@@ -13,7 +13,6 @@ library(tidyverse)
 library(ggthemes)
 library(ggmap)
 map.world <- map_data("world")
-
 ```
 
 ### 1. Egypt has approximately equal coastal and land borders.
@@ -183,3 +182,105 @@ gender_diff %>%
 
 ```
 
+
+### 4. (FALSE) Fewer than 85 percent of the residents of Belize have access to electricity.
+
+Non-probative non-graphical image: 
+![House in Belize](https://c1.staticflickr.com/3/2635/4221135356_ff080eb308_m.jpg)
+
+Semi-graphical probative image:    
+```{r}
+elec_cent_america <- filter(location, simple == "Central America") %>%
+  select(-desc, -simple) %>%
+  left_join(select(electricity_all, abbr, name, total_elec, urban_elec, rural_elec) %>%
+              unique())
+
+
+elec_cent_america %>%
+  full_join(map.world, by = c("name" = "region")) %>%
+  ggplot() + 
+  geom_polygon(aes(x = long, y = lat, fill = total_elec, group = group), color = "black") + 
+  scale_fill_gradient("% with\nElectricity", low = "white", high = "darkgreen", limits = c(75, 100)) + 
+  geom_label_repel(aes(x = label_long, y = label_lat, label = name), data = elec_cent_america) +
+  coord_map(projection = "ortho", orientation = c(12, -84, 0), xlim = c(-92.2, -77.2), ylim = c(7.22, 18.5)) + 
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), legend.position = c(0, 0), legend.justification = c(0, 0), legend.background = element_rect(fill = "transparent")) + 
+  ggtitle("Percent Electrification in Central America")
+```
+
+Graphical probative image:    
+```{r}
+elec_cent_america %>%
+  # arrange(desc(total_elec)) %>%
+  mutate(name = factor(name, levels = name, ordered = T),
+         urban_elec = urban_elec * urbanPct/100,
+         rural_elec = rural_elec * (1 - urbanPct/100)) %>%
+  gather(key = "pop", value = "pct", urban_elec, rural_elec) %>%
+  mutate(pop = str_replace_all(pop, c("total_elec" = "Total", "urban_elec" = "Urban", "rural_elec" = "Rural")) %>%
+           factor(levels = c("Total", "Urban", "Rural"))) %>%
+ggplot() + 
+  geom_bar(aes(x = name, y = pct, fill = pop), stat = "identity", position = "stack") + 
+  ggtitle("Electrification in Central America") + 
+  scale_fill_discrete("Population Type") + 
+  ylab("Percent of the population with electricity") + 
+  xlab("") + 
+  theme(axis.title.x = element_blank())
+
+```
+
+
+### 5. (FALSE) Switzerland is one of three countries who get more than 30% of their power from nuclear plants
+
+Non-probative non-graphical image:    
+![Nuclear Plant](https://upload.wikimedia.org/wikipedia/commons/4/4e/Nuclear_Power_Plant_Cattenom.jpg)
+
+Semi-graphical probative image:    
+```{r}
+europe_nuke <- filter(location, simple == "Europe" | name == "Russia") %>%
+  select(name) %>%
+  left_join(select(areas, name, total)) %>%
+  left_join(select(electricity_all, name, NuclearFuels)) %>%
+  mutate(name = str_replace(name, "United Kingdom", "UK") %>%
+           str_replace("Czechia", "Czech Republic")) %>%
+  filter(name != "Iceland") %>%
+  arrange(desc(NuclearFuels))
+
+regions <- filter(map.world, long > -15, long < 25, lat < 70, lat > 37)
+
+europe_nuke_map <- filter(map.world, region %in% regions$region) %>%
+  filter(region != "Iceland") %>%
+  left_join(europe_nuke, by = c("region" = "name"))
+
+europe_nuke_labels <- filter(location, name %in% c(head(europe_nuke, 10)$name, "Spain", "Germany", "Italy", "Czechia", "Austria", "Poland")) %>%
+  filter(!name %in% c("Slovenia", "Belgium"))
+ggplot(data = europe_nuke_map) + 
+  geom_polygon(aes(x = long, y = lat, fill = NuclearFuels, group = group), color = "black") +
+  coord_map(projection = "ortho", orientation = c(6, 50, 0), xlim = c(-14, 25), ylim = c(39, 70)) + 
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), legend.position = c(0, 1), legend.justification = c(0, 1), legend.background = element_rect(fill = "transparent")) + 
+  scale_fill_gradient("% Electricity from Nuclear Plants", low = "white", high = "darkgreen") + 
+  geom_text(aes(x = label_long, y = label_lat, label = name), data = europe_nuke_labels, hjust = .5, vjust = .5, size = 2.75)
+```
+
+
+Graphical probative image:    
+```{r, fig.width = 10, fig.height = 4}
+filter(location, name %in% c(europe_nuke$name, "United Kingdom", "Czechia")) %>%
+  select(name) %>%
+  inner_join(select(electricity_all, name, FossilFuels, HydroelectricPlants, NuclearFuels, OtherRenewableSources), by = "name") %>%
+  arrange(desc(NuclearFuels)) %>%
+  filter(row_number() < 15) %>%
+  arrange(name) %>%
+  mutate(name = str_replace(name, "Czech Republic", "Czechia") %>% str_replace("United Kingdom", "UK"),
+         name = factor(name, levels = name)) %>% 
+  filter(name != "European Union") %>%
+  rename(`Fossil Fuel` = FossilFuels, Hydroelectric = HydroelectricPlants, Nuclear = NuclearFuels, Renewable = OtherRenewableSources) %>%
+  gather(key = "Type", value = "Pct", `Fossil Fuel`, Hydroelectric, Nuclear, Renewable) %>%
+  mutate(Type = factor(Type, levels = rev(c("Nuclear", "Fossil Fuel", "Hydroelectric", "Renewable")))) %>%
+ggplot() + 
+  geom_bar(aes(x = name, y = Pct, fill = Type), stat = "identity", color = "black", position = "dodge") + 
+  scale_fill_brewer(palette = "Paired") + 
+  xlab("") + 
+  ylab("% Electricity Generation") + 
+  ggtitle("Power Generation in Europe") + 
+  theme(legend.position = c(0, 1), legend.justification = c(0,1), legend.direction = "horizontal", legend.background = element_rect(fill = "transparent"))
+
+```
