@@ -8,6 +8,7 @@ output: html_document
 ```{r, include = F}
 knitr::opts_chunk$set(echo = F)
 source("worldfactbook.R")
+source("epidemic.R")
 library(tidyverse)
 
 library(ggthemes)
@@ -282,5 +283,19 @@ ggplot() +
   ylab("% Electricity Generation") + 
   ggtitle("Power Generation in Europe") + 
   theme(legend.position = c(0, 1), legend.justification = c(0,1), legend.direction = "horizontal", legend.background = element_rect(fill = "transparent"))
+
+```
+
+
+### 6. Influenza pandemics occur roughly every 50 years
+
+```{r}
+tmp <- filter(epidemics, str_detect(disease, "influenza")) %>%
+  mutate(location = str_to_title(location)) %>%
+  select(-article, -disease) %>%
+  unique()
+
+ggplot(data = tmp) + 
+  geom_bar(aes(x = ))
 
 ```
