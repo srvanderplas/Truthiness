@@ -1,0 +1,119 @@
+---
+title: "Truthiness Variables"
+author: "Susan VanderPlas"
+date: "June 26, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include = F}
+knitr::opts_chunk$set(echo = F)
+source("worldfactbook.R")
+source("epidemic.R")
+library(tidyverse)
+
+library(ggthemes)
+library(ggmap)
+library(ggrepel)
+map.world <- map_data("world")
+```
+
+The truthiness effect depends on familiarity - the nonprobative image provided primes the brain for retrieval of facts related to the image, which then causes the individual to believe the claim because related information was easier to retrieve from memory. In exploring this phenomenon as it relates to graphics, there are (at least) four related variables which are important when considering visual displays: 
+
+1. Familarity    
+Is the provided image related to the claim, or is it unrelated?
+
+2. Probative Value    
+Is the provided image probative; that is, does it contain the information needed to evaluate the claim?
+
+3. Difficulty
+    - If the image is probative, what level of mental effort is required to extract the information necessary to evaluate the claim?
+    - If the image is not probative, but related, how much stored information must be extracted from memory in order to evaluate the claim?
+
+4. Abstraction    
+The amount of information transformation necessary in order to relate the graphic to the real world. Photographs are typically low on the abstraction scale, while scatterplots and bar charts are much more abstract. Maps are an example of an intermediate abstraction image - the spatial dimensions are explicitly mapped to spatial dimensions in the real world, and any additional information must be translated visually from aesthetics such as color to numerical quantities. Abstraction is distinct from difficulty, as the same type of image, such as a map, may require different levels of mental effort in order to evaluate different claims.
+
+### Familiarity
+
+This is what is manipulated in the classic truthiness paradigm: is the provided picture related or unrelated, and how does the percieved validity of the claim change based on the relatedness of the image. 
+
+In general, familiarity will be inversely related with abstraction - more abstract images will not activate stored information as easily as photographs or maps, which are less abstract. 
+
+
+#### Claim: Egypt has approximately equal coastal and land borders.
+
+![pyramids](https://upload.wikimedia.org/wikipedia/commons/a/af/All_Gizah_Pyramids.jpg)
+
+The pyramids are associated with Egypt, but provide no probative information about the shape of Egypt's borders. Thus, this image may increase percieved familiarity without providing any probative information.
+
+```{r}
+egyptlims <- filter(map.world, region == "Egypt") %>%
+  summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
+
+submapegypt <- filter(map.world, 
+                 long > egyptlims$long_min*.90, long < egyptlims$long_max*1.1, 
+                 lat > egyptlims$lat_min*.9, lat < egyptlims$lat_max*1.1)
+mapsubsetegypt <- filter(map.world, region %in% submapegypt$region) %>%
+  mutate(fill = region == "Egypt")
+
+ggplot(data = arrange(mapsubsetegypt, group, order)) + 
+  geom_polygon(aes(x = long, y = lat, group = group, fill = fill), color = "black") + 
+  scale_fill_manual(guide = F, values = c("FALSE" = "grey40", "TRUE" = "darkgreen")) + 
+  coord_map(projection = "ortho", orientation = c(29, 26, 0),
+            xlim = c(egyptlims$long_min*.90, egyptlims$long_max*1.1),
+            ylim = c(egyptlims$lat_min*.90, egyptlims$lat_max*1.1)) + 
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
+
+rm(egyptlims, submapegypt, mapsubsetegypt)
+```
+
+This map provides both familiarity and probative value - it is possible to examine the borders of Egypt using the map, but it also serves to remind the viewer of the shape of Egypt as well as which borders are land and coast. 
+
+```{r}
+filter(borders, name == "Egypt") %>%
+  unnest() %>%
+  bind_rows(data_frame(name = "Egypt", country = "Coast", length = unique(.$coast))) %>%
+  arrange(length) %>%
+  select(country, length) %>%
+  mutate(country = factor(country, levels = country, ordered = T)) %>%
+  ggplot() + 
+  geom_bar(aes(x = country, y = length, fill = country), stat = "identity") + 
+  xlab("") + 
+  ylab("Length (km)") + scale_fill_brewer("Border With:", type = "qual", palette = "Dark2") + 
+  ggtitle("Egypt's Border Regions")
+
+```
+
+This graph is probative but does not provide much additional familiarity. The increased abstraction decreases the additional information provided which may activate any related information in long term memory. 
+
+#### Claim: Brazil is the 5th largest country (by land area) in the world
+
+![Photo](https://www.planetware.com/photos-large/BRA/brazil-rio-de-janeiro-cristo-redentor.jpg)
+
+The Christ the Redeemer (Christo Redentor) statue in Brazil may not be as easily associated with Brazil as the pyramids are with Egypt, so this image may not be as successful in activating familiarity.
+
+This map of Brazil is not probative, as it provides no basis for comparison between the visual size of Brazil and the visual size of other large countries (Russia, US, Canada, China, etc.), but it activates mental information about the size of Brazil relative to South America, and the viewer may be able to use that information to recall the other countries which may be of similar size to Brazil. 
+
+```{r}
+brazillims <- filter(map.world, region == "Brazil") %>%
+  summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
+
+submapbrazil <- filter(map.world, 
+                 long < brazillims$long_max*.95, long > brazillims$long_min*1.05, 
+                 lat > brazillims$lat_min*1.08, lat < brazillims$lat_max*2)
+mapsubsetbrazil <- filter(map.world, region %in% submapbrazil$region) %>%
+  mutate(fill = region == "Brazil")
+
+ggplot(data = arrange(mapsubsetbrazil, group, order)) + 
+  geom_polygon(aes(x = long, y = lat, group = group, fill = fill), color = "black") + 
+  scale_fill_manual(guide = F, values = c("FALSE" = "grey40", "TRUE" = "darkgreen")) + 
+  coord_map(projection = "ortho", orientation = c(-25, -55, 0),
+            xlim = c(brazillims$long_min*1.05, brazillims$long_max*.95),
+            ylim = c(brazillims$lat_min*1.08, brazillims$lat_max*2)) + 
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
+
+rm(brazillims, submapbrazil, mapsubsetbrazil)
+```

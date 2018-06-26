@@ -38,7 +38,7 @@ vars <- expand.grid(var = c("Age", "Pct", "Male", "Female"), age = c("0.14", "14
   mutate(varname = paste(var, age, sep = ""))
 
 population <- population %>%
-  extract(facts, into = vars$varname, 
+  tidyr::extract(facts, into = vars$varname, 
           regex = "(\\d{1,}-\\d{1,}) years.*?: ([\\.\\d]{1,}). \\(male ([\\d,]{1,})/female ([\\d,]{1,})\\)(\\d{1,}-\\d{1,}) years.*?: ([\\.\\d]{1,}). \\(male ([\\d,]{1,})/female ([\\d,]{1,})\\)(\\d{1,}-\\d{1,}) years.*?: ([\\.\\d]{1,}). \\(male ([\\d,]{1,})/female ([\\d,]{1,})\\)(\\d{1,}-\\d{1,}) years.*?: ([\\.\\d]{1,}). \\(male ([\\d,]{1,})/female ([\\d,]{1,})\\)(\\d{1,}) years and over: ([\\.\\d]{1,}). \\(male ([\\d,]{1,})/female ([\\d,]{1,})\\)") %>%
   mutate_at(.vars = vars(matches("Male|Female")), parse_number) %>%
   select(-matches("Age")) %>%
@@ -72,7 +72,7 @@ areas <- data_frame(
     })
 ) %>%
   unnest() %>%
-  extract(facts, into = c("key", "value"), "<strong>(.*?): </strong> (.*)", remove = F) %>%
+  tidyr::extract(facts, into = c("key", "value"), "<strong>(.*?): </strong> (.*)", remove = F) %>%
   mutate(value = str_replace_all(value, c(" ?\\(.*\\)" = "", ";.*$" = "", " sq km ?" = ""))) %>%
   filter(key %in% c("total", "land", "water")) %>%
   mutate(million = grepl("million", value),
@@ -134,7 +134,7 @@ borders <- data_frame(
     })
 ) %>%
   unnest() %>%
-  extract(facts, into = c("key", "n", "value"), "<strong>(.*?)\\(?(\\d{1,})?\\)?: </strong> (.*)", remove = F) %>%
+  tidyr::extract(facts, into = c("key", "n", "value"), "<strong>(.*?)\\(?(\\d{1,})?\\)?: </strong> (.*)", remove = F) %>%
   mutate(key = ifelse(facts == "0 km", "total", key),
          value = ifelse(facts == "0 km", "0 km", value)) %>%
   mutate(name = ifelse(grepl(" - total", key), str_extract(key, "^([A-z ]{1,})"), name),
@@ -152,7 +152,7 @@ borders <- data_frame(
   spread(key = key, value = value) %>%
   mutate(border = str_split(border, ", ")) %>%
   unnest() %>%
-  extract(border, into = c("bordercountry", "borderlength"), "(.*?) ([\\d,\\.]{1,}) km") %>%
+  tidyr::extract(border, into = c("bordercountry", "borderlength"), "(.*?) ([\\d,\\.]{1,}) km") %>%
   mutate(total = str_replace(total, " km", "") %>% parse_number(),
          borderlength = parse_number(borderlength),
          n = ifelse(is.na(n), 1, n)) %>%
@@ -330,31 +330,46 @@ location <- left_join(location, select(location_center, -loc)) %>%
 
 rm(location_center)
 
+remove_empty_str <- function(x) {
+  x[nchar(x) != 0]
+}
 
-library(ggplot2)
-borders %>%
-  unnest() %>%
-  select(name, ncountries, land.border) %>% 
-  unique() %>%
-  filter(land.border > 0) %>%
-ggplot(data = .) + 
-  geom_jitter(aes(x = land.border, y = ncountries)) + 
-  scale_x_log10("Border Length (km)", breaks = c(10, 100, 1000, 5000, 20000)) + 
-  scale_y_continuous("Number of bordering countries and regions")
-
-library(ggrepel)
-borders %>%
-  filter(!grepl("Ocean", name)) %>%
-  filter(name != "European Union") %>%
-  filter(land.border > 0 & coast > 0) %>%
-  mutate(ratio = land.border/(land.border + coast)) %>%
-  mutate(label = land.border < 10 | coast < 10 | coast > 50000 | land.border > 20000) %>%
-ggplot(data = .) + 
-  geom_jitter(aes(x = land.border, y = coast)) + 
-  geom_label_repel(aes(x = land.border, y = coast, label = ifelse(label, name, NA))) + 
-  scale_x_log10("Land Border Length (km)", breaks = c(10, 100, 1000, 5000, 20000, 100000)) + 
-  scale_y_log10("Coast Length (km)", breaks = c(10, 100, 1000, 5000, 20000, 100000)) + 
-  theme(axis.text.y = element_text(angle = 90, hjust = .5, vjust = .5))
+roads <- "https://www.cia.gov/library/publications/the-world-factbook/fields/2085.html" %>%
+  read_html() %>%
+  xml_nodes("#fieldListing") %>%
+  xml_children() %>%
+  xml_children() %>%
+  map_df(.f = function(x) {
+    data_frame(
+      abbr = xml_attr(x, "id"),
+      name = xml_find_first(x, "td") %>%
+        xml_text(),
+      key = xml_find_all(x, "td[@class='fieldData']/strong/text()") %>%
+        xml_text() %>%
+        str_replace_all("\\n", "") %>%
+        str_trim(),
+      value = xml_find_all(x, "td[@class='fieldData']/node()[not(self::strong or self::br)]") %>%
+        xml_text() %>%
+        str_replace_all("\\n", "") %>%
+        str_trim() %>%
+        remove_empty_str()
+    )
+  }) %>%
+  filter(key != "note:") %>%
+  mutate(value = str_replace(value, "([\\d,\\.]{1,}) ?\\(?.*\\)?", "\\1") %>% parse_number,
+         key = str_replace_all(key, c("^paved(.*):$" = "paved/urban",
+                                      "private and forest roads:" = "unpaved/rural",
+                                      "unpaved(.*)" = "unpaved/rural",
+                                      "non-urban:" =  "unpaved/rural",
+                                      "^urban:" = "paved/urban",
+                                      "highways:" = "paved/urban",
+                                      "total:" = "total",
+                                      "urban roads:" = "paved/urban"))) %>%
+  group_by(key, name, abbr) %>%
+  summarize(value = sum(value)) %>%
+  filter(key %in% c("total", "paved/urban", "unpaved/rural")) %>%
+  spread(key = key, value = value)
+  
 
 
 

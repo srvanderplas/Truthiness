@@ -13,6 +13,7 @@ library(tidyverse)
 
 library(ggthemes)
 library(ggmap)
+library(ggrepel)
 map.world <- map_data("world")
 ```
 
@@ -184,7 +185,7 @@ gender_diff %>%
 ```
 
 
-### 4. (FALSE) Fewer than 85 percent of the residents of Belize have access to electricity.
+### 4. (FALSE) Less than 85 percent of the population of Belize has access to electricity.
 
 Non-probative non-graphical image: 
 ![House in Belize](https://c1.staticflickr.com/3/2635/4221135356_ff080eb308_m.jpg)
@@ -255,7 +256,9 @@ europe_nuke_labels <- filter(location, name %in% c(head(europe_nuke, 10)$name, "
   filter(!name %in% c("Slovenia", "Belgium"))
 ggplot(data = europe_nuke_map) + 
   geom_polygon(aes(x = long, y = lat, fill = NuclearFuels, group = group), color = "black") +
-  coord_map(projection = "ortho", orientation = c(6, 50, 0), xlim = c(-14, 25), ylim = c(39, 70)) + 
+  coord_map(
+    #projection = "ortho", orientation = c(6, 50, 0), 
+    xlim = c(-14, 25), ylim = c(39, 70)) +
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), legend.position = c(0, 1), legend.justification = c(0, 1), legend.background = element_rect(fill = "transparent")) + 
   scale_fill_gradient("% Electricity from Nuclear Plants", low = "white", high = "darkgreen") + 
   geom_text(aes(x = label_long, y = label_lat, label = name), data = europe_nuke_labels, hjust = .5, vjust = .5, size = 2.75)
@@ -281,21 +284,19 @@ ggplot() +
   scale_fill_brewer(palette = "Paired") + 
   xlab("") + 
   ylab("% Electricity Generation") + 
-  ggtitle("Power Generation in Europe") + 
+  ggtitle("Power Generation in Europe")  +
   theme(legend.position = c(0, 1), legend.justification = c(0,1), legend.direction = "horizontal", legend.background = element_rect(fill = "transparent"))
 
 ```
 
 
-### 6. Influenza pandemics occur roughly every 50 years
+### 5. (TRUE) The United States has about 10% of the total road length in the world
 
+Non-graphical non-probative image:    
+![I-10](https://upload.wikimedia.org/wikipedia/commons/e/ee/RF_-_Houston_West_Loop_South.3.jpeg)
+
+Semi-graphical probative image:    
 ```{r}
-tmp <- filter(epidemics, str_detect(disease, "influenza")) %>%
-  mutate(location = str_to_title(location)) %>%
-  select(-article, -disease) %>%
-  unique()
 
-ggplot(data = tmp) + 
-  geom_bar(aes(x = ))
 
 ```
