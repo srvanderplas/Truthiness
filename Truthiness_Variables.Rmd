@@ -45,6 +45,10 @@ In general, familiarity will be inversely related with abstraction - more abstra
 
 #### Claim: Egypt has approximately equal coastal and land borders.
 
+![unrelated image](https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Florida_Box_Turtle_Digon3_re-edited.jpg/1200px-Florida_Box_Turtle_Digon3_re-edited.jpg)
+
+This image is entirely unrelated to egypt, and thus does not provide any familiarity advantage. 
+
 ![pyramids](https://upload.wikimedia.org/wikipedia/commons/a/af/All_Gizah_Pyramids.jpg)
 
 The pyramids are associated with Egypt, but provide no probative information about the shape of Egypt's borders. Thus, this image may increase percieved familiarity without providing any probative information.
@@ -91,6 +95,11 @@ This graph is probative but does not provide much additional familiarity. The in
 
 #### Claim: Brazil is the 5th largest country (by land area) in the world
 
+![unrelated image](https://www.harborfreight.com/media/catalog/product/i/m/image_16157.jpg)
+
+This image is entirely unrelated to Brazil and thus provides no familiarity activation.
+
+
 ![Photo](https://www.planetware.com/photos-large/BRA/brazil-rio-de-janeiro-cristo-redentor.jpg)
 
 The Christ the Redeemer (Christo Redentor) statue in Brazil may not be as easily associated with Brazil as the pyramids are with Egypt, so this image may not be as successful in activating familiarity.
@@ -117,3 +126,8 @@ ggplot(data = arrange(mapsubsetbrazil, group, order)) +
 
 rm(brazillims, submapbrazil, mapsubsetbrazil)
 ```
+
+### Probative Value
+
+Probative value is a binary variable - can the question be answered using the information provided?
+
