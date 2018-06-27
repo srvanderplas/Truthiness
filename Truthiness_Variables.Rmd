@@ -129,5 +129,125 @@ rm(brazillims, submapbrazil, mapsubsetbrazil)
 
 ### Probative Value
 
-Probative value is a binary variable - can the question be answered using the information provided?
+Probative value is a binary variable - can the question be answered using the information provided? Classically, the truthiness paradigm only used nonprobative photos and manipulated the familiarity/relatedness of those photos to the claim.
+
+### Difficulty
+
+```{r}
+egyptlims <- filter(map.world, region == "Egypt") %>%
+  summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
+
+submapegypt <- filter(map.world, 
+                 long > egyptlims$long_min*.90, long < egyptlims$long_max*1.1, 
+                 lat > egyptlims$lat_min*.9, lat < egyptlims$lat_max*1.1)
+mapsubsetegypt <- filter(map.world, region %in% submapegypt$region) %>%
+  mutate(fill = region == "Egypt")
+
+ggplot(data = arrange(mapsubsetegypt, group, order)) + 
+  geom_polygon(aes(x = long, y = lat, group = group, fill = fill), color = "black") + 
+  scale_fill_manual(guide = F, values = c("FALSE" = "grey40", "TRUE" = "darkgreen")) + 
+  coord_map(projection = "ortho", orientation = c(29, 26, 0),
+            xlim = c(egyptlims$long_min*.90, egyptlims$long_max*1.1),
+            ylim = c(egyptlims$lat_min*.90, egyptlims$lat_max*1.1)) + 
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
+
+rm(egyptlims, submapegypt, mapsubsetegypt)
+```
+
+There are different levels of effort required to pull information out of a chart or graph. For example, the mental operations necessary to evaluate the claim that "Egypt has approximately equal coastal and land borders" are as follows: 
+
+1. Identify the land borders of Egypt: Libya, Sudan, Israel (and Gaza)
+2. Identify the coastal borders of Egypt: Mediterranean and Gulf
+3. Flatten out the coastal borders until they are approximately as straight as the land borders (potentially mentally stretching Egypt until it is roughly rectangular)
+4. Compare the length of the mental representation of the stretched out coastal border to the length of the mental representation of the land borders.
+5. Use this information to evaluate the claim
+
+Compare this to the mental operations necessary to evaluate the same information presented in a statistical chart: 
+
+```{r}
+filter(borders, name == "Egypt") %>%
+  unnest() %>%
+  bind_rows(data_frame(name = "Egypt", country = "Coast", length = unique(.$coast))) %>%
+  arrange(length) %>%
+  select(country, length) %>%
+  mutate(country = factor(country, levels = country, ordered = T)) %>%
+  ggplot() + 
+  geom_bar(aes(x = country, y = length, fill = country), stat = "identity") + 
+  xlab("") + 
+  ylab("Length (km)") + scale_fill_brewer("Border With:", type = "qual", palette = "Dark2") + 
+  ggtitle("Egypt's Border Regions")
+
+```
+
+1. Add the lengths of the first four bars
+2. Compare this length to the coastal bar
+3. Evaluate the claim with respect to the mental representation of the stacked bar length
+
+
+```{r}
+filter(borders, name == "Egypt") %>%
+  unnest() %>%
+  bind_rows(data_frame(name = "Egypt", country = "Coast", length = unique(.$coast))) %>%
+  arrange(length) %>%
+  select(country, length) %>%
+  mutate(country = factor(country, levels = country, ordered = T),
+         x = ifelse(country == "Coast", "Coast", "Land")) %>%
+  ggplot() + 
+  geom_bar(aes(x = x, y = length, fill = country), stat = "identity", position = "stack") + 
+  xlab("") + 
+  ylab("Length (km)") + scale_fill_brewer("Border With:", type = "qual", palette = "Dark2") + 
+  ggtitle("Egypt's Border Regions")
+
+```
+
+We can make this comparison require even less mental effort by collapsing the land borders into a single bar.
+
+In the case of the Brazil example, the mental effort required to evaluate the map requires both information retrieval and potentially spatial operations. The provided map of Brazil shows the size of Brazil relative to the majority of South America. From this point, the viewer can complete either of the following sets of manipulations:
+
+Option 1: Primarily Information Retrieval | Option 2: Associative Retrieval 
+----------------------------------------- | --------------------------------
+1. "Minds eye" search for largest countries | 1. Compare Brazil to the size of South America - it takes up most of the continent
+2. Identify Russia, China, US, Canada, Australia as possible candidate countries | 2. Assess the size of South America relative to other continents
+3. Rank Brazil within the list of large nations | 3. Identify Asia, North America, Africa as larger continents than South America
+4. Evaluate claim | 4. Search within those continents for large countries
+| 5. Identify (Russia, China), (Canada, USA) as being large countries relative to continents that are comparably sized to South America
+| 6. Rank candidate countries
+| 7. Evaluate claim
+
+The number of steps listed here does not form a proxy for the difficulty, though, because a search of 200+ countries (or even 30+ large countries) should take longer than a search through 6 continents (Antarctica is irrelevant because it does not have any countries) - Option 2 is a recursive search strategy.
+
+
+In another example, the fact "-40F is the same as -40C" can be evaluated using a thermometer with dual scales, or with a line graph. 
+
+<img src="https://images-na.ssl-images-amazon.com/images/I/61Xczv0eYTL._SY1600_.jpg" alt = "Thermometer" width = "30%"/>
+
+```{r}
+library(measurements)
+degc <- seq(-60, 120, 10)
+degf <- conv_unit(degc, "C", "F")
+
+ggplot() + 
+  geom_line(aes(x = degc, y = degf)) + 
+  scale_x_continuous("Degrees Celsius", breaks = c(-60, -30, 0, 30, 60, 90, 120), minor_breaks = seq(-60, 120, by = 10)) + 
+  scale_y_continuous("Degrees Fahrenheit", breaks = c(-80, -40, 0, 40, 80, 120, 160, 200, 240), minor_breaks = seq(-80, 250, by = 10))
+```
+
+The mental effort required to evaluate the claim  using the image of the thermometer is much lower because the two scales are aligned on the same axis. The effort required to evaluate the line graph is not great, but requires locating -40 on each axis and examining whether the line passes through that point on the coordinate plane. 
+
+Quantifying the level of mental effort required to evaluate the claim using the provided information is difficult. In the case of nonprobative images, instead of quantifying the mental operations needed to transform the information provided into information which can be used to evaluate a claim, it is necessary to quantify the amount of additional information which must be retrieved in order to evaluate the claim. It may also be necessary to quantify the probability that an individual can retrieve each piece of necessary information from long term memory (if that information ever was stored in long term memory in the first place). 
+
+It may be possible to use think-aloud protocols to get at this information, and then to confirm the relative difficulty of the operation by using time-to-answer as a proxy for difficulty. In theory, more complex mental operations should take more time to execute, though this is certainly not guaranteed when evaluating cross-domain tasks; for instance, comparing retrieval from long term memory to the spatial manipulations necessary to assess the length of Egypt's coastal border.
+
+### Abstraction
+
+> Abstraction: the process of considering something independently of its associations, attributes, or concrete accompaniments
+
+In this context, images that are abstract would have lower direct semantic or "tactile" association with the topic of the claim. For instance, a map of Egypt is a much lower level of abstraction relative to either a picture of the pyramids or to a graphical chart of the numerical information. 
+
+Could an alien who didn't know anything about our world (e.g. no associations/long term memory storage) complete the task? With higher levels of abstraction, the answer should be yes. By this definition, abstraction could be considered a measure of semantic independence.
+
+Fact | Ranking
+---- | -------
+Egypt has approx equal land and coastal borders | map < chart
+Brazil is the 5th largest country | map < chart
 
