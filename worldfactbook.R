@@ -371,5 +371,78 @@ roads <- "https://www.cia.gov/library/publications/the-world-factbook/fields/208
   spread(key = key, value = value)
   
 
-
+religion <- "https://www.cia.gov/library/publications/the-world-factbook/fields/2122.html" %>%
+  read_html() %>%
+  xml_nodes("#fieldListing") %>%
+  xml_children() %>%
+  xml_children() %>%
+  map_df(.f = function(x) {
+    data_frame(
+      abbr = xml_attr(x, "id"),
+      name = xml_find_first(x, "td") %>%
+        xml_text(),
+      value = xml_find_all(x, "td[@class='fieldData']/node()[not(self::strong or self::br)]") %>%
+        xml_text() %>%
+        str_replace_all("\\n", "") %>%
+        str_trim() %>%
+        remove_empty_str()
+    )
+  }) %>%
+  group_by(name) %>%
+  filter(row_number() == 1) %>%
+  ungroup() %>%
+  mutate(short = str_replace_all(value, " \\(.*?\\)", "")) %>%
+  mutate(denom = str_split(short, ", ")) %>%
+  unnest() %>%
+  mutate(pct = str_extract(denom, "[\\.\\d]{1,}") %>% as.numeric(),
+         denom_name = str_extract(denom, "^[A-z '-]{1,}") %>%
+           str_trim()) %>%
+  filter(!is.na(pct)) %>%
+  mutate(denom_name = denom_name %>%
+           str_replace_all(c("nominally " = "", 
+                             "more than" = "",
+                             "none(.*)" = "none",
+                             "(not religious or atheist)|(not stated or unidentified)" = "none",
+                             "no (religion|response)" = "none",
+                             "objected to answering" = "none",
+                             "^unknown|undeclared|unspecified|unaff?ill?iated$" = "none",
+                             "^Orthodox$" = "Orthodox Christian", 
+                             "other( and unspecified)?( and none)?( religion)?" = "other",
+                             "other Catholic" = "Catholic",
+                             "other Christian" = "Christian", 
+                             "other (non|or none|or unspecified)" = "other",
+                             "none or unknown" = "none",
+                             "(more than )?one religion" = "other",
+                             "other-Christian" = "Protestant",
+                             "other Protestant" = "Protestant",
+                             "other Evangelical Churches" = "Protestant",
+                             "(.*)(traditional|customary)(.*)" = "Traditional",
+                             "Seventh$" = "Seventh Day Adventist",
+                             "(.*)folk religion(.*)" =  "folk religion",
+                             "Roman Catholic" = "Catholic", 
+                             "Christianity" = "Christian", 
+                             "Evangelical( and Pentecostal)?( or Protestant)?( Reformist)?" = "Protestant",
+                             "Hindus" = "Hindu",
+                             "[Aa]nimist" = "Animist",
+                             "atheist (and|or) agnostic" = "Atheist",
+                             "atheist|agnostic" = "Atheist",
+                             "Buddhism" = "Buddhist",
+                             "don't know" = "none",
+                             "Kimbanguiste" = "Kimbanguist",
+                             "non-believers?" = "none",
+                             "non-Catholic Christians" = "Protestant",
+                             "Protestant and .*" = "Protestant",
+                             "Protestant Reformed" = "Reformed",
+                             "nondenominational" = "Protestant",
+                             "Seventh-Day" = "Seventh Day",
+                             "Witnesses" = "Witness",
+                             "Iglesia ni Kristo" = "Church of Christ",
+                             "Calvinist" = "Reformed",
+                             "others" = "other",
+                             "Vodoun|vodou" = "Vodou",
+                             "indigenous(.*)" = "Traditional",
+                             "other" = "Other",
+                             "none" = "None")) %>%
+           str_trim()) %>%
+  select(abbr, name, denom = denom_name, pct)
 
