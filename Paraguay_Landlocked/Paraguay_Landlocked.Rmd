@@ -201,7 +201,11 @@ ggplot(data = arrange(mapsubset, group, order)) +
   scale_fill_manual(guide = F, values = c("FALSE" = "grey40", "TRUE" = "darkgreen")) + 
   coord_map(
     projection = "ortho",
+<<<<<<< HEAD
     orientation = c(-5, -40, 0),
+=======
+    orientation = c(0, -40, 0),
+>>>>>>> 8cfad5574b06bccdf9c5d7b88709b654707da52a
     xlim = c(lims$long_min, lims$long_max),
     ylim = c(lims$lat_min*.9, lims$lat_max)) + 
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(),
