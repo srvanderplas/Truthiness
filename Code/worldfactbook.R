@@ -334,41 +334,41 @@ remove_empty_str <- function(x) {
   x[nchar(x) != 0]
 }
 
-roads <- "https://www.cia.gov/library/publications/the-world-factbook/fields/2085.html" %>%
-  read_html() %>%
-  xml_nodes("#fieldListing") %>%
-  xml_children() %>%
-  xml_children() %>%
-  map_df(.f = function(x) {
-    data_frame(
-      abbr = xml_attr(x, "id"),
-      name = xml_find_first(x, "td") %>%
-        xml_text(),
-      key = xml_find_all(x, "td[@class='fieldData']/strong/text()") %>%
-        xml_text() %>%
-        str_replace_all("\\n", "") %>%
-        str_trim(),
-      value = xml_find_all(x, "td[@class='fieldData']/node()[not(self::strong or self::br)]") %>%
-        xml_text() %>%
-        str_replace_all("\\n", "") %>%
-        str_trim() %>%
-        remove_empty_str()
-    )
-  }) %>%
-  filter(key != "note:") %>%
-  mutate(value = str_replace(value, "([\\d,\\.]{1,}) ?\\(?.*\\)?", "\\1") %>% parse_number,
-         key = str_replace_all(key, c("^paved(.*):$" = "paved/urban",
-                                      "private and forest roads:" = "unpaved/rural",
-                                      "unpaved(.*)" = "unpaved/rural",
-                                      "non-urban:" =  "unpaved/rural",
-                                      "^urban:" = "paved/urban",
-                                      "highways:" = "paved/urban",
-                                      "total:" = "total",
-                                      "urban roads:" = "paved/urban"))) %>%
-  group_by(key, name, abbr) %>%
-  summarize(value = sum(value)) %>%
-  filter(key %in% c("total", "paved/urban", "unpaved/rural")) %>%
-  spread(key = key, value = value)
+# roads <- "https://www.cia.gov/library/publications/the-world-factbook/fields/2085.html" %>%
+#   read_html() %>%
+#   xml_nodes("#fieldListing") %>%
+#   xml_children() %>%
+#   xml_children() %>%
+#   map_df(.f = function(x) {
+#     data_frame(
+#       abbr = xml_attr(x, "id"),
+#       name = xml_find_first(x, "td") %>%
+#         xml_text(),
+#       key = xml_find_all(x, "td[@class='fieldData']/strong/text()") %>%
+#         xml_text() %>%
+#         str_replace_all("\\n", "") %>%
+#         str_trim(),
+#       value = xml_find_all(x, "td[@class='fieldData']/node()[not(self::strong or self::br)]") %>%
+#         xml_text() %>%
+#         str_replace_all("\\n", "") %>%
+#         str_trim() %>%
+#         remove_empty_str()
+#     )
+#   }) %>%
+#   filter(key != "note:") %>%
+#   mutate(value = str_replace(value, "([\\d,\\.]{1,}) ?\\(?.*\\)?", "\\1") %>% parse_number,
+#          key = str_replace_all(key, c("^paved(.*):$" = "paved/urban",
+#                                       "private and forest roads:" = "unpaved/rural",
+#                                       "unpaved(.*)" = "unpaved/rural",
+#                                       "non-urban:" =  "unpaved/rural",
+#                                       "^urban:" = "paved/urban",
+#                                       "highways:" = "paved/urban",
+#                                       "total:" = "total",
+#                                       "urban roads:" = "paved/urban"))) %>%
+#   group_by(key, name, abbr) %>%
+#   summarize(value = sum(value)) %>%
+#   filter(key %in% c("total", "paved/urban", "unpaved/rural")) %>%
+#   spread(key = key, value = value)
   
 
 religion <- "https://www.cia.gov/library/publications/the-world-factbook/fields/2122.html" %>%
@@ -446,3 +446,5 @@ religion <- "https://www.cia.gov/library/publications/the-world-factbook/fields/
            str_trim()) %>%
   select(abbr, name, denom = denom_name, pct)
 
+
+save(areas, borders, coast, electricity_all, location, religion, population, urbanization, file = "Data/factbook.Rdata")
