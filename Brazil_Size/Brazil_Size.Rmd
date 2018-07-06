@@ -1,5 +1,5 @@
 ---
-title: "Egypt Borders"
+title: "Brazil's Size"
 author: "Susan VanderPlas"
 date: "July 3, 2018"
 output: html_document
@@ -29,7 +29,7 @@ library(tidyverse)
 
 ```
 
-## Egypt has approximately equal land and coastal borders
+## Brazil is the 5th largest country
 
 
 ### Pictures
