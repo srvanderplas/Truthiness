@@ -495,7 +495,8 @@ ethnicity <- "https://www.cia.gov/library/publications/the-world-factbook/fields
                                         "mulatto(.*)" = "mixed",
                                         "(other/unavailable|other/unspecified|none|not declared|undeclared|unknown|no answer|unspecified|unidentified|not stated)" = "other",
                                         "other (and|or) other" = "other",
-                                        "other/other" = "other"
+                                        "other/other" = "other",
+                                        "other" = "Other"
                                         )),
          pct = as.numeric(pct)) %>%
   group_by(name, group_name) %>%
