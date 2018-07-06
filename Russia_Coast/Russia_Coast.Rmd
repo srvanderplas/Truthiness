@@ -31,7 +31,7 @@ world_data <- data_frame(
 
 world_map <- fortify(world) %>%
   left_join(world_data)
-
+rm(world_data)
 world <- map_data("world")
 world2 <- map_data("world2")
 ```
@@ -261,5 +261,7 @@ ggplot() +
   scale_fill_brewer("Coast\nLength", type = "qual", palette = "Dark2", na.value = "grey80") + 
   scale_color_brewer("Coast\nLength", type = "qual", palette = "Dark2", na.value = "grey20") + 
   geom_cartogram(aes(fill = factor(rank), map_id = id, color = factor(rank)), data = top10, map = world_map) + 
-  coord_map("mollweide", ylim = c(-60, 90)) 
+  geom_path(aes(x = long, y = lat, group = group), data = world_map, color = "black", size = .125) + 
+  coord_map("mollweide", ylim = c(-60, 90))  + 
+  theme(legend.background = element_rect(fill = "white", color = "black"))
 ```
