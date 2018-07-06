@@ -1,0 +1,228 @@
+---
+title: "Black Sea"
+author: "Susan VanderPlas"
+date: "July 3, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE, echo = F, warning = F, message = F}
+knitr::opts_chunk$set(echo = F)
+
+# source("../worldfactbook.R")
+load("../Data/factbook.Rdata")
+
+library(ggthemes)
+library(ggmap)
+library(ggrepel)
+library(ggalt)
+
+library(rworldmap)
+library(sp)
+library(proj4)
+library(rgdal)
+library(RgoogleMaps)
+
+library(tidyverse)
+
+world <- readOGR("../Data/countries.geo.json", "OGRGeoJSON", stringsAsFactors=FALSE)
+world_data <- data_frame(
+  name = as.character(world@data$name),
+  id = rownames(world@data)
+)
+
+world_map <- fortify(world) %>%
+  left_join(world_data)
+rm(world_data)
+world <- map_data("world")
+world2 <- map_data("world2")
+
+load("../Data/Salinity.Rdata")
+```
+
+## Seven countries border the Black Sea
+
+
+### Pictures
+
+#### Subject-related
+
+<img src="picture_subject_related.jpg" width="60%"/>
+<!-- Source: https://upload.wikimedia.org/wikipedia/commons/5/5f/Zonguldak_58.jpg-->
+
+#### Subject-unrelated
+
+<img src="picture_subject_unrelated.jpg" width="60%"/>
+<!-- Source: https://upload.wikimedia.org/wikipedia/commons/0/0d/River-Nile-near-Aswan.jpg -->
+
+### Charts
+
+#### Subject-related, Topic-unrelated
+
+```{r, out.width = "60%"}
+salinity %>%
+  filter(type %in% c("Mediterranean sea", "Inland sea", "Ocean")) %>%
+  filter(name != "Pacific Ocean") %>%
+ggplot() + 
+  geom_col(aes(x = name, y = salinity_num, fill = name)) + 
+  ggtitle("Salinity of Eurasian Bodies of Water") + 
+  xlab("") + 
+  scale_y_continuous("Salinity (g/kg)") + 
+  scale_fill_discrete(guide = F) 
+```
+
+#### Subject-unrelated, Topic-unrelated
+
+```{r, out.width = "60%"}
+areas %>%
+  right_join(
+    filter(location, simple == "Africa"),
+    by = c("abbr", "name")
+  ) %>%
+  filter(!name %in% c("World", "European Union", "Antarctica") & ! str_detect(name, "Ocean")) %>%
+  mutate(name = str_replace(name, "Congo, Democratic Republic of the", "Democratic Republic of the Congo")) %>%
+  mutate(name = str_replace_all(name, " ", "\n") %>% str_replace("of\nthe\n", "of the ")) %>%
+  arrange(desc(total)) %>%
+  mutate(land = ifelse(is.na(land), total, land),
+         water = ifelse(is.na(water), 0, water)) %>%
+  filter(row_number() <= 10) %>%
+  mutate(name = factor(name, levels = name)) %>%
+  gather(key = type, value = value, land, water) %>% 
+  mutate(type = factor(type, levels = c("water", "land"))) %>%
+  ggplot() + 
+  geom_col(aes(x = name, y = value, fill = type)) + 
+  xlab("") + 
+  ylab("Area (square km)") + 
+  scale_fill_manual(guide = F, values = c("steelblue1", "springgreen4")) + 
+  ggtitle("Largest 10 Countries in Africa, by Total Area")
+```
+
+#### Subject-related, Topic-related (Probative)
+
+```{r, out.width = "60%"}
+borders %>%
+  filter(name %in% c("Bulgaria", "Romania", "Ukraine", "Russia", "Georgia", "Turkey")) %>%
+  mutate(name = str_replace_all(name, " ", "\n")) %>%
+  mutate(name = factor(name, levels = name)) %>%
+  gather(key = type, value = value, land.border, coast) %>% 
+  mutate(type = factor(type, levels = c("coast", "land.border"), labels = c("coast", "land"))) %>%
+  ggplot() + 
+  geom_col(aes(x = name, y = value, fill = type)) + 
+  xlab("") + 
+  ylab("Border Length (km)") + 
+  scale_fill_manual(guide = F, values = c("steelblue1", "springgreen4")) + 
+  ggtitle("Black Sea Nations, by Border Length")
+```
+
+#### Subject-unrelated, Topic-related 
+
+```{r, out.width = "60%"}
+country <- "Canada"
+filter(borders, name == country) %>%
+  unnest() %>%
+  bind_rows(data_frame(name = country, country = "Coast", length = unique(.$coast))) %>%
+  arrange(desc(length)) %>%
+  select(country, length) %>%
+  mutate(country = factor(country, levels = country, ordered = T)) %>%
+  ggplot() + 
+  geom_bar(aes(x = country, y = length, fill = country), stat = "identity") + 
+  xlab("") + 
+  ylab("Length (km)") + 
+  scale_fill_brewer("Border With:", type = "qual", palette = "Dark2", guide = F) + 
+  ggtitle(sprintf("%s's Border Regions", country))
+```
+
+### Maps
+
+#### Subject-related, topic-unrelated
+
+```{r, out.width = "60%", include = F}
+newmap <- GetMap(center = c(-26.316667, 31.13333), zoom = 10, destfile = "EswatiniMap.png")
+```
+
+<img src="EswatiniMap.png" width="60%"/>
+
+#### Subject-unrelated, topic-unrelated
+
+```{r, out.width = "60%", include = F}
+newmap <- GetMap(center = c(43.7, -79.4), zoom = 10, destfile = "TorontoMap.png")
+```
+
+<img src="TorontoMap.png" width="60%"/>
+
+#### Subject-related, topic-related (Non-probative)
+
+```{r, out.width = "60%"}
+lims <- filter(world, region == "Swaziland") %>%
+  summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
+
+ggplot(data = filter(world, region == "Swaziland")) + 
+  geom_polygon(aes(x = long, y = lat, group = group), color = "black", fill = "grey70") + 
+  geom_label(aes(x = label_long, y = label_lat, label = name), data = filter(location, name == "Eswatini")) + 
+  coord_map(projection = "azequalarea", xlim = c(30.5, 32.5), ylim = c(-27.5, -25.5)) + 
+  theme(axis.text = element_blank(), axis.ticks = element_blank(), axis.title = element_blank())
+rm(lims)
+
+```
+
+
+#### Subject-unrelated, topic-related (Non-probative)
+
+```{r, out.width = "60%"}
+lims <- filter(world, region == "Canada") %>%
+  summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
+
+ggplot(data = filter(world, region == "Canada")) + 
+  geom_polygon(aes(x = long, y = lat, group = group), color = "black", fill = "grey70") + 
+  geom_label(aes(x = label_long, y = label_lat, label = name), data = filter(location, name == "Canada")) + 
+  coord_map(projection = "ortho") + 
+  theme(axis.text = element_blank(), axis.ticks = element_blank(), axis.title = element_blank())
+rm(lims)
+
+```
+
+#### Subject-related, topic-related (probative)
+
+```{r, out.width = "60%", message = F, warning = F}
+lims <- filter(world, region == "Swaziland") %>%
+  summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
+
+gridlines1 <- expand.grid(
+      long = c(-179, 179),
+      lat = c(-60, -30, 0, 30, 60)
+    ) %>%
+      as_data_frame() %>%
+      mutate(group = rep(1:5, each = 2))
+gridlines2 <- expand.grid(long = c(-180, -150, -120, -90, -60, -30, 0, 30, 60, 90, 120, 150, 180),
+                          lat = seq(-80, 80, by = 5)) %>%
+  as_data_frame() %>%
+  mutate(group = group_indices(., long)) %>%
+  arrange(long)
+      
+
+fixed_lims <- lims * c(.5, 1.08, 1.31, .8)
+
+submap <- filter(world2,
+                 long > fixed_lims$long_min,
+                 long < fixed_lims$long_max,
+                 lat > fixed_lims$lat_min,
+                 lat < fixed_lims$lat_max)
+mapsubset <- filter(world2, region %in% submap$region) %>%
+  arrange(group, order) %>%
+  group_by(group) %>%
+  mutate(latmin = min(lat)) %>%
+  ungroup() 
+
+locsubset <- filter(location, name %in% c(mapsubset$region, "Eswatini")) %>%
+  filter(!name %in% c("Zimbabwe", "Mozambique"))
+
+ggplot() + 
+  theme_map() + 
+  geom_line(aes(x = long, y = lat, group = group), data = gridlines1) + 
+  geom_line(aes(x = long, y = lat, group = group), data = gridlines2) + 
+  ggpolypath::geom_polypath(aes(x = long, y = lat, group = group, fill = region), data = mapsubset, color = "black") + 
+  geom_path(aes(x = long, y = lat, group = group), data = mapsubset, color = "black", size = .125) + 
+  scale_fill_discrete(guide = F) + 
+  geom_label_repel(aes(x = label_long, y = label_lat, label = name), data = locsubset, point.padding = .2) +
+  coord_map(xlim = as.numeric(fixed_lims[,1:2]), ylim = as.numeric(fixed_lims[,3:4]))  +
+  theme(legend.background = element_rect(fill = "white", color = "black"))
+```
