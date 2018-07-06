@@ -505,4 +505,4 @@ ethnicity <- "https://www.cia.gov/library/publications/the-world-factbook/fields
   select(name, ethnicity = group_name, pct = pct)
 
 
-save(areas, borders, coast, electricity_all, location, religion, population, urbanization, ethnicity, file = "Data/factbook.Rdata")
+save(areas, borders, electricity_all, location, religion, population, ethnicity, file = "Data/factbook.Rdata")
