@@ -447,4 +447,61 @@ religion <- "https://www.cia.gov/library/publications/the-world-factbook/fields/
   select(abbr, name, denom = denom_name, pct)
 
 
-save(areas, borders, coast, electricity_all, location, religion, population, urbanization, file = "Data/factbook.Rdata")
+ethnicity <- "https://www.cia.gov/library/publications/the-world-factbook/fields/2075.html" %>%
+  read_html() %>%
+  xml_nodes("#fieldListing") %>%
+  xml_children() %>%
+  xml_children() %>%
+  map_df(.f = function(x) {
+    data_frame(
+      abbr = xml_attr(x, "id"),
+      name = xml_find_first(x, "td") %>%
+        xml_text(),
+      value = xml_find_all(x, "td[@class='fieldData']/node()[not(self::strong or self::br)]") %>%
+        xml_text() %>%
+        str_replace_all("\\n", "") %>%
+        str_trim() %>%
+        remove_empty_str()
+    )
+  }) %>%
+  group_by(name) %>%
+  filter(row_number() == 1) %>%
+  filter(str_detect(value, "%")) %>%
+  ungroup() %>%
+  mutate(short = str_replace_all(value, c("\\(.*?\\(.*?\\).*?\\)" = "",
+                                          "\\(.*?\\)" = "",
+                                          "(.*?), .*?:" = "",
+                                          "^([A-z ]*):" = "",
+                                          " at least" = "", 
+                                          "less than " = "",
+                                          "more than " = "",
+                                          "predominantly " = "",
+                                          "population: " = "",
+                                          " and related" = "",
+                                          ",(\\d{3})" = "\\1",
+                                          "((over)|(more than)) \\d{2,}(.*) ethnic groups" = "",
+                                          "; \\d{1,}%[A-z ]{1,},[A-z ]{1,}$" = ""))) %>%
+  mutate(group = str_split(short, ", ")) %>%
+  unnest() %>%
+  mutate(pct = str_extract(group, "[\\.\\d]{1,}%") %>% str_replace("%", ""),
+         group_name = str_replace(group, pct, "") %>%
+           str_replace("%", "") %>%
+           str_trim()) %>%
+  filter(!is.na(pct)) %>%
+  mutate(group_name = str_replace_all(group_name, 
+                                      c("mainland - " = "",
+                                        "(local|metropolitan) " = "",
+                                        "mestizo|mestico" = "mixed",
+                                        "mulatto(.*)" = "mixed",
+                                        "(other/unavailable|other/unspecified|none|not declared|undeclared|unknown|no answer|unspecified|unidentified|not stated)" = "other",
+                                        "other (and|or) other" = "other",
+                                        "other/other" = "other"
+                                        )),
+         pct = as.numeric(pct)) %>%
+  group_by(name, group_name) %>%
+  summarize(pct = sum(pct)) %>%
+  ungroup() %>%
+  select(name, ethnicity = group_name, pct = pct)
+
+
+save(areas, borders, coast, electricity_all, location, religion, population, urbanization, ethnicity, file = "Data/factbook.Rdata")
