@@ -83,7 +83,7 @@ areas %>%
   ggplot() + 
   geom_col(aes(x = name, y = value, fill = type)) + 
   xlab("") + 
-  ylab("Area (sqare km)") + 
+  ylab("Area (square km)") + 
   scale_fill_manual(guide = F, values = c("steelblue1", "springgreen4")) + 
   ggtitle("Largest 10 Countries, by Total Area")
 ```
@@ -105,7 +105,7 @@ areas %>%
   ggplot() + 
   geom_col(aes(x = name, y = value, fill = type)) + 
   xlab("") + 
-  ylab("Area (sqare km)") + 
+  ylab("Area (square km)") + 
   scale_fill_manual(guide = F, values = c("steelblue1", "springgreen4")) + 
   ggtitle("Largest 10 Countries in Europe, by Total Area")
 ```
