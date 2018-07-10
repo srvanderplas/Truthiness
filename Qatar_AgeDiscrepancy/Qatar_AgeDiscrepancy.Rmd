@@ -1,0 +1,348 @@
+---
+title: "Qatar Age Discrepancy"
+author: "Susan VanderPlas"
+date: "July 10, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE, echo = F, warning = F, message = F}
+knitr::opts_chunk$set(echo = F)
+
+# source("../worldfactbook.R")
+load("../Data/factbook.Rdata")
+
+library(ggthemes)
+library(ggmap)
+library(ggrepel)
+library(ggalt)
+
+library(rworldmap)
+library(sp)
+library(proj4)
+library(rgdal)
+library(RgoogleMaps)
+
+library(tidyverse)
+
+world <- readOGR("../Data/countries.geo.json", "OGRGeoJSON", stringsAsFactors=FALSE)
+world_data <- data_frame(
+  name = as.character(world@data$name),
+  id = rownames(world@data)
+)
+
+world_map <- fortify(world) %>%
+  left_join(world_data)
+rm(world_data)
+world <- map_data("world")
+world2 <- map_data("world2")
+
+load("../Data/JapanQatarImports.Rdata")
+export_col_theme <- sample(scales::hue_pal()(15), size = 15)
+```
+
+## Qatar has the largest gender imbalance in working-age populations compared to neighboring countries
+
+### Pictures
+
+#### Subject-related
+
+<img src="picture_subject_related.jpg" width="60%"/>
+<!-- Source: https://www.goodfreephotos.com/albums/qatar/doha-west-bay-area-in-qatar.jpg-->
+
+#### Subject-unrelated
+
+<img src="picture_subject_unrelated.jpg" width="60%"/>
+<!-- Source: https://upload.wikimedia.org/wikipedia/commons/c/cf/Shinjuku_skyline%2C_Tokyo_-_Sony_A7R_%2811831328835%29.jpg/ -->
+
+### Charts
+
+#### Subject-related, Topic-unrelated
+
+```{r, out.width = "60%"}
+ggplot(data = qatar_imports) + 
+  geom_col(aes(x = ProductCategory, y = TotalTradeMil/1000, fill = ProductCategory)) + 
+  ggtitle("Qatar's Imports (2016)") + 
+  scale_fill_manual(guide = F, values = export_col_theme) +
+  xlab("") + 
+  scale_y_continuous("Value (Billions, USD)") + 
+  coord_flip()
+```
+
+#### Subject-unrelated, Topic-unrelated
+
+```{r, out.width = "60%"}
+ggplot(data = japan_imports) + 
+  geom_col(aes(x = ProductCategory, y = TotalTradeMil/1000, fill = ProductCategory)) + 
+  ggtitle("Japan's Imports (2017)") + 
+  scale_fill_manual(guide = F, values = export_col_theme) +
+  xlab("") + 
+  scale_y_continuous("Value (Billions, USD)") + 
+  coord_flip()
+```
+
+#### Subject-related, Topic-related (Probative)
+
+```{r, out.width = "60%"}
+population %>%
+  mutate(Female = as.numeric(Female), Male = as.numeric(Male), ratio = Female/Male) %>%
+  arrange(ratio) %>%
+  filter(name %in% c("Qatar", "Oman", "Yemen", "Saudi Arabia", "United Arab Emirates")) %>%
+  gather(key = Gender, value = value, -abbr, -name, -age, -Pct, -ratio) %>%
+  group_by(name) %>%
+  mutate(value = value/sum(value)*100) %>%
+  ggplot() + 
+  geom_bar(aes(x = age, y = value, fill = Gender), stat = "identity", position = "dodge") + 
+  scale_fill_manual("Gender", values = c("Female" = "#B2182B", "Male" = "#2166AC")) + 
+  facet_wrap(~name) + 
+  ylab("% Population") + 
+  xlab("Age Group") + 
+  ggtitle("Population Demographics - Lower Arabian Peninsula") + 
+  theme(legend.position = c(1, 0), legend.justification = c(1, 0), legend.background = element_rect(fill = "transparent"))
+```
+
+#### Subject-unrelated, Topic-related 
+
+```{r, out.width = "60%"}
+population %>%
+  mutate(Female = as.numeric(Female), Male = as.numeric(Male), ratio = Female/Male) %>%
+  arrange(ratio) %>%
+  filter(name %in% c("Japan", "Korea, North", "Korea, South", "China", "Russia")) %>%
+  mutate(name = str_replace(name, "Korea, (.*)", "\\1 Korea")) %>%
+  gather(key = Gender, value = value, -abbr, -name, -age, -Pct, -ratio) %>%
+  group_by(name) %>%
+  mutate(value = value/sum(value)*100) %>%
+  ggplot() + 
+  geom_bar(aes(x = age, y = value, fill = Gender), stat = "identity", position = "dodge") + 
+  scale_fill_manual("Gender", values = c("Female" = "#B2182B", "Male" = "#2166AC")) + 
+  facet_wrap(~name) + 
+  ylab("% Population") + 
+  xlab("Age Group") + 
+  ggtitle("Population Demographics - Eastern Asia") + 
+  theme(legend.position = c(1, 0), legend.justification = c(1, 0), legend.background = element_rect(fill = "transparent"))
+```
+
+### Maps
+
+#### Subject-related, topic-unrelated
+
+```{r, out.width = "60%"}
+regionlist <- c("Qatar", "Oman", "Yemen", "Saudi Arabia", "United Arab Emirates")
+lims <- filter(world2, region %in% regionlist) %>%
+  summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
+
+submap <- filter(world2, 
+                 long > lims$long_min*.98, 
+                 long < lims$long_max*1.01, 
+                 lat > lims$lat_min*.98, 
+                 lat < lims$lat_max*1.01)
+
+datasubset <- electricity_all %>%
+  filter(name %in% submap$region) %>%
+  select(region = name, total_elec)
+
+mapsubset <- filter(world2, region %in% submap$region & group %in% submap$group) %>%
+  left_join(datasubset, by = "region")
+
+mapsubset_avg <- submap %>%
+  filter(region %in% regionlist) %>%
+  unique() %>%
+  group_by(region) %>%
+  summarize(long = median(long), lat = median(lat))%>%
+  mutate(region = str_replace_all(region, " ", "\n")) 
+
+ggplot(data = arrange(mapsubset, group, order)) + 
+  geom_polygon(aes(x = long, y = lat, group = group, fill = total_elec), color = "black") + 
+  geom_label_repel(aes(x = long, y = lat, label = region), data = mapsubset_avg, point.padding = .35) + 
+  scale_fill_gradient("% Population\nwith Electricity", low = "#F7fcf5", high = "#00441b", limits = c(0, 100)) + 
+  coord_map(xlim = c(lims$long_min, lims$long_max) * c(.98, 1.01),
+            ylim = c(lims$lat_min, lims$lat_max) * c(.98, 1.01)) + 
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank()) + 
+  ggtitle("Electrification in the Middle East")
+
+rm(lims, submap, mapsubset)
+```
+
+#### Subject-unrelated, topic-unrelated
+
+```{r, out.width = "60%"}
+country <- "Japan"
+lims <- filter(world2, region == country) %>%
+  summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
+
+submap <- filter(world2, 
+                 long > lims$long_min*.95, 
+                 long < lims$long_max*1.001, 
+                 lat > lims$lat_min*.95, 
+                 lat < lims$lat_max*1.001)
+
+datasubset <- electricity_all %>%
+  mutate(region = str_replace(name, "Korea, (.*)", "\\1 Korea")) %>%
+  filter(region %in% submap$region) %>%
+  select(region, total_elec) %>%
+  mutate(total_elec = ifelse(region == "Taiwan", 100, total_elec))
+
+mapsubset <- filter(world2, region %in% submap$region & group %in% submap$group) %>% 
+  left_join(datasubset, by = "region")
+
+mapsubset_avg <- submap %>%
+  unique() %>%
+  group_by(region) %>%
+  summarize(long = median(long), lat = median(lat)) %>%
+  mutate(long = ifelse(region == "Mongolia", long - 3, long),
+         long = ifelse(region == "Taiwan", long + 1.5, long),
+         long = ifelse(region == "North Korea", long + 2, long),
+         long = ifelse(region == "South Korea", long - 2, long),
+         long = ifelse(region == "Russia", long + 2, long),
+         lat = ifelse(region == "China", lat + 5, lat))
+
+ggplot(data = arrange(mapsubset, group, order)) + 
+  geom_polygon(aes(x = long, y = lat, group = group, fill = total_elec), color = "black") + 
+  geom_label(aes(x = long, y = lat, label = region), data = mapsubset_avg) + 
+  scale_fill_gradient("% Population\nwith Electricity", low = "#F7fcf5", high = "#00441b", limits = c(0, 100)) + 
+  coord_map(
+    projection = "ortho",
+    xlim = c(lims$long_min, lims$long_max) * c(.95, 1.001),
+    ylim = c(lims$lat_min, lims$lat_max) * c(.95, 1.001)) + 
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank()) + 
+  ggtitle("Electrification in East Asia")
+
+rm(lims, submap, mapsubset)
+```
+
+#### Subject-related, topic-related (Non-probative)
+
+```{r, out.width = "60%"}
+regionlist <- c("Qatar", "Oman", "Yemen", "Saudi Arabia", "United Arab Emirates")
+lims <- filter(world2, region %in% regionlist) %>%
+  summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
+
+submap <- filter(world2, 
+                 long > lims$long_min*.98, 
+                 long < lims$long_max*1.01, 
+                 lat > lims$lat_min*.98, 
+                 lat < lims$lat_max*1.01)
+
+datasubset <- population %>%
+  filter(name %in% submap$region, age == "25-54") %>%
+  select(region = name, Pct2554 = Pct) %>%
+  mutate(Pct2554 = as.numeric(Pct2554))
+
+mapsubset <- filter(world2, region %in% submap$region & group %in% submap$group) %>%
+  left_join(datasubset, by = "region") %>%
+  arrange(group, order)
+
+mapsubset_avg <- submap %>%
+  filter(region %in% regionlist) %>%
+  unique() %>%
+  group_by(region) %>%
+  summarize(long = median(long), lat = median(lat))%>%
+  mutate(region = str_replace_all(region, " ", "\n")) 
+
+ggplot(data = arrange(mapsubset, group, order)) + 
+  geom_polygon(aes(x = long, y = lat, group = group, fill = Pct2554), color = "black") + 
+  geom_label_repel(aes(x = long, y = lat, label = region), data = mapsubset_avg, point.padding = .35) + 
+  scale_fill_gradient("% Population\n25-54", low = "white", high = "#FF9900") + 
+  coord_map(xlim = c(lims$long_min, lims$long_max) * c(.98, 1.01),
+            ylim = c(lims$lat_min, lims$lat_max) * c(.98, 1.01)) + 
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank()) + 
+  ggtitle("Middle East Population, % Age 25-54")
+
+```
+
+
+#### Subject-unrelated, topic-related (Non-probative)
+
+```{r, out.width = "60%"}
+country <- "Japan"
+lims <- filter(world2, region == country) %>%
+  summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
+
+submap <- filter(world2, 
+                 long > lims$long_min*.95, 
+                 long < lims$long_max*1.001, 
+                 lat > lims$lat_min*.95, 
+                 lat < lims$lat_max*1.05)
+
+datasubset <- population %>%
+  mutate(region = str_replace(name, "Korea, (.*)", "\\1 Korea")) %>%
+  filter(region %in% submap$region) %>%
+  mutate(Female = as.numeric(Female), Male = as.numeric(Male), ratio = Female/Male) %>%
+  filter(age %in% c("15-24", "25-54")) %>%
+  select(region, Male, Female) %>%
+  group_by(region) %>%
+  summarize(ratio = sum(Male)/sum(Male + Female))
+
+mapsubset <- filter(world2, region %in% submap$region & group %in% submap$group) %>%
+  left_join(datasubset, by = "region") %>%
+  arrange(group, order)
+
+mapsubset_avg <- submap %>%
+  unique() %>%
+  group_by(region) %>%
+  summarize(long = median(long), lat = median(lat)) %>%
+  mutate(long = ifelse(region == "Mongolia", long - 3, long),
+         long = ifelse(region == "Taiwan", long + 1.5, long),
+         long = ifelse(region == "North Korea", long + 2, long),
+         long = ifelse(region == "South Korea", long - 2, long),
+         long = ifelse(region == "Russia", long + 2, long),
+         lat = ifelse(region == "China", lat + 5, lat))
+
+ggplot(data = arrange(mapsubset, group, order)) + 
+  geom_polygon(aes(x = long, y = lat, group = group, fill = ratio), color = "black") + 
+  geom_label(aes(x = long, y = lat, label = region), data = mapsubset_avg) + 
+  scale_fill_gradient2("Male Proportion\nof population,\n15-54", low = "#b2182b", mid = "#FFFFFF", midpoint = .5, high = "#2166ac", limits = c(.45, .55)) + 
+  coord_map(projection = "ortho",
+            xlim = c(lims$long_min, lims$long_max) * c(.95, 1.001),
+            ylim = c(lims$lat_min, lims$lat_max) * c(.95, 1.05)) + 
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank()) + 
+  ggtitle("Working-Age Population Gender Balance")
+
+# rm(lims, submap, mapsubset)
+
+```
+
+#### Subject-related, topic-related (probative)
+
+```{r, out.width = "60%"}
+regionlist <- c("Qatar", "Oman", "Yemen", "Saudi Arabia", "United Arab Emirates")
+lims <- filter(world2, region %in% regionlist) %>%
+  summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
+
+submap <- filter(world2, 
+                 long > lims$long_min*.98, 
+                 long < lims$long_max*1.01, 
+                 lat > lims$lat_min*.98, 
+                 lat < lims$lat_max*1.01)
+
+datasubset <- population %>%
+  mutate(region = name) %>%
+  filter(region %in% submap$region) %>%
+  mutate(Female = as.numeric(Female), Male = as.numeric(Male), ratio = Female/Male) %>%
+  filter(age %in% c("15-24", "25-54")) %>%
+  select(region, Male, Female) %>%
+  group_by(region) %>%
+  summarize(ratio = sum(Male)/sum(Male + Female))
+
+mapsubset <- filter(world2, region %in% submap$region & group %in% submap$group) %>%
+  left_join(datasubset, by = "region") %>%
+  arrange(group, order)
+
+mapsubset_avg <- submap %>%
+  filter(region %in% regionlist) %>%
+  unique() %>%
+  group_by(region) %>%
+  summarize(long = median(long), lat = median(lat))%>%
+  mutate(region = str_replace_all(region, " ", "\n"))
+
+ggplot() + 
+  geom_polygon(aes(x = long, y = lat, group = group, fill = ratio), color = "black", data = mapsubset) + 
+  geom_label_repel(aes(x = long, y = lat, label = region), data = mapsubset_avg, point.padding = .35) +
+  scale_fill_gradient2("Male Proportion\nof population,\n15-54", low = "#b2182b", mid = "#FFFFFF", midpoint = .5, high = "#2166ac", limits = c(.1, .9)) + 
+  coord_map(xlim = c(lims$long_min, lims$long_max) * c(.98, 1.01),
+            ylim = c(lims$lat_min, lims$lat_max) * c(.98, 1.01)) + 
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank()) + 
+  ggtitle("Working-Age Population Gender Balance")
+
+rm(lims, submap, mapsubset)
+
+```
