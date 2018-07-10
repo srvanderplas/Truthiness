@@ -1,0 +1,3 @@
+TM_WORLD_BORDERS-0.3: http://thematicmapping.org/downloads/TM_WORLD_BORDERS-0.3.zip
+World_Seas_IHO_v2: http://www.marineregions.org/downloads.php#iho (click on IHO Sea Areas, Version 2 (2017), and fill out the download form)
+Countries.geo.json, plates.json: https://rud.is/b/2015/10/04/replicating-natgeos-proper-earthquake-map-in-r/
