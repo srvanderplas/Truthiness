@@ -64,5 +64,7 @@ plant_detail_info <- plant_info$link %>%
   map_df(read_plant_info)
 
 hydro_plants <- plant_info %>% left_join(plant_detail_info)
+hydro_plants <- hydro_plants %>%
+  mutate(capacity_MW = as.numeric(str_trim(capacity_MW)))
 
 save(hydro_plants, file =  "Data/hydro.Rdata")

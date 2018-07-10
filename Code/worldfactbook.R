@@ -49,7 +49,10 @@ population <- population %>%
   ) %>%
   spread(key = var, value = value) %>%
   mutate(age = factor(age, levels = c("0.14", "14.24", "25.54", "55.64", "65"), 
-                      labels = c("0-14", "15-24", "25-54", "55-64", "65+"), ordered = T))
+                      labels = c("0-14", "15-24", "25-54", "55-64", "65+"), ordered = T)) %>%
+  mutate(Female = as.numeric(Female), 
+         Male = as.numeric(Male),
+         Pct = as.numeric(Pct))
 
 pg <- read_html("https://www.cia.gov/library/publications/the-world-factbook/fields/2147.html")
 cts <- xml_nodes(pg, "#fieldListing") %>%
