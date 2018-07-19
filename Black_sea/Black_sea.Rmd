@@ -21,10 +21,11 @@ library(sp)
 library(proj4)
 library(rgdal)
 library(RgoogleMaps)
+library(geojsonio)
 
 library(tidyverse)
 
-world <- readOGR("../Data/countries.geo.json", "OGRGeoJSON", stringsAsFactors=FALSE)
+world <- geojson_read("https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json", method = "web", what = "sp")
 world_data <- data_frame(
   name = as.character(world@data$name),
   id = rownames(world@data)
