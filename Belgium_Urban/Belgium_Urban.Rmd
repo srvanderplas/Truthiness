@@ -1,0 +1,354 @@
+---
+title: "Belgium Urban Population"
+author: "Susan VanderPlas"
+date: "July 24, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE, echo = F, warning = F, message = F}
+knitr::opts_chunk$set(echo = F)
+
+# source("../worldfactbook.R")
+load("../Data/factbook.Rdata")
+load("../Data/hydro.Rdata")
+library(ggthemes)
+# library(ggmap)
+library(ggrepel)
+# library(ggalt)
+map.world <- map_data("world")
+
+library(rworldmap)
+library(sp)
+library(proj4)
+library(rgdal)
+library(RgoogleMaps)
+
+library(tidyverse)
+world <- map_data("world")
+world2 <- map_data("world2")
+
+```
+
+## Over 95% of Belgium's population lives in urban areas
+
+
+### Pictures
+
+#### Subject-related
+
+<img src="picture_subject_related.jpg" width="60%"/>
+<!-- Source: https://upload.wikimedia.org/wikipedia/commons/d/d3/2007_07_Belgium_Brussels_06_%28cropped%29.jpg-->
+
+#### Subject-unrelated
+
+<img src="picture_subject_unrelated.jpg" width="60%"/>
+<!-- Source: https://upload.wikimedia.org/wikipedia/commons/1/12/Flickr_-_%E2%80%A6trialsanderrors_-_The_Colosseum%2C_Rome%2C_Italy%2C_ca._1896.jpg -->
+
+### Charts
+
+#### Subject-related, Topic-unrelated
+
+```{r, out.width = "60%"}
+cc <- c("Belgium", "Netherlands", "United Kingdom")
+unnest(borders2) %>%
+  filter(country %in% cc) %>%
+  bind_rows(data_frame(name = cc, country = cc)) %>%
+  select(name) %>%
+  unique() %>%
+  arrange(name) %>%
+  left_join(population, by = "name") %>%
+  filter(!is.na(Pct)) %>%
+  mutate(name = factor(name, levels = unique(name)),
+         age = factor(age, levels = rev(levels(age)))) %>%
+ggplot() + 
+  geom_col(aes(x = name, y = Pct, fill = age), position = "stack") + 
+  ggtitle("Demographics in Western Europe") + 
+  scale_fill_brewer("Age", type = "qual", palette = "Paired") +
+  xlab("") + 
+  scale_y_continuous("% Population") + 
+  coord_flip()
+```
+
+#### Subject-unrelated, Topic-unrelated
+
+```{r, out.width = "60%"}
+unnest(borders2) %>%
+  filter(country %in% c("Greece", "Italy")) %>%
+  bind_rows(data_frame(name = c("Italy", "Greece"), country = c("Italy", "Greece"))) %>%
+  select(name) %>%
+  arrange(name) %>%
+  left_join(population, by = "name") %>%
+  filter(!is.na(Pct)) %>%
+  mutate(name = factor(name, levels = unique(name)),
+         age = factor(age, levels = rev(levels(age)))) %>%
+ggplot() + 
+  geom_col(aes(x = name, y = Pct, fill = age), position = "stack") + 
+  ggtitle("Demographics in Southern Europe") + 
+  scale_fill_brewer("Age", type = "qual", palette = "Paired") +
+  xlab("") + 
+  scale_y_continuous("% Population") + 
+  coord_flip()
+```
+
+#### Subject-related, Topic-related (Probative)
+
+```{r, out.width = "60%"}
+cc <- c("Belgium", "Netherlands", "United Kingdom")
+unnest(borders2) %>%
+  filter(country %in% cc) %>%
+  bind_rows(data_frame(name = cc, country = cc)) %>%
+  select(name) %>%
+  unique() %>%
+  arrange(name) %>%
+  left_join(location, by = "name") %>%
+  select(name, urban = urbanPct) %>%
+  mutate(rural = 100 - urban) %>%
+  arrange(desc(urban)) %>%
+  mutate(name = factor(name)) %>%
+  gather(key = type, value = Pct, urban:rural) %>%
+  ggplot() + 
+  geom_col(aes(x = name, y = Pct, fill = type), position = "stack") + 
+  ggtitle("Urbanization in Western Europe") + 
+  scale_fill_brewer("", type = "qual", palette = "Paired") +
+  xlab("") + 
+  scale_y_continuous("% Population") + 
+  coord_flip()
+```
+
+#### Subject-unrelated, Topic-related 
+
+```{r, out.width = "60%"}
+cc <- c("Greece", "Italy")
+unnest(borders2) %>%
+  filter(country %in% cc) %>%
+  bind_rows(data_frame(name = cc, country = cc)) %>%
+  select(name) %>%
+  unique() %>%
+  arrange(name) %>%
+  left_join(location, by = "name") %>%
+  select(name, urban = urbanPct) %>%
+  mutate(rural = 100 - urban) %>%
+  arrange(desc(urban)) %>%
+  mutate(name = factor(name)) %>%
+  gather(key = type, value = Pct, urban:rural) %>%
+  ggplot() + 
+  geom_col(aes(x = name, y = Pct, fill = type), position = "stack") + 
+  ggtitle("Urbanization in Southern Europe") + 
+  scale_fill_brewer("", type = "qual", palette = "Paired") +
+  xlab("") + 
+  scale_y_continuous("% Population") + 
+  coord_flip()
+```
+
+### Maps
+
+#### Subject-related, topic-unrelated
+
+```{r, out.width = "60%", include = F}
+region <- "Europe"
+cc <- c("Italy", "Greece")
+ccr <- unnest(borders2) %>%
+  filter(country %in% cc) %>%
+  bind_rows(data_frame(name = cc, country = cc)) %>%
+  select(name) %>%
+  unique() %>%
+  arrange(name) %>%
+  magrittr::extract2("name")
+
+tmp <- filter(location, str_detect(simple, region)) %>%
+  select(name) %>%
+  left_join(population, by = 'name') %>%
+  mutate(name = str_replace_all(name, c("United Kingdom" = "UK"))) %>%
+  filter(age == "65+") %>%
+  filter(!is.na(Pct)) %>%
+  select(name, pct_old = Pct) %>%
+  mutate(pct_old = cut(pct_old, seq(5, 35, 5))) %>%
+  full_join(world, by = c("name" = "region"))
+
+lims <- tmp %>%
+  filter(is.na(subregion)) %>%
+  right_join(filter(location, str_detect(desc, region2))) %>%
+  select(lat, long) %>%
+  summarize_all(.funs = funs(min, max), na.rm = T)
+
+labs <- location %>%
+  filter(name %in% c(ccr, "Italy", "Spain")) %>%
+  filter(!name %in% c("Switzerland", "San Marino", "Slovenia", "Macedonia", "Holy See (Vatican City)", "Turkey"))
+
+
+tmp %>%
+  ggplot() + 
+  geom_polygon(aes(x = long, y = lat, group = group), color = "black", fill = "grey50") + 
+  geom_polygon(aes(x = long, y = lat, fill = pct_old, group = group), color = "black", data = filter(tmp, !is.na(pct_old))) + 
+  coord_quickmap(xlim = c(lims$long_min, 25), ylim = c(lims$lat_min, lims$lat_max), expand = T) + 
+  geom_label_repel(aes(x = label_long, y = label_lat, label = name), data = labs) + 
+  theme(axis.text = element_blank(), axis.ticks = element_blank(), axis.title = element_blank()) + 
+  scale_fill_discrete("% Population 65+") + 
+  ggtitle("Population Over 65")
+```
+
+#### Subject-unrelated, topic-unrelated
+
+```{r, out.width = "60%", include = F}
+region <- "Europe"
+cc <- c("Belgium", "Netherlands", "United Kingdom", "Ireland")
+ccr <- unnest(borders2) %>%
+  filter(country %in% cc) %>%
+  bind_rows(data_frame(name = cc, country = cc)) %>%
+  select(name) %>%
+  unique() %>%
+  arrange(name) %>%
+  magrittr::extract2("name")
+
+tmp <- filter(location, str_detect(simple, region)) %>%
+  select(name) %>%
+  left_join(population, by = 'name') %>%
+  mutate(name = str_replace_all(name, c("United Kingdom" = "UK", "Czechia"= "Czech Republic"))) %>%
+  filter(age == "65+") %>%
+  filter(!is.na(Pct)) %>%
+  select(name, pct_old = Pct) %>%
+  mutate(pct_old = cut(pct_old, seq(5, 35, 5))) %>%
+  full_join(world, by = c("name" = "region"))
+
+lims <- tmp %>%
+  filter(name %in% ccr) %>%
+  select(lat, long) %>%
+  summarize_all(.funs = funs(min, max), na.rm = T)
+
+labs <- location %>%
+  filter(name %in% c(ccr, "Italy", "Spain")) 
+
+
+tmp %>%
+  ggplot() + 
+  geom_polygon(aes(x = long, y = lat, group = group), color = "black", fill = "grey50") + 
+  geom_polygon(aes(x = long, y = lat, fill = pct_old, group = group), color = "black", data = filter(tmp, !is.na(pct_old))) + 
+  geom_label_repel(aes(x = label_long, y = label_lat, label = name), data = labs, label.padding = .3) + 
+  coord_quickmap(xlim = c(lims$long_min, lims$long_max), ylim = c(lims$lat_min, lims$lat_max), expand = T) + 
+  theme(axis.text = element_blank(), axis.ticks = element_blank(), axis.title = element_blank()) + 
+  scale_fill_discrete("% Population 65+") + 
+  ggtitle("Population Over 65")
+```
+
+#### Subject-related, topic-related (Non-probative)
+
+```{r, out.width = "60%"}
+datasubset <- filter(location, simple == "South America") %>%
+  mutate(name = str_replace(name, "South Georgia(.*)", "South Georgia") %>%
+           str_replace("Falkland Islands(.*)", "Falkland Islands"))
+
+lims <- filter(world, region %in% datasubset$name) %>%
+  filter(is.na(subregion )) %>%
+  summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
+
+submap <- filter(world,
+                 long > lims$long_min*1.01, 
+                 long < lims$long_max*.98, 
+                 lat > lims$lat_min*1.01, 
+                 lat < lims$lat_max*1.05)
+
+hydro_sub <- filter(hydro_plants, 
+                    long > lims$long_min*1.01, 
+                    long < lims$long_max*.98, 
+                    lat > lims$lat_min*1.01, 
+                    lat < lims$lat_max*1.05)
+
+mapsubset <- filter(world, region %in% submap$region & group %in% submap$group) %>%
+  arrange(group, order)
+
+mapsubset_avg <- submap %>%
+  filter(region %in% datasubset$name) %>%
+  unique() %>%
+  group_by(region) %>%
+  summarize(long = median(long), lat = median(lat))%>%
+  mutate(region = str_replace_all(region, " ", "\n"))
+
+ggplot() + 
+  geom_polygon(aes(x = long, y = lat, group = group), fill = "white", color = "grey50", data = mapsubset) + 
+  geom_point(aes(x = long, y = lat, size = capacity_MW), data = hydro_sub, shape = 1) + 
+  coord_map(xlim = c(lims$long_min*1.01, lims$long_max*.98), ylim = c(lims$lat_min*1.01, lims$lat_max*1.05)) +
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), 
+        legend.position = c(1, 0), legend.justification = c(1, 0), legend.direction = "vertical", legend.background = element_rect(fill = "transparent")) + 
+  scale_size_continuous("Capacity(MW)", breaks = c(10, 100, 1000), trans = "log10", range = c(.25, 4)) + 
+  ggtitle("Hydroelectric power plants")
+
+```
+
+
+#### Subject-unrelated, topic-related (Non-probative)
+
+```{r, out.width = "60%"}
+datasubset <- filter(location, simple == "Europe" | name == "Russia") %>%
+  mutate(name = str_replace(name, "United Kingdom", "UK") %>%
+           str_replace("Czechia", "Czech Republic"))
+
+lims <- filter(world, region %in% datasubset$name) %>%
+  filter(is.na(subregion )) %>%
+  summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
+
+submap <- filter(world, long > -15, long < 25, lat < 70, lat > 37)
+
+mapsubset <- filter(world, region %in% submap$region & group %in% submap$group) %>%
+  arrange(group, order)
+
+mapsubset_avg <- submap %>%
+  filter(region %in% datasubset$name) %>%
+  unique() %>%
+  group_by(region) %>%
+  summarize(long = median(long), lat = median(lat))%>%
+  mutate(region = str_replace_all(region, " ", "\n"))
+
+hydro_sub <- filter(hydro_plants, long > -12, long < 25, lat > 36, lat < 60)
+
+ggplot() + 
+  geom_polygon(aes(x = long, y = lat, group = group), fill = "white", color = "grey50", data = mapsubset) + 
+  geom_point(aes(x = long, y = lat, size = capacity_MW), data = hydro_sub, shape = 1) + 
+  coord_map(xlim = c(-12, 25), ylim = c(36, 60)) +
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank()) + 
+  scale_size_continuous("Capacity(MW)") + 
+  ggtitle("Hydroelectric power plants")
+
+
+```
+
+#### Subject-related, topic-related (probative)
+
+```{r, out.width = "60%", message = F, warning = F}
+datasubset <- electricity_all %>% 
+  right_join(
+    filter(location, simple == "South America") %>% select(name), by = c("name")
+  ) %>%
+  select(name, Hydroelectric = HydroelectricPlants) %>%
+  arrange(desc(Hydroelectric)) %>%
+  mutate(name = factor(name, levels = name)) %>%
+  mutate(name = str_replace(name, "South Georgia(.*)", "South Georgia") %>%
+           str_replace("Falkland Islands(.*)", "Falkland Islands"))
+
+lims <- filter(world, region %in% datasubset$name) %>%
+  filter(is.na(subregion )) %>%
+  summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
+
+submap <- filter(world,
+                 long > lims$long_min*1.01, 
+                 long < lims$long_max*.98, 
+                 lat > lims$lat_min*1.01, 
+                 lat < lims$lat_max*1.05)
+
+mapsubset <- filter(world, region %in% submap$region & group %in% submap$group) %>%
+  arrange(group, order) %>%
+  left_join(datasubset, by = c("region" = "name"))
+
+mapsubset_avg <- submap %>%
+  filter(region %in% datasubset$name) %>%
+  unique() %>%
+  group_by(region) %>%
+  summarize(long = median(long), lat = median(lat))%>%
+  mutate(region = str_replace_all(region, " ", "\n"))
+
+ggplot() + 
+  geom_polygon(aes(x = long, y = lat, group = group, fill = Hydroelectric), color = "black", data = mapsubset) + 
+  coord_map(xlim = c(lims$long_min*1.01, lims$long_max*.98), ylim = c(lims$lat_min*1.01, lims$lat_max*1.05)) +
+  scale_fill_gradient2("% Hydro\nPower", low = "#b2182b", high = "#2166ac", mid = "white", midpoint = 50, limits = c(0, 100)) + 
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), 
+        legend.position = c(1, 0), legend.justification = c(1, 0), legend.direction = "vertical", legend.background = element_rect(fill = "transparent"))
+```
