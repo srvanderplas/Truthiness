@@ -171,7 +171,60 @@ borders <- borders %>%
   nest(-abbr, -name, -land.border, -coast)
 
 rm(cts, pg, vars)
-
+borders2 <- "https://www.cia.gov/library/publications/the-world-factbook/fields/2096.html" %>%
+  read_html() %>%
+  xml_nodes("#fieldListing") %>%
+  xml_children() %>% 
+  xml_children() %>%
+  map_df(.f = function(x) {
+    data_frame(
+      abbr = xml_attr(x, "id"),
+      name = xml_find_first(x, "td") %>%
+        xml_text(),
+      label = xml_find_all(x, "td[@class='fieldData']/strong/text()") %>%
+        xml_text() %>%
+        str_replace_all("\\n", ""),
+      total = xml_find_all(x, "td[@class='fieldData']/text()") %>%
+        xml_text() %>%
+        str_replace_all("\\n", "") %>%
+        str_trim() %>%
+        (function(xx) {
+          nc <- nchar(xx) > 0
+          if (sum(nc) > 0) return(xx[nc])
+          return("")
+        })
+    ) 
+  }) %>%
+  filter(!is.na(abbr)) %>%
+  filter(!str_detect(label, "note")) %>%
+  group_by(name) %>%
+  mutate(n = length(name), nrow = row_number()) %>%
+  ungroup() %>%
+  mutate(name = ifelse(name == "France", ifelse(nrow < 3, "France", "French Guiana"), name)) %>%
+  mutate(abbr = ifelse(abbr == "fr", ifelse(nrow < 3, "fr", "frg"), abbr)) %>%
+  mutate(label = str_replace(label, "(.*)total:", "total:")) %>%
+  select(-n, -nrow) %>%
+  group_by(name) %>%
+  mutate(n = str_replace(label, "border countries \\((\\d{1,})\\):", "\\1") %>% as.numeric() %>% na_fill()) %>%
+  mutate(label = str_replace_all(label, "[[:punct:]\\d]{1,}", "") %>% str_trim()) %>%
+  mutate(total = str_replace_all(total, ",(\\d{3})", "\\1")) %>%
+  spread(key = label, value = total) %>%
+  mutate(`border countries` = ifelse(is.na(`border sovereign base areas`), `border countries`, paste0(`border countries`, ", ", `border sovereign base areas`)),
+         `border countries` = ifelse(is.na(`regional borders`), `border countries`, paste0(`border countries`, ", ", `regional borders`))) %>%
+  select(abbr, name, n, total, `border countries`) %>%
+  rename(totalLandBorder = total, borderCountry = `border countries`) %>%
+  mutate(borderCountry = str_split(borderCountry, ", ")) %>%
+  unnest() %>%
+  tidyr::extract(borderCountry, into = c("country", "length"),
+                 regex = "(.*?) ([\\d,\\.]{1,}) km") %>%
+  filter(!is.na(country)) %>%
+  group_by(name) %>%
+  mutate(n = n()) %>%
+  mutate(totalLandBorder = str_replace(totalLandBorder, " km", "") %>% str_trim %>% as.numeric(),
+         length = str_trim(length) %>% as.numeric()) %>%
+  ungroup() %>%
+  nest(country, length)
+  
 
 pgs <- paste0("https://www.cia.gov/library/publications/the-world-factbook/fields/", 2237:2240, ".html")
 pg <- purrr::map(pgs, read_html)
@@ -508,4 +561,4 @@ ethnicity <- "https://www.cia.gov/library/publications/the-world-factbook/fields
   select(name, ethnicity = group_name, pct = pct)
 
 
-save(areas, borders, electricity_all, location, religion, population, ethnicity, file = "Data/factbook.Rdata")
+save(areas, borders, borders2, electricity_all, location, religion, population, ethnicity, file = "Data/factbook.Rdata")
