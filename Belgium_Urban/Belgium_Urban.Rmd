@@ -17,16 +17,23 @@ library(ggrepel)
 # library(ggalt)
 map.world <- map_data("world")
 
-library(rworldmap)
-library(sp)
-library(proj4)
-library(rgdal)
-library(RgoogleMaps)
+library(ggmap)
 
 library(tidyverse)
-world <- map_data("world")
-world2 <- map_data("world2")
 
+library(geojsonio)
+belgium_italy <- geojson_read("../Data/belgiumItaly.geo.json", what = "sp")
+belgium_italy_data <- data_frame(
+  name = as.character(belgium_italy@data$name),
+  id = rownames(belgium_italy@data)
+)
+
+
+belgium_italy <- fortify(belgium_italy) %>%
+  left_join(belgium_italy_data)
+rm(belgium_italy_data)
+
+world <- map_data("world")
 ```
 
 ## Over 95% of Belgium's population lives in urban areas
@@ -167,7 +174,7 @@ tmp <- filter(location, str_detect(simple, region)) %>%
 
 lims <- tmp %>%
   filter(is.na(subregion)) %>%
-  right_join(filter(location, str_detect(desc, region2))) %>%
+  right_join(filter(location, name %in% ccr)) %>%
   select(lat, long) %>%
   summarize_all(.funs = funs(min, max), na.rm = T)
 
@@ -233,122 +240,81 @@ tmp %>%
 #### Subject-related, topic-related (Non-probative)
 
 ```{r, out.width = "60%"}
-datasubset <- filter(location, simple == "South America") %>%
-  mutate(name = str_replace(name, "South Georgia(.*)", "South Georgia") %>%
-           str_replace("Falkland Islands(.*)", "Falkland Islands"))
-
-lims <- filter(world, region %in% datasubset$name) %>%
-  filter(is.na(subregion )) %>%
-  summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
-
-submap <- filter(world,
-                 long > lims$long_min*1.01, 
-                 long < lims$long_max*.98, 
-                 lat > lims$lat_min*1.01, 
-                 lat < lims$lat_max*1.05)
-
-hydro_sub <- filter(hydro_plants, 
-                    long > lims$long_min*1.01, 
-                    long < lims$long_max*.98, 
-                    lat > lims$lat_min*1.01, 
-                    lat < lims$lat_max*1.05)
-
-mapsubset <- filter(world, region %in% submap$region & group %in% submap$group) %>%
-  arrange(group, order)
-
-mapsubset_avg <- submap %>%
-  filter(region %in% datasubset$name) %>%
-  unique() %>%
-  group_by(region) %>%
-  summarize(long = median(long), lat = median(lat))%>%
-  mutate(region = str_replace_all(region, " ", "\n"))
-
-ggplot() + 
-  geom_polygon(aes(x = long, y = lat, group = group), fill = "white", color = "grey50", data = mapsubset) + 
-  geom_point(aes(x = long, y = lat, size = capacity_MW), data = hydro_sub, shape = 1) + 
-  coord_map(xlim = c(lims$long_min*1.01, lims$long_max*.98), ylim = c(lims$lat_min*1.01, lims$lat_max*1.05)) +
-  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), 
-        legend.position = c(1, 0), legend.justification = c(1, 0), legend.direction = "vertical", legend.background = element_rect(fill = "transparent")) + 
-  scale_size_continuous("Capacity(MW)", breaks = c(10, 100, 1000), trans = "log10", range = c(.25, 4)) + 
-  ggtitle("Hydroelectric power plants")
-
+belgiummap <- filter(belgium_italy, name == "Belgium") %>%
+  arrange(id, group, order)
+belgiumbox <- c(left = min(belgiummap$long), bottom = min(belgiummap$lat), right = max(belgiummap$long), top = max(belgiummap$lat))
+if (!file.exists("../Data/belgiummaptiles.Rdata")) {
+  belgiummaptiles <- get_stamenmap(belgiumbox, zoom = 8) 
+  save(belgiummaptiles, file = "../Data/belgiummaptiles.Rdata")
+} else {
+  load("../Data/belgiummaptiles.Rdata")
+}
+belgiummaptiles %>% ggmap() + 
+  geom_path(aes(x = long, y = lat, group = group), data = belgiummap, color = "red", alpha = .5) + 
+  theme_map() + 
+  ggtitle("Belgium")
+rm(belgiummap, belgiumbox, belgiummaptiles)
 ```
 
 
 #### Subject-unrelated, topic-related (Non-probative)
 
 ```{r, out.width = "60%"}
-datasubset <- filter(location, simple == "Europe" | name == "Russia") %>%
-  mutate(name = str_replace(name, "United Kingdom", "UK") %>%
-           str_replace("Czechia", "Czech Republic"))
-
-lims <- filter(world, region %in% datasubset$name) %>%
-  filter(is.na(subregion )) %>%
-  summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
-
-submap <- filter(world, long > -15, long < 25, lat < 70, lat > 37)
-
-mapsubset <- filter(world, region %in% submap$region & group %in% submap$group) %>%
-  arrange(group, order)
-
-mapsubset_avg <- submap %>%
-  filter(region %in% datasubset$name) %>%
-  unique() %>%
-  group_by(region) %>%
-  summarize(long = median(long), lat = median(lat))%>%
-  mutate(region = str_replace_all(region, " ", "\n"))
-
-hydro_sub <- filter(hydro_plants, long > -12, long < 25, lat > 36, lat < 60)
-
-ggplot() + 
-  geom_polygon(aes(x = long, y = lat, group = group), fill = "white", color = "grey50", data = mapsubset) + 
-  geom_point(aes(x = long, y = lat, size = capacity_MW), data = hydro_sub, shape = 1) + 
-  coord_map(xlim = c(-12, 25), ylim = c(36, 60)) +
-  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank()) + 
-  scale_size_continuous("Capacity(MW)") + 
-  ggtitle("Hydroelectric power plants")
-
-
+italymap <- filter(belgium_italy, name == "Italy") %>%
+  arrange(id, group, order)
+italybox <- c(left = min(italymap$long), bottom = min(italymap$lat), right = max(italymap$long), top = max(italymap$lat))
+if (!file.exists("../Data/italymaptiles.Rdata")) {
+  italymaptiles <- get_stamenmap(italybox, zoom = 6)
+  save(italymaptiles, file = "../Data/italymaptiles.Rdata")
+} else {
+  load("../Data/italymaptiles.Rdata")
+}
+italymaptiles %>% ggmap() + 
+  geom_path(aes(x = long, y = lat, group = group), data = italymap, color = "red", alpha = .5) + 
+  theme_map() + 
+  ggtitle("Italy")
+rm(italymap, italymaptiles, italybox)
 ```
 
 #### Subject-related, topic-related (probative)
 
 ```{r, out.width = "60%", message = F, warning = F}
-datasubset <- electricity_all %>% 
-  right_join(
-    filter(location, simple == "South America") %>% select(name), by = c("name")
-  ) %>%
-  select(name, Hydroelectric = HydroelectricPlants) %>%
-  arrange(desc(Hydroelectric)) %>%
-  mutate(name = factor(name, levels = name)) %>%
-  mutate(name = str_replace(name, "South Georgia(.*)", "South Georgia") %>%
-           str_replace("Falkland Islands(.*)", "Falkland Islands"))
-
-lims <- filter(world, region %in% datasubset$name) %>%
-  filter(is.na(subregion )) %>%
-  summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
-
-submap <- filter(world,
-                 long > lims$long_min*1.01, 
-                 long < lims$long_max*.98, 
-                 lat > lims$lat_min*1.01, 
-                 lat < lims$lat_max*1.05)
-
-mapsubset <- filter(world, region %in% submap$region & group %in% submap$group) %>%
-  arrange(group, order) %>%
-  left_join(datasubset, by = c("region" = "name"))
-
-mapsubset_avg <- submap %>%
-  filter(region %in% datasubset$name) %>%
+region <- "Europe"
+cc <- c("Belgium", "Netherlands", "United Kingdom", "Ireland")
+ccr <- unnest(borders2) %>%
+  filter(country %in% cc) %>%
+  bind_rows(data_frame(name = cc, country = cc)) %>%
+  select(name) %>%
   unique() %>%
-  group_by(region) %>%
-  summarize(long = median(long), lat = median(lat))%>%
-  mutate(region = str_replace_all(region, " ", "\n"))
+  arrange(name) %>%
+  magrittr::extract2("name")
 
-ggplot() + 
-  geom_polygon(aes(x = long, y = lat, group = group, fill = Hydroelectric), color = "black", data = mapsubset) + 
-  coord_map(xlim = c(lims$long_min*1.01, lims$long_max*.98), ylim = c(lims$lat_min*1.01, lims$lat_max*1.05)) +
-  scale_fill_gradient2("% Hydro\nPower", low = "#b2182b", high = "#2166ac", mid = "white", midpoint = 50, limits = c(0, 100)) + 
-  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), 
-        legend.position = c(1, 0), legend.justification = c(1, 0), legend.direction = "vertical", legend.background = element_rect(fill = "transparent"))
+tmp <- filter(location, str_detect(simple, region)) %>%
+  select(name) %>%
+  left_join(location, by = 'name') %>%
+  mutate(name = str_replace_all(name, c("United Kingdom" = "UK", "Czechia"= "Czech Republic"))) %>%
+  filter(!is.na(urbanPct)) %>%
+  select(name, urban = urbanPct) %>%
+  mutate(urban = cut(urban, c(seq(5, 100, 10), 100))) %>%
+  full_join(world, by = c("name" = "region"))
+
+lims <- tmp %>%
+  filter(name %in% ccr) %>%
+  select(lat, long) %>%
+  summarize_all(.funs = funs(min, max), na.rm = T)
+
+labs <- location %>%
+  filter(name %in% c("France", "Germany", "United Kingdom", "Greece", "Italy", "Spain", "Belgium"))  %>%
+  mutate(name = str_replace_all(name, c("United Kingdom" = "UK", "Czechia"= "Czech Republic"))) 
+
+tmp %>%
+  ggplot() + 
+  geom_polygon(aes(x = long, y = lat, group = group), color = "black", fill = "grey50") + 
+  geom_polygon(aes(x = long, y = lat, fill = urban, group = group), color = "black", data = filter(tmp, !is.na(urban))) + 
+  geom_label_repel(aes(x = label_long, y = label_lat, label = name), data = labs, label.padding = .4) + 
+  coord_quickmap(xlim = c(lims$long_min, lims$long_max - 15), ylim = c(lims$lat_min, lims$lat_max+5), expand = T) + 
+  theme(axis.text = element_blank(), axis.ticks = element_blank(), axis.title = element_blank(), legend.direction = "horizontal", legend.position = "bottom") + 
+  scale_fill_brewer("% Population\nin Urban Areas") + 
+  ggtitle("Urbanization in Europe")
 ```
+
