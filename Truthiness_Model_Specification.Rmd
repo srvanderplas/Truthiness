@@ -1,0 +1,108 @@
+---
+title: "Truthiness Model Specification"
+author: "Susan VanderPlas"
+date: "July 25, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Definitions
+
+- _subject relatedness_: The image shown is related to the subject of the claim (e.g. the country or geographic entity)
+- _topic relatedness_: The image is related to the topic of the claim (e.g. the numerical dimension of the claim)
+- _spatial-only claim_: The claim can be evaluated using only a map without any additional explicit variables (e.g. the claim deals with explicit geographic boundaries)
+- _probative value_: The image shown can be used to determine whether the claim is true or false
+    - _pictures_ do not provide any probative value
+    - _charts_ may provide probative value if they are both subject and topic related [1]
+    - _maps_ may provide probative value if they are both subject and topic related, but they are not guaranteed to provide probative information even if both subject and topic relatedness are met. 
+    
+[1] In the current specification, there is no provision for subject-related, topic-related nonprobative charts. It is not completely impossible to imagine that such charts might exist, however. 
+
+
+
+## Trials
+
+The following images are generated for each of 12 claims. Of the claims, 6 are spatial only (can be determined from a map without any additional variables), 6 require additional data. Within spatial classification, half of the claims are true, and half are false.  
+
+Number | Subject Related | Topic Related | Probative | Media Type
+------ | --------------- | ------------- | --------- | ----------
+0 |   |   |   | claim alone
+1 | Y | - | - | picture
+2 | - | - | - | picture
+3 | Y | - | - | chart
+4 | - | - | - | chart
+5 | Y | Y | Y | chart
+6 | - | Y | - | chart
+7 | Y | - | - | map
+8 | - | Y | - | map
+9 | Y | Y | - | map
+10 | - | Y | - | map
+11 | Y | Y | Y | map
+
+## Notation
+
+Let: 
+
+- $\alpha_i$, $i = 1, 2, 3$ correspond to image type (1 = picture, 2 = chart, 3 = map)
+- $\beta_j$, $j = 1, 2$ correspond to relatedness type (1 = subject, 2 = topic)
+- $\gamma$ correspond to probative value
+- $\delta_k$, $k = 1, 2$ correspond to claim type (1 = spatial-only, 2 = data)
+- $\zeta_l$, $l = 1, 2$ correspond to claim truth (1 = true, 2 = false)
+- $\eta_m$, $m = 1, 2, 3$ correspond to claim number (3 replicates of each combination of claim truth and claim type)
+- $\rho_n$, $n = 1, ...$ correspond to participant number
+
+Fixed/Random Effects:
+- $\alpha$ fixed
+- $\beta$ fixed
+- $\gamma$ fixed
+- $\delta$ fixed
+- $\zeta$ fixed
+- $\eta$ random?
+- $\rho$ random
+
+## Truthiness Models
+
+The specification of effects for $\delta, \zeta, \eta, \rho$ are constant throughout the models discussed in this section and have been omitted for simplicity.
+
+### Vanilla Truthiness
+The standard truthiness paradigm compares claim evaluations made in the presence of a related or unrelated photo.
+
+Trials: 0, 1, 2
+
+$$ \text{logit}(\text{True Claim}) \propto \alpha_1 + \beta_1 1_{subj. related}$$ 
+
+### Chart Truthiness
+The chart truthiness paradigm compares claim evaluations made in the presence of a subject related or topic related nonprobative chart.
+
+Trials: 0, 3, 4, 6
+
+$$\text{logit}(\text{True Claim}) \propto \alpha_2 + \beta_1 1_{subj. related} + \beta_2 1_{topic\ related}$$ 
+### Map Truthiness
+The map truthiness paradigm compares claim evaluations made in the presence of a subject related or topic related nonprobative chart. This model is fully specified, that is, the interaction between subject-relatedness and topic-relatedness can be evaluated.
+
+
+Trials: 0, 7, 8, 9, 10
+
+$$\text{logit}(\text{True Claim}) \propto \alpha_3 + \beta_1 1_{subj. related} \times \beta_2 1_{topic\ related}$$ 
+
+### Item-Type Truthiness
+This model examines only the effect of subject-relatedness and does not consider topic-relatedness, as it is not feasible to get pictures which are topic-related.
+
+Trials: 0, 1, 3, 7, 2, 4, 8
+
+$$\text{logit}(\text{True Claim}) \propto \alpha * \beta_1 1_{subj. related}$$ 
+
+This model fully contains the Vanilla truthiness model, but does not contain the chart/map truthiness models because of the exclusion of the topic-related effects.
+
+### Item Type Motivation
+This model examines whether having probative images increases the probability of a claim being evaluated as true. That is, does the participant bother using the information they're given to evaluate the claim?
+If not, then we have fairly big problems...
+
+Trials: 0, 3, 4, 5, 6, 7, 8, 9, 10, 11
+
+$$\text{logit}(\text{True Claim}) \propto \alpha_{2,3} \times (\beta_1 1_{subj. related} \times \beta_2 1_{topic\ related} + \gamma 1_{probative})$$
+
+
+
