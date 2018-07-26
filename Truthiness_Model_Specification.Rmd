@@ -2,12 +2,21 @@
 title: "Truthiness Model Specification"
 author: "Susan VanderPlas"
 date: "July 25, 2018"
-output: html_document
+output: 
+  html_document: 
+    number_sections: yes
+    toc: yes
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = F)
+library(tidyverse)
+library(lme4)
+library(furrr)
 ```
+
+# Introduction
+
 ## Definitions
 
 - _subject relatedness_: The image shown is related to the subject of the claim (e.g. the country or geographic entity)
@@ -21,8 +30,29 @@ knitr::opts_chunk$set(echo = TRUE)
 [1] In the current specification, there is no provision for subject-related, topic-related nonprobative charts. It is not completely impossible to imagine that such charts might exist, however. 
 
 
+## Notation
 
-## Trials
+Let: 
+
+- $\alpha_i$, $i = 1, 2, 3$ correspond to image type (1 = picture, 2 = chart, 3 = map)
+- $\beta_j$, $j = 1, 2$ correspond to relatedness type (1 = subject, 2 = topic)
+- $\gamma$ correspond to probative value
+- $\delta_k$, $k = 1, 2$ correspond to claim type (1 = spatial-only, 2 = data)
+- $\zeta_l$, $l = 1, 2$ correspond to claim truth (1 = true, 2 = false)
+- $\eta_m$, $m = 1, ..., 12$ correspond to claim number (3 replicates of each combination of claim truth and claim type)
+- $\rho_n$, $n = 1, ...$ correspond to participant number
+
+Fixed/Random Effects:
+- $\alpha$ fixed
+- $\beta$ fixed
+- $\gamma$ fixed
+- $\delta$ fixed
+- $\zeta$ fixed
+- $\eta$ random
+- $\rho$ random
+
+
+# Trials
 
 The following images are generated for each of 12 claims. Of the claims, 6 are spatial only (can be determined from a map without any additional variables), 6 require additional data. Within spatial classification, half of the claims are true, and half are false.  
 
@@ -41,45 +71,24 @@ Number | Subject Related | Topic Related | Probative | Media Type
 10 | - | Y | - | map
 11 | Y | Y | Y | map
 
-## Notation
-
-Let: 
-
-- $\alpha_i$, $i = 1, 2, 3$ correspond to image type (1 = picture, 2 = chart, 3 = map)
-- $\beta_j$, $j = 1, 2$ correspond to relatedness type (1 = subject, 2 = topic)
-- $\gamma$ correspond to probative value
-- $\delta_k$, $k = 1, 2$ correspond to claim type (1 = spatial-only, 2 = data)
-- $\zeta_l$, $l = 1, 2$ correspond to claim truth (1 = true, 2 = false)
-- $\eta_m$, $m = 1, 2, 3$ correspond to claim number (3 replicates of each combination of claim truth and claim type)
-- $\rho_n$, $n = 1, ...$ correspond to participant number
-
-Fixed/Random Effects:
-- $\alpha$ fixed
-- $\beta$ fixed
-- $\gamma$ fixed
-- $\delta$ fixed
-- $\zeta$ fixed
-- $\eta$ random?
-- $\rho$ random
-
-## Truthiness Models
+# Truthiness Models
 
 The specification of effects for $\delta, \zeta, \eta, \rho$ are constant throughout the models discussed in this section and have been omitted for simplicity.
 
-### Vanilla Truthiness
+## Vanilla Truthiness
 The standard truthiness paradigm compares claim evaluations made in the presence of a related or unrelated photo.
 
 Trials: 0, 1, 2
 
 $$ \text{logit}(\text{True Claim}) \propto \alpha_1 + \beta_1 1_{subj. related}$$ 
 
-### Chart Truthiness
+## Chart Truthiness
 The chart truthiness paradigm compares claim evaluations made in the presence of a subject related or topic related nonprobative chart.
 
 Trials: 0, 3, 4, 6
 
 $$\text{logit}(\text{True Claim}) \propto \alpha_2 + \beta_1 1_{subj. related} + \beta_2 1_{topic\ related}$$ 
-### Map Truthiness
+## Map Truthiness
 The map truthiness paradigm compares claim evaluations made in the presence of a subject related or topic related nonprobative chart. This model is fully specified, that is, the interaction between subject-relatedness and topic-relatedness can be evaluated.
 
 
@@ -87,7 +96,7 @@ Trials: 0, 7, 8, 9, 10
 
 $$\text{logit}(\text{True Claim}) \propto \alpha_3 + \beta_1 1_{subj. related} \times \beta_2 1_{topic\ related}$$ 
 
-### Item-Type Truthiness
+## Item-Type Truthiness
 This model examines only the effect of subject-relatedness and does not consider topic-relatedness, as it is not feasible to get pictures which are topic-related.
 
 Trials: 0, 1, 3, 7, 2, 4, 8
@@ -96,7 +105,7 @@ $$\text{logit}(\text{True Claim}) \propto \alpha * \beta_1 1_{subj. related}$$
 
 This model fully contains the Vanilla truthiness model, but does not contain the chart/map truthiness models because of the exclusion of the topic-related effects.
 
-### Item Type Motivation
+## Item Type Motivation
 This model examines whether having probative images increases the probability of a claim being evaluated as true. That is, does the participant bother using the information they're given to evaluate the claim?
 If not, then we have fairly big problems...
 
@@ -104,5 +113,87 @@ Trials: 0, 3, 4, 5, 6, 7, 8, 9, 10, 11
 
 $$\text{logit}(\text{True Claim}) \propto \alpha_{2,3} \times (\beta_1 1_{subj. related} \times \beta_2 1_{topic\ related} + \gamma 1_{probative})$$
 
+## Simplified Truthiness and Motivation
 
+This model combines truthiness and motivation exploration. 
 
+Trials: 0, 4, 3, 5, 8, 9, 11
+
+$$\begin{align}\text{logit}(\text{True Claim}) \propto & \phantom{ + }\delta\times 1_{spatial-only} + \zeta \times 1_{true\ claim} & \text{claim fixed effects}\\
+&+  \alpha_2\times 1_{chart} + \alpha_3 \times 1_{map} + \beta \times 1_{related} + \gamma \times 1_{probative}  & \text{image fixed effects}\\
+&+ \eta_m + \rho_n & \text{random effects for claim and participant}\\
+& + \epsilon_{tmn} & \text{random effect for evaluation of specific claim}\end{align}$$
+
+### Simulation
+
+```{r simplified-truthiness-model, eval = F}
+dtruthy <- .05
+dprobative <- .1
+nparticipants <- 60
+nreps <- 100
+
+# Generate model matrix
+claims <- expand.grid(rep = 1:3,
+                      claimtruth = c(TRUE, FALSE),
+                      claimtype = c("spatial", "data")) %>%
+  as_data_frame() %>%
+  mutate(claim = row_number(), claim_difficulty = rnorm(12, .5, .15)) %>%
+  select(claim, claimtype, claimtruth, claim_difficulty)
+
+trial_types <- tribble(~chart, ~related, ~probative,
+                       "none", F, F,
+                       "chart", F, F,
+                       "chart", T, F,
+                       "chart", T, T,
+                       "map", F, F,
+                       "map", T, F,
+                       "map", T, T) %>%
+  mutate(trial_difficulty = related*dtruthy + probative * dprobative)
+
+sample_participant_trial_types <- function(){
+  sample(c(1:7, 1, sample(2:7, size = 4, replace = F)), 12, replace = F)
+}
+
+sim_eval <- function(nparticipants, dprobative, dtruthy, simrep = NULL) {
+  evaluations <- data_frame(participant = 1:nparticipants) %>%
+  mutate(trials = map(participant, ~bind_cols(claims, trial_types[sample_participant_trial_types(),]) %>%
+                        mutate(difficulty = claim_difficulty + trial_difficulty, 
+                               difficulty = pmin(difficulty, .98) %>% pmax(0),
+                               claim_eval = rbernoulli(length(difficulty), p = difficulty)))) %>%
+  unnest()
+
+  model <- glmer(claim_eval ~ (1|claim) + chart + related + probative + (1|participant), 
+                 data = evaluations, 
+                 family = "binomial")
+  msum <- summary(model)
+  
+  mcoef <- coef(msum) %>% as_tibble %>% mutate(var = rownames(msum$coefficients))
+  
+  tmp <- data_frame(nparticipants = nparticipants, dprobative = dprobative, dtruthy = dtruthy, 
+                    probative_sig = as.numeric(mcoef[5, 4]) < .05,
+                    truthy_sig = as.numeric(mcoef[4, 4]) < .05,
+                    fixef = list(mcoef),
+                    evals = list(evaluations))
+  if (is.null(simrep)) return(tmp)
+  
+  tmp %>% 
+    mutate(simrep = simrep)
+}
+
+sim_trials <- expand.grid(dtruthy = c(0, .05, .1, .15, .2, .25), dprobative = c(0, .05, .1, .15, .2, .25)) %>%
+  as_tibble() %>%
+  filter(dtruthy + dprobative <= .3) %>%
+  filter(dtruthy + dprobative > 0) %>%
+  mutate(nparticipants = list(data_frame(nparticipants = seq(20, 200, by = 20)))) %>%
+  unnest() %>%
+  mutate(simrep = list(data_frame(simrep = 1:nreps))) %>%
+  unnest()
+
+plan(multiprocess)
+sim_results <- future_pmap_dfr(sim_trials, sim_eval)
+
+sim_results_sum <- sim_results %>% group_by(nparticipants, dprobative, dtruthy) %>%
+  summarize_at(vars(probative_sig, truthy_sig), mean)
+
+save(sim_results_sum, sim_results, file = "simResults.Rdata")
+```

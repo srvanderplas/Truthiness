@@ -125,9 +125,27 @@ $(document).ready(function () {
 
 </div>
 
+<div id="TOC">
+<ul>
+<li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a><ul>
+<li><a href="#definitions"><span class="toc-section-number">1.1</span> Definitions</a></li>
+<li><a href="#notation"><span class="toc-section-number">1.2</span> Notation</a></li>
+</ul></li>
+<li><a href="#trials"><span class="toc-section-number">2</span> Trials</a></li>
+<li><a href="#truthiness-models"><span class="toc-section-number">3</span> Truthiness Models</a><ul>
+<li><a href="#vanilla-truthiness"><span class="toc-section-number">3.1</span> Vanilla Truthiness</a></li>
+<li><a href="#chart-truthiness"><span class="toc-section-number">3.2</span> Chart Truthiness</a></li>
+<li><a href="#item-type-truthiness"><span class="toc-section-number">3.3</span> Item-Type Truthiness</a></li>
+<li><a href="#item-type-motivation"><span class="toc-section-number">3.4</span> Item Type Motivation</a></li>
+<li><a href="#item-type"><span class="toc-section-number">3.5</span> Item Type</a></li>
+</ul></li>
+</ul>
+</div>
 
+<div id="introduction" class="section level1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
 <div id="definitions" class="section level2">
-<h2>Definitions</h2>
+<h2><span class="header-section-number">1.1</span> Definitions</h2>
 <ul>
 <li><em>subject relatedness</em>: The image shown is related to the subject of the claim (e.g. the country or geographic entity)</li>
 <li><em>topic relatedness</em>: The image is related to the topic of the claim (e.g. the numerical dimension of the claim)</li>
@@ -141,8 +159,23 @@ $(document).ready(function () {
 </ul>
 <p>[1] In the current specification, there is no provision for subject-related, topic-related nonprobative charts. It is not completely impossible to imagine that such charts might exist, however.</p>
 </div>
-<div id="trials" class="section level2">
-<h2>Trials</h2>
+<div id="notation" class="section level2">
+<h2><span class="header-section-number">1.2</span> Notation</h2>
+<p>Let:</p>
+<ul>
+<li><span class="math inline">\(\alpha_i\)</span>, <span class="math inline">\(i = 1, 2, 3\)</span> correspond to image type (1 = picture, 2 = chart, 3 = map)</li>
+<li><span class="math inline">\(\beta_j\)</span>, <span class="math inline">\(j = 1, 2\)</span> correspond to relatedness type (1 = subject, 2 = topic)</li>
+<li><span class="math inline">\(\gamma\)</span> correspond to probative value</li>
+<li><span class="math inline">\(\delta_k\)</span>, <span class="math inline">\(k = 1, 2\)</span> correspond to claim type (1 = spatial-only, 2 = data)</li>
+<li><span class="math inline">\(\zeta_l\)</span>, <span class="math inline">\(l = 1, 2\)</span> correspond to claim truth (1 = true, 2 = false)</li>
+<li><span class="math inline">\(\eta_m\)</span>, <span class="math inline">\(m = 1, 2, 3\)</span> correspond to claim number (3 replicates of each combination of claim truth and claim type)</li>
+<li><span class="math inline">\(\rho_n\)</span>, <span class="math inline">\(n = 1, ...\)</span> correspond to participant number</li>
+</ul>
+<p>Fixed/Random Effects: - <span class="math inline">\(\alpha\)</span> fixed - <span class="math inline">\(\beta\)</span> fixed - <span class="math inline">\(\gamma\)</span> fixed - <span class="math inline">\(\delta\)</span> fixed - <span class="math inline">\(\zeta\)</span> fixed - <span class="math inline">\(\eta\)</span> random? - <span class="math inline">\(\rho\)</span> random</p>
+</div>
+</div>
+<div id="trials" class="section level1">
+<h1><span class="header-section-number">2</span> Trials</h1>
 <p>The following images are generated for each of 12 claims. Of the claims, 6 are spatial only (can be determined from a map without any additional variables), 6 require additional data. Within spatial classification, half of the claims are true, and half are false.</p>
 <table>
 <thead>
@@ -242,49 +275,39 @@ $(document).ready(function () {
 </tbody>
 </table>
 </div>
-<div id="notation" class="section level2">
-<h2>Notation</h2>
-<p>Let:</p>
-<ul>
-<li><span class="math inline">\(\alpha_i\)</span>, <span class="math inline">\(i = 1, 2, 3\)</span> correspond to image type (1 = picture, 2 = chart, 3 = map)</li>
-<li><span class="math inline">\(\beta_j\)</span>, <span class="math inline">\(j = 1, 2\)</span> correspond to relatedness type (1 = subject, 2 = topic)</li>
-<li><span class="math inline">\(\gamma\)</span> correspond to probative value</li>
-<li><span class="math inline">\(\delta_k\)</span>, <span class="math inline">\(k = 1, 2\)</span> correspond to claim type (1 = spatial-only, 2 = data)</li>
-<li><span class="math inline">\(\zeta_l\)</span>, <span class="math inline">\(l = 1, 2\)</span> correspond to claim truth (1 = true, 2 = false)</li>
-<li><span class="math inline">\(\eta_m\)</span>, <span class="math inline">\(m = 1, 2, 3\)</span> correspond to claim number (3 replicates of each combination of claim truth and claim type)</li>
-<li><span class="math inline">\(\rho_n\)</span>, <span class="math inline">\(n = 1, ...\)</span> correspond to participant number</li>
-</ul>
-<p>Fixed/Random Effects: - <span class="math inline">\(\alpha\)</span> fixed - <span class="math inline">\(\beta\)</span> fixed - <span class="math inline">\(\gamma\)</span> fixed - <span class="math inline">\(\delta\)</span> fixed - <span class="math inline">\(\zeta\)</span> fixed - <span class="math inline">\(\eta\)</span> random? - <span class="math inline">\(\rho\)</span> random</p>
-</div>
-<div id="truthiness-models" class="section level2">
-<h2>Truthiness Models</h2>
+<div id="truthiness-models" class="section level1">
+<h1><span class="header-section-number">3</span> Truthiness Models</h1>
 <p>The specification of effects for <span class="math inline">\(\delta, \zeta, \eta, \rho\)</span> are constant throughout the models discussed in this section and have been omitted for simplicity.</p>
-<div id="vanilla-truthiness" class="section level3">
-<h3>Vanilla Truthiness</h3>
+<div id="vanilla-truthiness" class="section level2">
+<h2><span class="header-section-number">3.1</span> Vanilla Truthiness</h2>
 <p>The standard truthiness paradigm compares claim evaluations made in the presence of a related or unrelated photo.</p>
 <p>Trials: 0, 1, 2</p>
 <p><span class="math display">\[ \text{logit}(\text{True Claim}) \propto \alpha_1 + \beta_1 1_{subj. related}\]</span></p>
 </div>
-<div id="chart-truthiness" class="section level3">
-<h3>Chart Truthiness</h3>
+<div id="chart-truthiness" class="section level2">
+<h2><span class="header-section-number">3.2</span> Chart Truthiness</h2>
 <p>The chart truthiness paradigm compares claim evaluations made in the presence of a subject related or topic related nonprobative chart.</p>
 <p>Trials: 0, 3, 4, 6</p>
-<p><span class="math display">\[\text{logit}(\text{True Claim}) \propto \alpha_2 + \beta_1 1_{subj. related} + \beta_2 1_{topic\ related}\]</span> ### Map Truthiness The map truthiness paradigm compares claim evaluations made in the presence of a subject related or topic related nonprobative chart. This model is fully specified, that is, the interaction between subject-relatedness and topic-relatedness can be evaluated.</p>
+<p><span class="math display">\[\text{logit}(\text{True Claim}) \propto \alpha_2 + \beta_1 1_{subj. related} + \beta_2 1_{topic\ related}\]</span> ## Map Truthiness The map truthiness paradigm compares claim evaluations made in the presence of a subject related or topic related nonprobative chart. This model is fully specified, that is, the interaction between subject-relatedness and topic-relatedness can be evaluated.</p>
 <p>Trials: 0, 7, 8, 9, 10</p>
 <p><span class="math display">\[\text{logit}(\text{True Claim}) \propto \alpha_3 + \beta_1 1_{subj. related} \times \beta_2 1_{topic\ related}\]</span></p>
 </div>
-<div id="item-type-truthiness" class="section level3">
-<h3>Item-Type Truthiness</h3>
+<div id="item-type-truthiness" class="section level2">
+<h2><span class="header-section-number">3.3</span> Item-Type Truthiness</h2>
 <p>This model examines only the effect of subject-relatedness and does not consider topic-relatedness, as it is not feasible to get pictures which are topic-related.</p>
 <p>Trials: 0, 1, 3, 7, 2, 4, 8</p>
 <p><span class="math display">\[\text{logit}(\text{True Claim}) \propto \alpha * \beta_1 1_{subj. related}\]</span></p>
 <p>This model fully contains the Vanilla truthiness model, but does not contain the chart/map truthiness models because of the exclusion of the topic-related effects.</p>
 </div>
-<div id="item-type-motivation" class="section level3">
-<h3>Item Type Motivation</h3>
+<div id="item-type-motivation" class="section level2">
+<h2><span class="header-section-number">3.4</span> Item Type Motivation</h2>
 <p>This model examines whether having probative images increases the probability of a claim being evaluated as true. That is, does the participant bother using the information they’re given to evaluate the claim? If not, then we have fairly big problems…</p>
 <p>Trials: 0, 3, 4, 5, 6, 7, 8, 9, 10, 11</p>
 <p><span class="math display">\[\text{logit}(\text{True Claim}) \propto \alpha_{2,3} \times (\beta_1 1_{subj. related} \times \beta_2 1_{topic\ related} + \gamma 1_{probative})\]</span></p>
+</div>
+<div id="item-type" class="section level2">
+<h2><span class="header-section-number">3.5</span> Item Type</h2>
+<p>This model evaluates</p>
 </div>
 </div>
 
