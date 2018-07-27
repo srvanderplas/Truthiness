@@ -42,7 +42,10 @@ Let:
 - $\eta_m$, $m = 1, ..., 12$ correspond to claim number (3 replicates of each combination of claim truth and claim type)
 - $\rho_n$, $n = 1, ...$ correspond to participant number
 
+$\delta$, $\zeta$, and $\eta$ can be collapsed into a single random effect $\eta$ for simplicity if it is not deemed important to know the effect of the actual truth of the claim.
+
 Fixed/Random Effects:
+
 - $\alpha$ fixed
 - $\beta$ fixed
 - $\gamma$ fixed
@@ -71,6 +74,11 @@ Number | Subject Related | Topic Related | Probative | Media Type
 10 | - | Y | - | map
 11 | Y | Y | Y | map
 
+# Experiment Setup
+
+## Participant Instructions
+You will be shown a sequence of twelve claims that may or may not be accompanied by an image. You will have approximately 45 seconds to read each claim and evaluate whether it is true or false. If you do not know the answer, give your best guess.
+
 # Truthiness Models
 
 The specification of effects for $\delta, \zeta, \eta, \rho$ are constant throughout the models discussed in this section and have been omitted for simplicity.
@@ -81,6 +89,12 @@ The standard truthiness paradigm compares claim evaluations made in the presence
 Trials: 0, 1, 2
 
 $$ \text{logit}(\text{True Claim}) \propto \alpha_1 + \beta_1 1_{subj. related}$$ 
+
+### Simulation
+
+```{r}
+```
+
 
 ## Chart Truthiness
 The chart truthiness paradigm compares claim evaluations made in the presence of a subject related or topic related nonprobative chart.
@@ -183,10 +197,10 @@ trial_types <- tribble(~chart, ~related, ~probative,
                        "map", T, T)
 
 nreps <- 50
-sim_trials <- expand.grid(dtruthy = c(-1, -.5, -.25, -.1, -.05, 0, .05, 1, .25, .5, 1), 
-                          dprobative = c(-1, -.5, -.25, -.1, -.05, 0, .05, 1, .25, .5, 1)) %>%
+sim_trials <- expand.grid(dtruthy = seq(-1, 1, .1), 
+                          dprobative = 0) %>%
   as_tibble() %>%
-  mutate(nparticipants = list(data_frame(nparticipants = c(50, 100, 150, 200, 250)))) %>%
+  mutate(nparticipants = list(data_frame(nparticipants = c(50, 100, 150, 200, 250, 300, 350, 400, 450, 500)))) %>%
   unnest() %>%
   mutate(simrep = list(data_frame(simrep = 1:nreps))) %>%
   unnest()
@@ -209,18 +223,43 @@ sim_results2 <- future_pmap_dfr(sim_trials2, sim_eval)
 
 sim_results_sum2 <- sim_results2 %>% group_by(nparticipants, dprobative, dtruthy) %>%
   summarize_at(vars(probative_sig, truthy_sig), mean)
-save(sim_results_sum, sim_results, sim_results2, sim_result_sum2, file = "simResults.Rdata")
+save(sim_results_sum, sim_results, sim_results2, sim_results_sum2, file = "Data/SimpleTruthinessMotivation.Rdata")
 ```
+Simulation setup: 
+
+- 50 simulation reps per parameter combination
+- Trials allocated to participants as follows: 
+    - Each participant sees each claim once
+    - Each participant gets image-free claims twice (2)
+    - Each participant gets each chart claim once (6)
+    - The remaining 4 trials are randomly chosen from the picture conditions
+
+- Claim-specific effect randomly distributed $\sim N(0, 3)$ (that is, values generated on logit scale)
+- True effect size for truthiness generated on logit scale between -1 and 1
+- Bernoulli trial conducted for each participant/trial combination to select an answer according to the data-generating model
+
+Model: 
+- Simplified model to reduce simulation time - only manipulate truthiness, hold probative effect constant at 0    
+The power calculations for truthiness hold for probative effect as well
+- `glmer` model statement: `claim_eval ~ (1|claim) + chart + related + probative + (1|participant)`
+    - random effects for claim and participant
+    - fixed effects for chart, truthiness, and probative value
 
 ```{r}
-load("simResults.Rdata")
+load("Data/SimpleTruthinessMotivation.Rdata")
+ggplot(sim_results_sum) + 
+  geom_line(aes(x = dtruthy, y = truthy_sig, color = factor(nparticipants), group = nparticipants)) + 
+  ylab("Proportion of trials where relatedness is significant") + 
+  xlab("True difference due to relatedness") + 
+  scale_color_discrete("# Participants") + 
+  ggtitle("Simulated Power for glmer Truthiness Model - Coarse")
 
-# ggplot(sim_results_sum) + 
-#   geom_line(aes(x = dprobative, y = probative_sig, color = nparticipants, group = nparticipants)) + facet_wrap(~dtruthy)
-# ggplot(sim_results_sum) + 
-#   geom_line(aes(x = dtruthy, y = truthy_sig, color = nparticipants, group = nparticipants)) + facet_wrap(~dprobative)
 ggplot(sim_results_sum2) + 
-  geom_line(aes(x = dtruthy, y = truthy_sig, color = nparticipants, group = nparticipants))
+  geom_line(aes(x = dtruthy, y = truthy_sig, color = factor(nparticipants), group = nparticipants)) + 
+  ylab("Proportion of trials where relatedness is significant") + 
+  xlab("True difference due to relatedness") + 
+  scale_color_discrete("# Participants") + 
+  ggtitle("Simulated Power for glmer Truthiness Model")
 ```
 
 Conclusion: need ~350 participants to have a 75% chance of detecting a difference of 0.3 on log-odds scale. Additional participants don't actually help that much.
