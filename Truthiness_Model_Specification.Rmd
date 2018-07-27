@@ -92,9 +92,81 @@ $$ \text{logit}(\text{True Claim}) \propto \alpha_1 + \beta_1 1_{subj. related}$
 
 ### Simulation
 
-```{r}
-```
+```{r, eval = F}
+logit <- function(x) 1/(1 + exp(x))
+invlogit <- function(x) log(1/x - 1)
 
+sample_participant_trial_init <- function(){
+  sample(rep(1:3, times = 4), 12, replace = F)
+}
+
+sim_eval_init <- function(nparticipants, dtruthy, simrep = NULL, fullres = F) {
+  evaluations <- data_frame(participant = 1:nparticipants) %>%
+    mutate(trials = map(participant, ~bind_cols(claims, trial_types[sample_participant_trial_init(),]) %>%
+                          mutate(trial_difficulty = related*dtruthy) %>%
+                          mutate(difficulty = logit(claim_difficulty + trial_difficulty), 
+                                 claim_eval = rbernoulli(length(difficulty), p = difficulty)))) %>%
+    unnest()
+
+  model <- glmer(claim_eval ~ (1|claim) + related + (1|participant), 
+                 data = evaluations, 
+                 family = "binomial")
+  msum <- summary(model)
+  
+  mcoef <- coef(msum) %>% as_tibble %>% mutate(var = rownames(msum$coefficients))
+  
+  tmp <- data_frame(nparticipants = nparticipants, dtruthy = dtruthy, 
+                    truthy_sig = as.numeric(mcoef[2, 4]) < .05,
+                    fixef = list(mcoef)
+                    )
+  if (fullres) {
+    tmp <- tmp %>% mutate(evals = list(evaluations))
+  }
+  
+  if (is.null(simrep)) return(tmp)
+  
+  tmp %>% 
+    mutate(simrep = simrep)
+}
+
+
+# Generate model matrix
+claims <- expand.grid(rep = 1:3,
+                      claimtruth = c(TRUE, FALSE),
+                      claimtype = c("spatial", "data")) %>%
+  as_data_frame() %>%
+  mutate(claim = row_number(), claim_difficulty = rnorm(12, 0, 3)) %>%
+  select(claim, claimtype, claimtruth, claim_difficulty)
+
+trial_types <- tribble(~chart, ~related, ~probative,
+                       "none", F, F,
+                       "image", T, F,
+                       "image", F, F)
+
+nreps <- 100
+sim_trials_init <- data_frame(dtruthy = seq(-1, 1, .1)) %>%
+  mutate(nparticipants = list(data_frame(nparticipants = c(50, 100, 150, 200, 250, 300, 350, 400, 450, 500)))) %>%
+  unnest() %>%
+  mutate(simrep = list(data_frame(simrep = 1:nreps))) %>%
+  unnest()
+
+plan(multiprocess)
+sim_results_init <- future_pmap_dfr(sim_trials_init, sim_eval_init)
+
+sim_results_sum_init <- sim_results_init %>% group_by(nparticipants, dtruthy) %>%
+  summarize_at(vars(truthy_sig), mean)
+save(sim_results_init, sim_results_sum_init, file = "Data/ClassicTruthinessSim.Rdata")
+
+```
+```{r}
+load("Data/ClassicTruthinessSim.Rdata")
+ggplot(sim_results_sum_init) + 
+  geom_line(aes(x = dtruthy, y = truthy_sig, color = factor(nparticipants), group = nparticipants)) + 
+  ylab("Proportion of trials where relatedness is significant") + 
+  xlab("True difference due to relatedness") + 
+  scale_color_discrete("# Participants") + 
+  ggtitle("Simulated Power for Classic Truthiness - Coarse")
+```
 
 ## Chart Truthiness
 The chart truthiness paradigm compares claim evaluations made in the presence of a subject related or topic related nonprobative chart.
