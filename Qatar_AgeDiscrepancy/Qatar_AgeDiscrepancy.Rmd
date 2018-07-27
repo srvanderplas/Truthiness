@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}
-knitr::opts_chunk$set(echo = F)
+knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 # source("../worldfactbook.R")
 load("../Data/factbook.Rdata")

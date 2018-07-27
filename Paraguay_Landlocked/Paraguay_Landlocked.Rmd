@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}
-knitr::opts_chunk$set(echo = F)
+knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 # source("../worldfactbook.R")
 load("../Data/factbook.Rdata")
@@ -175,8 +175,7 @@ ggplot(data = arrange(mapsubset, group, order)) +
     orientation = c(5, 110, 0),
     xlim = c(lims$long_min, lims$long_max),
     ylim = c(lims$lat_min, lims$lat_max)) + 
-  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(),
-        panel.background = element_rect(fill = "skyblue"))
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
 
 rm(lims, submap, mapsubset)
 
@@ -204,8 +203,7 @@ ggplot(data = arrange(mapsubset, group, order)) +
     orientation = c(-5, -40, 0),
     xlim = c(lims$long_min, lims$long_max),
     ylim = c(lims$lat_min*.9, lims$lat_max)) + 
-  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(),
-        panel.background = element_rect(fill = "skyblue"))
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
 
 rm(lims, submap, mapsubset)
 ```

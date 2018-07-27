@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}
-knitr::opts_chunk$set(echo = F)
+knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 # source("../worldfactbook.R")
 load("../Data/factbook.Rdata")
@@ -159,7 +159,7 @@ filter(location, simple == "Central America") %>%
 
 #### Subject-unrelated, topic-unrelated
 
-```{r, out.width = "60%", include = F}
+```{r, out.width = "60%"}
 # newmap <- GetMap(center = c(1, 38), zoom = 8, destfile = "KenyaMap.png")
 countryList <- c("Congo, Democratic Republic of the", "Zambia", "Malawi", 
                  "Rwanda", "Burundi", "Tanzania", "Uganda", 

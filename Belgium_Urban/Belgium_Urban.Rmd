@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}
-knitr::opts_chunk$set(echo = F)
+knitr::opts_chunk$set(echo = F, warning = F, message = F)
 
 # source("../worldfactbook.R")
 load("../Data/factbook.Rdata")
@@ -151,7 +151,7 @@ unnest(borders2) %>%
 
 #### Subject-related, topic-unrelated
 
-```{r, out.width = "60%", include = F}
+```{r, out.width = "60%", include = T}
 region <- "Europe"
 cc <- c("Italy", "Greece")
 ccr <- unnest(borders2) %>%
@@ -196,7 +196,7 @@ tmp %>%
 
 #### Subject-unrelated, topic-unrelated
 
-```{r, out.width = "60%", include = F}
+```{r, out.width = "60%", include = T}
 region <- "Europe"
 cc <- c("Belgium", "Netherlands", "United Kingdom", "Ireland")
 ccr <- unnest(borders2) %>%
@@ -278,7 +278,7 @@ rm(italymap, italymaptiles, italybox)
 
 #### Subject-related, topic-related (probative)
 
-```{r, out.width = "60%", message = F, warning = F}
+```{r, out.width = "60%", message = F, warning = F, fig.width = 6, fig.height = 6}
 region <- "Europe"
 cc <- c("Belgium", "Netherlands", "United Kingdom", "Ireland")
 ccr <- unnest(borders2) %>%
@@ -304,7 +304,7 @@ lims <- tmp %>%
   summarize_all(.funs = funs(min, max), na.rm = T)
 
 labs <- location %>%
-  filter(name %in% c("France", "Germany", "United Kingdom", "Greece", "Italy", "Spain", "Belgium"))  %>%
+  filter(name %in% c("France", "Germany", "United Kingdom", "Italy", "Spain", "Belgium"))  %>%
   mutate(name = str_replace_all(name, c("United Kingdom" = "UK", "Czechia"= "Czech Republic"))) 
 
 tmp %>%
@@ -312,7 +312,7 @@ tmp %>%
   geom_polygon(aes(x = long, y = lat, group = group), color = "black", fill = "grey50") + 
   geom_polygon(aes(x = long, y = lat, fill = urban, group = group), color = "black", data = filter(tmp, !is.na(urban))) + 
   geom_label_repel(aes(x = label_long, y = label_lat, label = name), data = labs, label.padding = .4) + 
-  coord_quickmap(xlim = c(lims$long_min, lims$long_max - 15), ylim = c(lims$lat_min, lims$lat_max+5), expand = T) + 
+  coord_quickmap(xlim = c(lims$long_min, lims$long_max), ylim = c(lims$lat_min, lims$lat_max), expand = T) + 
   theme(axis.text = element_blank(), axis.ticks = element_blank(), axis.title = element_blank(), legend.direction = "horizontal", legend.position = "bottom") + 
   scale_fill_brewer("% Population\nin Urban Areas") + 
   ggtitle("Urbanization in Europe")

@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}
-knitr::opts_chunk$set(echo = F)
+knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 # source("../worldfactbook.R")
 load("../Data/factbook.Rdata")
@@ -138,7 +138,7 @@ rs_boundaries %>%
 
 #### Subject-unrelated, topic-unrelated
 
-```{r, out.width = "60%", include = F}
+```{r, out.width = "60%", include = T}
 africalabels <- location %>% filter(simple == "Africa") %>%
   left_join(areas) %>%
   mutate(name = str_replace(name, "Congo, (.*)", "\\1 Congo") %>%
@@ -150,7 +150,8 @@ africalabels <- location %>% filter(simple == "Africa") %>%
            str_replace_all(" ", "\n") %>%
            str_replace("of\nthe", "of the")
          ) %>%
-  filter(land > 750000)
+  filter(land > 750000 | name == "Sudan") %>%
+  mutate(label_lat = ifelse(str_detect(name, "Congo"), label_lat - 1, label_lat))
 location %>% filter(simple == "Africa") %>%
   mutate(name = str_replace(name, "Congo, (.*)", "\\1 Congo") %>%
            str_replace("^Republic of the Congo", "Republic of Congo") %>%

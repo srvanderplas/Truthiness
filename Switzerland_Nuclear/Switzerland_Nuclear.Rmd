@@ -6,8 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}
-knitr::opts_chunk$set(echo = F)
-
+knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 # source("../worldfactbook.R")
 load("../Data/factbook.Rdata")
 
@@ -164,7 +163,7 @@ usmap <- GetMap(center = c(40, -96), zoom = 4, destfile = "USMap.png")
 
 #### Subject-related, topic-related (Non-probative)
 
-```{r, out.width = "60%"}
+```{r, out.width = "80%"}
 plants <- filter(location, simple == "Europe") %>%
   select(name) %>%
   left_join(nuclear, by = "name") %>%
@@ -178,6 +177,7 @@ plants <- filter(location, simple == "Europe") %>%
 # save(europemap, file = "EuropeMap.Rdata")
 load("EuropeMap.Rdata")
 ggmap(europemap) + 
+  theme_void() + 
   geom_point(aes(x = Longitude, y = Latitude), shape = 1, data = plants) + 
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), legend.background = element_rect(fill = "transparent")) +
   ggtitle("Nuclear Power Plants in Europe")
@@ -186,7 +186,7 @@ ggmap(europemap) +
 
 #### Subject-unrelated, topic-related (Non-probative)
 
-```{r, out.width = "60%"}
+```{r, out.width = "80%"}
 plants <- filter(location, simple == "North America") %>%
   select(name) %>%
   left_join(nuclear, by = "name") %>%
@@ -200,6 +200,7 @@ plants <- filter(location, simple == "North America") %>%
 # save(usmap, file = "USMap.Rdata")
 load("USMap.Rdata")
 ggmap(usmap) + 
+  theme_void() + 
   geom_point(aes(x = Longitude, y = Latitude), shape = 1, data = plants) + 
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), 
         axis.title = element_blank(), axis.ticks = element_blank(), 

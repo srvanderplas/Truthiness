@@ -6,7 +6,8 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}
-knitr::opts_chunk$set(echo = F)
+
+knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 # source("../worldfactbook.R")
 load("../Data/factbook.Rdata")
@@ -29,7 +30,7 @@ library(tidyverse)
 
 ```
 
-## Brazil is the 5th largest country
+## Brazil is the 5th largest country in the world
 
 
 ### Pictures
@@ -176,8 +177,7 @@ ggplot(data = arrange(mapsubset, group, order)) +
     orientation = c(5, 136, 0),
     xlim = c(lims$long_min, lims$long_max) * c(.95, 1.05),
     ylim = c(lims$lat_min, lims$lat_max) * c(1.05, .95)) + 
-  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(),
-        panel.background = element_rect(fill = "skyblue"))
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
 
 rm(lims, submap, mapsubset)
 
@@ -185,7 +185,7 @@ rm(lims, submap, mapsubset)
 
 #### Subject-related, topic-related (probative)
 
-```{r, out.width = "60%", message = F, warning = F}
+```{r, out.width = "60%", include = F}
 
 world <- readOGR("../Data/countries.geo.json", "OGRGeoJSON", stringsAsFactors=FALSE)
 world_data <- data_frame(
@@ -196,6 +196,8 @@ world_data <- data_frame(
 world_map <- fortify(world)
 
 plates_map <- readOGR("../Data/plates.json", "OGRGeoJSON", stringsAsFactors = F) %>% fortify()
+```
+```{r, out.width = "60%", message = F, warning = F}
 
 top10 <- areas %>%
   filter(!name %in% c("World", "European Union", "Antarctica") & ! str_detect(name, "Ocean")) %>%
@@ -205,13 +207,13 @@ top10 <- areas %>%
   select(name, rank) %>%
   full_join(world_data)
 
-ggplot() + 
+ggplot() +
   geom_cartogram(data=plates_map, map=plates_map,
                  aes(x=long, y=lat, map_id=id),
-                 color="black", size=0.1, fill="#00000000", alpha=0) + 
+                 color="black", size=0.1, fill="#00000000", alpha=0) +
   geom_cartogram(aes(x = long, y = lat, map_id = id), data = world_map, map = world_map, color = "black") + 
   geom_cartogram(aes(fill = factor(rank), map_id = id), color = "black", map = world_map, data = top10) + 
   coord_map("mollweide") + 
-  scale_fill_ptol(guide = F, na.value = "grey80") + 
+  scale_fill_ptol("Largest\nCountries\nBy Area", na.value = "grey80") + 
   theme_map()
 ```

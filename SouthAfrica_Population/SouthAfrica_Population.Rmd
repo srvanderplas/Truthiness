@@ -6,11 +6,10 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}
-knitr::opts_chunk$set(echo = F)
+knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 # source("../worldfactbook.R")
 load("../Data/factbook.Rdata")
-load("../Data/BrazilAusExports.Rdata")
 export_col_theme <- sample(scales::hue_pal()(15), size = 15)
 
 library(ggthemes)
@@ -46,7 +45,7 @@ world2 <- map_data("world2")
 
 #### Subject-related
 
-<img src="picture_subject_related.jpg" width="40%"/>
+<img src="picture_subject_related.jpg" width="60%"/>
 <!-- Source: https://upload.wikimedia.org/wikipedia/commons/c/cc/South_africa_-_zulu_reed_dance_ceremony_%286563648943%29.jpg-->
 
 #### Subject-unrelated

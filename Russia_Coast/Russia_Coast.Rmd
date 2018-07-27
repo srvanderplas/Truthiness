@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}
-knitr::opts_chunk$set(echo = F)
+knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 load("../Data/factbook.Rdata")
 
@@ -182,8 +182,7 @@ ggplot() +
   scale_fill_manual(guide = F, values = c("FALSE" = "grey40", "TRUE" = "darkgreen")) + 
   coord_map(projection = "sp_albers", parameters = c(75, 35), orientation = c(90, 25, 78), xlim = c(27, 190), ylim = c(40, 70)) +
   theme_map() +
-  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(),
-        panel.background = element_rect(fill = "skyblue"))
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
 
 rm(lims, submap, mapsubset)
 
@@ -219,8 +218,7 @@ ggplot(data = arrange(mapsubset, group, order)) +
   scale_fill_manual(guide = F, values = c("FALSE" = "grey40", "TRUE" = "darkgreen")) + 
   coord_map(xlim = c(fixed_lims$long_min, fixed_lims$long_max),
             ylim = c(fixed_lims$lat_min, fixed_lims$lat_max)) +
-  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(),
-        panel.background = element_rect(fill = "skyblue"))
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
 
 rm(lims, submap, mapsubset)
 

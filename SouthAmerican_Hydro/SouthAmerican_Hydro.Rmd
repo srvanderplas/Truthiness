@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}
-knitr::opts_chunk$set(echo = F)
+knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 # source("../worldfactbook.R")
 load("../Data/factbook.Rdata")
@@ -148,7 +148,7 @@ ggplot() +
 
 #### Subject-related, topic-unrelated
 
-```{r, out.width = "60%", include = F}
+```{r, out.width = "60%", include = T, fig.width = 5, fig.height = 6}
 datasubset <- population %>% 
   right_join(
     filter(location, simple == "South America"), by = c("name", "abbr")
@@ -179,7 +179,11 @@ mapsubset_avg <- submap %>%
   unique() %>%
   group_by(region) %>%
   summarize(long = median(long), lat = median(lat))%>%
-  mutate(region = str_replace_all(region, " ", "\n"))
+  mutate(region = str_replace_all(region, " ", "\n")) %>%
+  filter(region %in% c("Brazil", "Bolivia", "Peru", "Colombia", "Chile", "Argentina", "Venezuela")) %>%
+  mutate(long = ifelse(region == "Peru", long - 5, long),
+         lat = ifelse(region == "Colombia", lat + 5, lat),
+         lat = ifelse(region == "Peru", lat - 3, lat))
 
 ggplot() + 
   geom_polygon(aes(x = long, y = lat, group = group, fill = Pop), color = "black", data = mapsubset) + 
@@ -193,7 +197,7 @@ ggplot() +
 #### Subject-unrelated, topic-unrelated
 
 
-```{r, out.width = "60%", include = F}
+```{r, out.width = "60%", include = T}
 datasubset <- population %>% 
   right_join(
     filter(location, simple == "Europe"  | name == "Russia"), by = c("name", "abbr")
@@ -220,7 +224,8 @@ mapsubset_avg <- submap %>%
   unique() %>%
   group_by(region) %>%
   summarize(long = median(long), lat = median(lat))%>%
-  mutate(region = str_replace_all(region, " ", "\n"))
+  mutate(region = str_replace_all(region, " ", "\n")) %>%
+  filter(region %in% c("UK", "Ireland", "France", "Spain", "Germany", "Poland", "Italy"))
 
 ggplot() + 
   geom_polygon(aes(x = long, y = lat, group = group, fill = Pop), color = "black", data = mapsubset) + 
@@ -233,7 +238,7 @@ ggplot() +
 
 #### Subject-related, topic-related (Non-probative)
 
-```{r, out.width = "60%"}
+```{r, out.width = "60%", fig.width = 5, fig.height = 6}
 datasubset <- filter(location, simple == "South America") %>%
   mutate(name = str_replace(name, "South Georgia(.*)", "South Georgia") %>%
            str_replace("Falkland Islands(.*)", "Falkland Islands"))
@@ -314,7 +319,7 @@ ggplot() +
 
 #### Subject-related, topic-related (probative)
 
-```{r, out.width = "60%", message = F, warning = F}
+```{r, out.width = "60%", message = F, warning = F, fig.width = 5, fig.height = 6}
 datasubset <- electricity_all %>% 
   right_join(
     filter(location, simple == "South America") %>% select(name), by = c("name")

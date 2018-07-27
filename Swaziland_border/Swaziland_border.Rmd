@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}
-knitr::opts_chunk$set(echo = F)
+knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 # source("../worldfactbook.R")
 load("../Data/factbook.Rdata")
@@ -149,10 +149,11 @@ lims <- filter(world, region == "Swaziland") %>%
   summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
 
 ggplot(data = filter(world, region == "Swaziland")) + 
+  theme_map() + 
   geom_polygon(aes(x = long, y = lat, group = group), color = "black", fill = "grey70") + 
   geom_label(aes(x = label_long, y = label_lat, label = name), data = filter(location, name == "Eswatini")) + 
-  coord_map(projection = "azequalarea", xlim = c(30.5, 32.5), ylim = c(-27.5, -25.5)) + 
-  theme(axis.text = element_blank(), axis.ticks = element_blank(), axis.title = element_blank())
+  coord_map(xlim = c(30.5, 32.5), ylim = c(-27.5, -25.5)) + 
+  theme(axis.text = element_blank(), axis.ticks = element_blank(), axis.title = element_blank()) 
 rm(lims)
 
 ```
@@ -165,6 +166,7 @@ lims <- filter(world, region == "Canada") %>%
   summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
 
 ggplot(data = filter(world, region == "Canada")) + 
+  theme_map() + 
   geom_polygon(aes(x = long, y = lat, group = group), color = "black", fill = "grey70") + 
   geom_label(aes(x = label_long, y = label_lat, label = name), data = filter(location, name == "Canada")) + 
   coord_map(projection = "ortho") + 

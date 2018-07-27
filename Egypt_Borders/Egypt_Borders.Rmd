@@ -6,11 +6,12 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}
-knitr::opts_chunk$set(echo = F)
+knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 library(RgoogleMaps)
 library(tidyverse)
 
-source("../worldfactbook.R")
+# source("../Code/worldfactbook.R")
+load("../Data/factbook.Rdata")
 library(ggthemes)
 library(ggmap)
 library(ggrepel)
@@ -138,8 +139,7 @@ ggplot(data = arrange(mapsubsetegypt, group, order)) +
   coord_map(projection = "ortho", orientation = c(29, 26, 0),
             xlim = c(sinailims$long_min*.95, sinailims$long_max*1.05),
             ylim = c(sinailims$lat_min*.95, sinailims$lat_max*1.05)) + 
-  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(),
-        panel.background = element_rect(fill = "skyblue"))
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
 
 rm(sinailims, submapegypt, mapsubsetegypt)
 
@@ -168,8 +168,7 @@ ggplot(data = arrange(mapsubset, group, order)) +
     orientation = c(25, -100, 0),
     xlim = c(lims$long_min, lims$long_max),
     ylim = c(lims$lat_min, lims$lat_max)) + 
-  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(),
-        panel.background = element_rect(fill = "skyblue"))
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
 
 rm(lims, submap, mapsubset)
 
@@ -195,8 +194,7 @@ ggplot(data = arrange(mapsubsetegypt, group, order)) +
   coord_map(projection = "ortho", orientation = c(29, 26, 0),
             xlim = c(lims$long_min*.95, lims$long_max*1.05),
             ylim = c(lims$lat_min*.95, lims$lat_max*1.05)) + 
-  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(),
-        panel.background = element_rect(fill = "skyblue"))
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
 
 rm(lims, submapegypt, mapsubsetegypt)
 
