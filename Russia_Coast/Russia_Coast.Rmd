@@ -8,7 +8,7 @@ output: html_document
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
-load("../Data/factbook.Rdata")
+load(here::here("Data/factbook.Rdata"))
 
 library(ggthemes)
 library(ggmap)
@@ -23,7 +23,7 @@ library(RgoogleMaps)
 
 library(tidyverse)
 
-world <- readOGR("../Data/countries.geo.json", "OGRGeoJSON", stringsAsFactors=FALSE)
+world <- readOGR(here::here("Data/countries.geo.json", "OGRGeoJSON"), stringsAsFactors=FALSE)
 world_data <- data_frame(
   name = as.character(world@data$name),
   id = rownames(world@data)

@@ -8,8 +8,8 @@ output: html_document
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
-# source("../worldfactbook.R")
-load("../Data/factbook.Rdata")
+# source(here::here("worldfactbook.R"))
+load(here::here("Data/factbook.Rdata"))
 
 library(ggthemes)
 library(ggmap)
@@ -120,19 +120,44 @@ filter(borders, name == "China") %>%
 
 #### Subject-related, topic-unrelated
 
-```{r, out.width = "60%", include = F}
-newmap <- GetMap(center = c(-25.3, -57.6333), zoom = 10, destfile = "AsuncionMap.png")
+```{r, out.width = "60%"}
+# newmap <- GetMap(center = c(-25.3, -57.6333), zoom = 10, destfile = "AsuncionMap.png")
+
+if (!file.exists(here::here("Data/AsuncionMapTiles.Rdata"))) {
+  Asuncionmaptiles <- get_googlemap(center = c( -57.6333, -25.3), zoom = 10, maptype = "roadmap") 
+  save(Asuncionmaptiles, file = here::here("Data/AsuncionMapTiles.Rdata"))
+} else {
+  load(here::here("Data/AsuncionMapTiles.Rdata"))
+}
+Asuncionmaptiles %>% ggmap() + 
+  theme_map() + 
+  ggtitle("Asuncion, Paraguay")
+ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
+       width = 5, height = 5, dpi = 300)
+
 ```
 
-<img src="AsuncionMap.png" width="60%"/>
+<!-- <img src="AsuncionMap.png" width="60%"/> -->
 
 #### Subject-unrelated, topic-unrelated
 
-```{r, out.width = "60%", include = F}
-newmap <- GetMap(center = c(39.91667, 116.3833), zoom = 10, destfile = "BeijingMap.png")
+```{r, out.width = "60%"}
+# newmap <- GetMap(center = c(39.91667, 116.3833), zoom = 10, destfile = "BeijingMap.png")
+
+if (!file.exists(here::here("Data/BeijingMapTiles.Rdata"))) {
+  Beijingmaptiles <- get_googlemap(center = c( -57.6333, -25.3), zoom = 10, maptype = "roadmap") 
+  save(Beijingmaptiles, file = here::here("Data/BeijingMapTiles.Rdata"))
+} else {
+  load(here::here("Data/BeijingMapTiles.Rdata"))
+}
+Beijingmaptiles %>% ggmap() + 
+  theme_map() + 
+  ggtitle("Beijing, China")
+ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
+       width = 5, height = 5, dpi = 300)
 ```
 
-<img src="BeijingMap.png" width="60%"/>
+<!-- <img src="BeijingMap.png" width="60%"/> -->
 
 #### Subject-related, topic-related (Non-probative)
 

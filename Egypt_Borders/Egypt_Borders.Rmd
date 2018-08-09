@@ -10,8 +10,8 @@ knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 library(RgoogleMaps)
 library(tidyverse)
 
-# source("../Code/worldfactbook.R")
-load("../Data/factbook.Rdata")
+# source(here::here("Code/worldfactbook.R"))
+load(here::here("Data/factbook.Rdata"))
 library(ggthemes)
 library(ggmap)
 library(ggrepel)
@@ -105,19 +105,40 @@ filter(borders, name == "Mexico") %>%
 
 #### Subject-related, topic-unrelated
 
-```{r, out.width = "60%", include = F}
-newmap <- GetMap(center = c(30.04, 31.24), zoom = 10, destfile = "CairoMap.png")
+```{r, out.width = "60%", include = T}
+# newmap <- GetMap(center = c(30.04, 31.24), zoom = 10, destfile = "CairoMap.png")
+
+if (!file.exists(here::here("Data/CairoMapTiles.Rdata"))) {
+  cairomaptiles <- get_googlemap(center = c( 31.24, 30.04), zoom = 10, maptype = "roadmap") 
+  save(cairomaptiles, file = here::here("Data/CairoMapTiles.Rdata"))
+} else {
+  load(here::here("Data/CairoMapTiles.Rdata"))
+}
+cairomaptiles %>% ggmap() + 
+  theme_map() + 
+  ggtitle("Cairo, Egypt")
 ```
 
-<img src="CairoMap.png" width="60%"/>
+<!-- <img src="CairoMap.png" width="60%"/> -->
 
 #### Subject-unrelated, topic-unrelated
 
-```{r, out.width = "60%", include = F}
-newmap <- GetMap(center = c(19.43, -99.13), zoom = 10, destfile = "MexicoCityMap.png")
+```{r, out.width = "60%", include = T}
+# newmap <- GetMap(center = c(19.43, -99.13), zoom = 10, destfile = "MexicoCityMap.png")
+
+
+if (!file.exists(here::here("Data/MexCityMapTiles.Rdata"))) {
+  mexcitymaptiles <- get_googlemap(center = c( -99.13, 19.43), zoom = 10, maptype = "roadmap") 
+  save(mexcitymaptiles, file = here::here("Data/MexCityMapTiles.Rdata"))
+} else {
+  load(here::here("Data/MexCityMapTiles.Rdata"))
+}
+mexcitymaptiles %>% ggmap() + 
+  theme_map() + 
+  ggtitle("Mexico City, Mexico")
 ```
 
-<img src="MexicoCityMap.png" width="60%"/>
+<!-- <img src="MexicoCityMap.png" width="60%"/> -->
 
 #### Subject-related, topic-related (Non-probative)
 

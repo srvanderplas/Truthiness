@@ -8,9 +8,9 @@ output: html_document
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
-# source("../worldfactbook.R")
-load("../Data/factbook.Rdata")
-load("../Data/hydro.Rdata")
+# source(here::here("worldfactbook.R"))
+load(here::here("Data/factbook.Rdata"))
+load(here::here("Data/hydro.Rdata"))
 library(ggthemes)
 # library(ggmap)
 library(ggrepel)

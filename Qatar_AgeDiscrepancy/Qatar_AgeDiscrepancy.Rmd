@@ -8,8 +8,8 @@ output: html_document
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
-# source("../worldfactbook.R")
-load("../Data/factbook.Rdata")
+# source(here::here("worldfactbook.R"))
+load(here::here("Data/factbook.Rdata"))
 
 library(ggthemes)
 library(ggmap)
@@ -24,7 +24,7 @@ library(RgoogleMaps)
 
 library(tidyverse)
 
-world <- readOGR("../Data/countries.geo.json", "OGRGeoJSON", stringsAsFactors=FALSE)
+world <- readOGR(here::here("Data/countries.geo.json", "OGRGeoJSON"), stringsAsFactors=FALSE)
 world_data <- data_frame(
   name = as.character(world@data$name),
   id = rownames(world@data)
@@ -36,7 +36,7 @@ rm(world_data)
 world <- map_data("world")
 world2 <- map_data("world2")
 
-load("../Data/JapanQatarImports.Rdata")
+load(here::here("Data/JapanQatarImports.Rdata"))
 export_col_theme <- sample(scales::hue_pal()(15), size = 15)
 ```
 
