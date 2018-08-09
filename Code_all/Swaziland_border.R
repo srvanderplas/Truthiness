@@ -1,0 +1,165 @@
+## ----setup, include=FALSE, echo = F, warning = F, message = F------------
+knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
+
+# source(here::here("worldfactbook.R"))
+load(here::here("Data/factbook.Rdata"))
+load(here::here("Data/BrazilAusExports.Rdata"))
+export_col_theme <- sample(scales::hue_pal()(15), size = 15)
+
+library(ggthemes)
+library(ggmap)
+library(ggrepel)
+library(ggalt)
+
+library(rworldmap)
+library(sp)
+library(proj4)
+library(rgdal)
+library(RgoogleMaps)
+
+library(tidyverse)
+
+world <- readOGR(here::here("Data/countries.geo.json", "OGRGeoJSON"), stringsAsFactors=FALSE)
+world_data <- data_frame(
+  name = as.character(world@data$name),
+  id = rownames(world@data)
+)
+
+world_map <- fortify(world) %>%
+  left_join(world_data)
+rm(world_data)
+world <- map_data("world")
+world2 <- map_data("world2")
+
+## ---- out.width = "60%"--------------------------------------------------
+filter(population, name == "Eswatini") %>%
+  select(name, age, Female, Male) %>%
+  gather(key = gender, value = value, -name, -age) %>%
+  mutate(value = as.numeric(value)) %>%
+ggplot() + 
+  geom_col(aes(x = age, y = value/1e3, fill = gender), position = "dodge") + 
+  ggtitle("Eswatini's Population") + 
+  xlab("") + 
+  scale_y_continuous("Population (Thousands)") + 
+  scale_fill_discrete("Gender") + 
+  theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.background = element_rect(fill = "transparent"))
+
+## ---- out.width = "60%"--------------------------------------------------
+filter(population, name == "Canada") %>%
+  select(name, age, Female, Male) %>%
+  gather(key = gender, value = value, -name, -age) %>%
+  mutate(value = as.numeric(value)) %>%
+ggplot() + 
+  geom_col(aes(x = age, y = value/1e6, fill = gender), position = "dodge") + 
+  ggtitle("Canada's Population") + 
+  xlab("") + 
+  scale_y_continuous("Population (Millions)") + 
+  scale_fill_discrete("Gender") + 
+  theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.background = element_rect(fill = "transparent"))
+
+## ---- out.width = "60%"--------------------------------------------------
+country <- "Eswatini"
+filter(borders, name == country) %>%
+  unnest() %>%
+  # bind_rows(data_frame(name = country, country = "Coast", length = unique(.$coast))) %>%
+  arrange(desc(length)) %>%
+  select(country, length) %>%
+  mutate(country = factor(country, levels = country, ordered = T)) %>%
+  ggplot() + 
+  geom_bar(aes(x = country, y = length, fill = country), stat = "identity") + 
+  xlab("") + 
+  ylab("Length (km)") + 
+  scale_fill_brewer("Border With:", type = "qual", palette = "Dark2", guide = F) + 
+  ggtitle(sprintf("%s's Border Regions", country))
+
+## ---- out.width = "60%"--------------------------------------------------
+country <- "Canada"
+filter(borders, name == country) %>%
+  unnest() %>%
+  bind_rows(data_frame(name = country, country = "Coast", length = unique(.$coast))) %>%
+  arrange(desc(length)) %>%
+  select(country, length) %>%
+  mutate(country = factor(country, levels = country, ordered = T)) %>%
+  ggplot() + 
+  geom_bar(aes(x = country, y = length, fill = country), stat = "identity") + 
+  xlab("") + 
+  ylab("Length (km)") + 
+  scale_fill_brewer("Border With:", type = "qual", palette = "Dark2", guide = F) + 
+  ggtitle(sprintf("%s's Border Regions", country))
+
+## ---- out.width = "60%", include = F-------------------------------------
+newmap <- GetMap(center = c(-26.316667, 31.13333), zoom = 10, destfile = "EswatiniMap.png")
+
+## ---- out.width = "60%", include = F-------------------------------------
+newmap <- GetMap(center = c(43.7, -79.4), zoom = 10, destfile = "TorontoMap.png")
+
+## ---- out.width = "60%"--------------------------------------------------
+lims <- filter(world, region == "Swaziland") %>%
+  summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
+
+ggplot(data = filter(world, region == "Swaziland")) + 
+  theme_map() + 
+  geom_polygon(aes(x = long, y = lat, group = group), color = "black", fill = "grey70") + 
+  geom_label(aes(x = label_long, y = label_lat, label = name), data = filter(location, name == "Eswatini")) + 
+  coord_map(xlim = c(30.5, 32.5), ylim = c(-27.5, -25.5)) + 
+  theme(axis.text = element_blank(), axis.ticks = element_blank(), axis.title = element_blank()) 
+rm(lims)
+
+
+## ---- out.width = "60%"--------------------------------------------------
+lims <- filter(world, region == "Canada") %>%
+  summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
+
+ggplot(data = filter(world, region == "Canada")) + 
+  theme_map() + 
+  geom_polygon(aes(x = long, y = lat, group = group), color = "black", fill = "grey70") + 
+  geom_label(aes(x = label_long, y = label_lat, label = name), data = filter(location, name == "Canada")) + 
+  coord_map(projection = "ortho") + 
+  theme(axis.text = element_blank(), axis.ticks = element_blank(), axis.title = element_blank())
+rm(lims)
+
+
+## ---- out.width = "60%", message = F, warning = F------------------------
+lims <- filter(world, region == "Swaziland") %>%
+  summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
+
+gridlines1 <- expand.grid(
+      long = c(-179, 179),
+      lat = c(-60, -30, 0, 30, 60)
+    ) %>%
+      as_data_frame() %>%
+      mutate(group = rep(1:5, each = 2))
+gridlines2 <- expand.grid(long = c(-180, -150, -120, -90, -60, -30, 0, 30, 60, 90, 120, 150, 180),
+                          lat = seq(-80, 80, by = 5)) %>%
+  as_data_frame() %>%
+  mutate(group = group_indices(., long)) %>%
+  arrange(long)
+      
+
+fixed_lims <- lims * c(.5, 1.08, 1.31, .8)
+
+submap <- filter(world2,
+                 long > fixed_lims$long_min,
+                 long < fixed_lims$long_max,
+                 lat > fixed_lims$lat_min,
+                 lat < fixed_lims$lat_max)
+mapsubset <- filter(world2, region %in% submap$region) %>%
+  arrange(group, order) %>%
+  group_by(group) %>%
+  mutate(latmin = min(lat)) %>%
+  ungroup() 
+
+locsubset <- filter(location, name %in% c(mapsubset$region, "Eswatini")) %>%
+  filter(!name %in% c("Zimbabwe", "Mozambique"))
+
+ggplot() + 
+  theme_map() + 
+  geom_line(aes(x = long, y = lat, group = group), data = gridlines1) + 
+  geom_line(aes(x = long, y = lat, group = group), data = gridlines2) + 
+  ggpolypath::geom_polypath(aes(x = long, y = lat, group = group, fill = region), data = mapsubset, color = "black") + 
+  geom_path(aes(x = long, y = lat, group = group), data = mapsubset, color = "black", size = .125) + 
+  scale_fill_discrete(guide = F) + 
+  geom_label_repel(aes(x = label_long, y = label_lat, label = name), data = locsubset, point.padding = .2) +
+  coord_map(xlim = as.numeric(fixed_lims[,1:2]), ylim = as.numeric(fixed_lims[,3:4]))  +
+  theme(legend.background = element_rect(fill = "white", color = "black"))
+
