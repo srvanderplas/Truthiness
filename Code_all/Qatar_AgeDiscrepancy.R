@@ -1,3 +1,4 @@
+opt <- "Qatar_AgeDiscrepancy"
 ## ----setup, include=FALSE, echo = F, warning = F, message = F------------
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
@@ -17,7 +18,8 @@ library(RgoogleMaps)
 
 library(tidyverse)
 
-world <- readOGR(here::here("Data/countries.geo.json", "OGRGeoJSON"), stringsAsFactors=FALSE)
+world <- readOGR(here::here("Data/countries.geo.json"), "OGRGeoJSON", 
+                 stringsAsFactors = FALSE)
 world_data <- data_frame(
   name = as.character(world@data$name),
   id = rownames(world@data)
@@ -41,6 +43,9 @@ ggplot(data = qatar_imports) +
   scale_y_continuous("Value (Billions, USD)") + 
   coord_flip()
 
+ggsave(sprintf("Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt), 
+       width = 4, height = 6, dpi = 300)
+
 ## ---- out.width = "60%"--------------------------------------------------
 ggplot(data = japan_imports) + 
   geom_col(aes(x = ProductCategory, y = TotalTradeMil/1000, fill = ProductCategory)) + 
@@ -49,6 +54,9 @@ ggplot(data = japan_imports) +
   xlab("") + 
   scale_y_continuous("Value (Billions, USD)") + 
   coord_flip()
+
+ggsave(sprintf("Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt), 
+       width = 4, height = 6, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
 population %>%
@@ -67,6 +75,9 @@ population %>%
   ggtitle("Population Demographics - Lower Arabian Peninsula") + 
   theme(legend.position = c(1, 0), legend.justification = c(1, 0), legend.background = element_rect(fill = "transparent"))
 
+ggsave(sprintf("Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt), 
+       width = 6, height = 4, dpi = 300)
+
 ## ---- out.width = "60%"--------------------------------------------------
 population %>%
   mutate(Female = as.numeric(Female), Male = as.numeric(Male), ratio = Female/Male) %>%
@@ -84,6 +95,10 @@ population %>%
   xlab("Age Group") + 
   ggtitle("Population Demographics - Eastern Asia") + 
   theme(legend.position = c(1, 0), legend.justification = c(1, 0), legend.background = element_rect(fill = "transparent"))
+
+ggsave(sprintf("Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt), 
+       width = 6, height = 4, dpi = 300)
+
 
 ## ---- out.width = "60%"--------------------------------------------------
 regionlist <- c("Qatar", "Oman", "Yemen", "Saudi Arabia", "United Arab Emirates")
@@ -116,8 +131,11 @@ ggplot(data = arrange(mapsubset, group, order)) +
   scale_fill_gradient("% Population\nwith Electricity", low = "#F7fcf5", high = "#00441b", limits = c(0, 100)) + 
   coord_map(xlim = c(lims$long_min, lims$long_max) * c(.98, 1.01),
             ylim = c(lims$lat_min, lims$lat_max) * c(.98, 1.01)) + 
-  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank()) + 
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), 
+        legend.position = c(1, 1), legend.justification = c(1, 1), legend.direction = "horizontal", legend.background = element_rect(fill = "white")) + 
   ggtitle("Electrification in the Middle East")
+ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
+       width = 6, height = 5, dpi = 300)
 
 rm(lims, submap, mapsubset)
 
@@ -127,14 +145,14 @@ lims <- filter(world2, region == country) %>%
   summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
 
 submap <- filter(world2, 
-                 long > lims$long_min*.95, 
+                 long > lims$long_min*.9, 
                  long < lims$long_max*1.001, 
-                 lat > lims$lat_min*.95, 
+                 lat > lims$lat_min*.9, 
                  lat < lims$lat_max*1.001)
 
 datasubset <- electricity_all %>%
   mutate(region = str_replace(name, "Korea, (.*)", "\\1 Korea")) %>%
-  filter(region %in% submap$region) %>%
+  filter(region %in% c("Russia", "China", "North Korea", "South Korea", "Japan", "Taiwan", "Mongolia")) %>%
   select(region, total_elec) %>%
   mutate(total_elec = ifelse(region == "Taiwan", 100, total_elec))
 
@@ -156,13 +174,14 @@ ggplot(data = arrange(mapsubset, group, order)) +
   geom_polygon(aes(x = long, y = lat, group = group, fill = total_elec), color = "black") + 
   geom_label(aes(x = long, y = lat, label = region), data = mapsubset_avg) + 
   scale_fill_gradient("% Population\nwith Electricity", low = "#F7fcf5", high = "#00441b", limits = c(0, 100)) + 
-  coord_map(
-    projection = "ortho",
-    xlim = c(lims$long_min, lims$long_max) * c(.95, 1.001),
-    ylim = c(lims$lat_min, lims$lat_max) * c(.95, 1.001)) + 
-  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank()) + 
+  coord_map(xlim = c(lims$long_min, lims$long_max) * c(.85, 1.01),
+            ylim = c(lims$lat_min, lims$lat_max) * c(.85, 1.01)) + 
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(),
+        legend.position = c(1, 0), legend.justification = c(1, 0), legend.background = element_rect(fill = "transparent")) + 
   ggtitle("Electrification in East Asia")
 
+ggsave(sprintf("Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt), 
+       width = 6, height = 5, dpi = 300)
 rm(lims, submap, mapsubset)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -195,12 +214,15 @@ mapsubset_avg <- submap %>%
 ggplot(data = arrange(mapsubset, group, order)) + 
   geom_polygon(aes(x = long, y = lat, group = group, fill = Pct2554), color = "black") + 
   geom_label_repel(aes(x = long, y = lat, label = region), data = mapsubset_avg, point.padding = .35) + 
-  scale_fill_gradient("% Population\n25-54", low = "white", high = "#FF9900") + 
+  scale_fill_gradient("% Population\n25-54", low = "#F7fcf5", high = "#00441b") +
   coord_map(xlim = c(lims$long_min, lims$long_max) * c(.98, 1.01),
             ylim = c(lims$lat_min, lims$lat_max) * c(.98, 1.01)) + 
-  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank()) + 
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), 
+        legend.position = c(1, 1), legend.justification = c(1, 1), legend.direction = "horizontal", legend.background = element_rect(fill = "white")) + 
   ggtitle("Middle East Population, % Age 25-54")
 
+ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt), 
+       width = 6, height = 5, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
 country <- "Japan"
@@ -208,14 +230,14 @@ lims <- filter(world2, region == country) %>%
   summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
 
 submap <- filter(world2, 
-                 long > lims$long_min*.95, 
+                 long > lims$long_min*.9, 
                  long < lims$long_max*1.001, 
-                 lat > lims$lat_min*.95, 
-                 lat < lims$lat_max*1.05)
+                 lat > lims$lat_min*.9, 
+                 lat < lims$lat_max*1.001)
 
 datasubset <- population %>%
   mutate(region = str_replace(name, "Korea, (.*)", "\\1 Korea")) %>%
-  filter(region %in% submap$region) %>%
+  filter(region %in% c("Russia", "China", "North Korea", "South Korea", "Japan", "Taiwan", "Mongolia")) %>%
   mutate(Female = as.numeric(Female), Male = as.numeric(Male), ratio = Female/Male) %>%
   filter(age %in% c("15-24", "25-54")) %>%
   select(region, Male, Female) %>%
@@ -241,12 +263,14 @@ ggplot(data = arrange(mapsubset, group, order)) +
   geom_polygon(aes(x = long, y = lat, group = group, fill = ratio), color = "black") + 
   geom_label(aes(x = long, y = lat, label = region), data = mapsubset_avg) + 
   scale_fill_gradient2("Male Proportion\nof population,\n15-54", low = "#b2182b", mid = "#FFFFFF", midpoint = .5, high = "#2166ac", limits = c(.45, .55)) + 
-  coord_map(projection = "ortho",
-            xlim = c(lims$long_min, lims$long_max) * c(.95, 1.001),
-            ylim = c(lims$lat_min, lims$lat_max) * c(.95, 1.05)) + 
-  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank()) + 
+  coord_map(xlim = c(lims$long_min, lims$long_max) * c(.85, 1.01),
+            ylim = c(lims$lat_min, lims$lat_max) * c(.85, 1.01)) + 
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(),
+        legend.position = c(1, 0), legend.justification = c(1, 0), legend.background = element_rect(fill = "transparent")) + 
   ggtitle("Working-Age Population Gender Balance")
 
+ggsave(sprintf("Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt), 
+       width = 6, height = 5, dpi = 300)
 # rm(lims, submap, mapsubset)
 
 
@@ -287,9 +311,12 @@ ggplot() +
   scale_fill_gradient2("Male Proportion\nof population,\n15-54", low = "#b2182b", mid = "#FFFFFF", midpoint = .5, high = "#2166ac", limits = c(.1, .9)) + 
   coord_map(xlim = c(lims$long_min, lims$long_max) * c(.98, 1.01),
             ylim = c(lims$lat_min, lims$lat_max) * c(.98, 1.01)) + 
-  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank()) + 
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), 
+        legend.position = c(1, 1), legend.justification = c(1, 1), legend.direction = "horizontal", legend.background = element_rect(fill = "white")) + 
   ggtitle("Working-Age Population Gender Balance")
 
+ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt), 
+       width = 5, height = 5, dpi = 300)
 rm(lims, submap, mapsubset)
 
 
