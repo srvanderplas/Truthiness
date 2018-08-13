@@ -155,11 +155,11 @@ sim_results_init <- future_pmap_dfr(sim_trials_init, sim_eval_init)
 
 sim_results_sum_init <- sim_results_init %>% group_by(nparticipants, dtruthy) %>%
   summarize_at(vars(truthy_sig), mean)
-save(sim_results_init, sim_results_sum_init, file = "Data/ClassicTruthinessSim.Rdata")
+save(sim_results_init, sim_results_sum_init, file = here::here("Model_Development/SimData/ClassicTruthinessSim.Rdata"))
 
 ```
 ```{r}
-load("Data/ClassicTruthinessSim.Rdata")
+load(here::here("Model_Development/SimData/ClassicTruthinessSim.Rdata"))
 ggplot(sim_results_sum_init) + 
   geom_line(aes(x = dtruthy, y = truthy_sig, color = factor(nparticipants), group = nparticipants)) + 
   ylab("Proportion of trials where relatedness is significant") + 
@@ -295,7 +295,7 @@ sim_results2 <- future_pmap_dfr(sim_trials2, sim_eval)
 
 sim_results_sum2 <- sim_results2 %>% group_by(nparticipants, dprobative, dtruthy) %>%
   summarize_at(vars(probative_sig, truthy_sig), mean)
-save(sim_results_sum, sim_results, sim_results2, sim_results_sum2, file = "Data/SimpleTruthinessMotivation.Rdata")
+save(sim_results_sum, sim_results, sim_results2, sim_results_sum2, file = here::here("Model_Development/SimData/SimpleTruthinessMotivation.Rdata"))
 ```
 Simulation setup: 
 
@@ -318,7 +318,7 @@ The power calculations for truthiness hold for probative effect as well
     - fixed effects for chart, truthiness, and probative value
 
 ```{r}
-load("Data/SimpleTruthinessMotivation.Rdata")
+load(here::here("Model_Development/SimData/SimpleTruthinessMotivation.Rdata"))
 ggplot(sim_results_sum) + 
   geom_line(aes(x = dtruthy, y = truthy_sig, color = factor(nparticipants), group = nparticipants)) + 
   ylab("Proportion of trials where relatedness is significant") + 
