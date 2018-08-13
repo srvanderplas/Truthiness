@@ -6,7 +6,7 @@ rmdfiles <- rmdfiles[!str_detect(rmdfiles, "Truthiness|Facts")]
 purl_in_folder <- function(x) {
   dir <- dirname(x)
   indicname <- str_replace_all(dir, "[\\./]", "")
-  Rfile <- file.path("Code_all", str_replace(basename(x), ".Rmd", ".R"))
+  Rfile <- file.path("Single_Fact_Code", str_replace(basename(x), ".Rmd", ".R"))
   knitr::purl(x, output = Rfile)
   imgs <- list.files(dir, pattern = "png$|jpg$", full.names = T)
   imgnewnames <- file.path("Pictures_all", paste0(indicname, "-", basename(imgs)))
@@ -15,6 +15,6 @@ purl_in_folder <- function(x) {
 
 lapply(rmdfiles, purl_in_folder)
 
-setwd("Code_all")
+setwd("Single_Fact_Code")
 # find ./ -type f -exec sed -i 's!\(\"\.\./\)\(.*\)\(\"\)!here::here("\2")!g' {} \;
 system("find ./ -type f -exec sed -i 's!\\(\\\"\\.\\./\\)\\(.*\\)\\(\\\"\\)!here::here(\\\"\\2\\\")!g' {} \\;")
