@@ -155,11 +155,11 @@ sim_results_init <- future_pmap_dfr(sim_trials_init, sim_eval_init)
 
 sim_results_sum_init <- sim_results_init %>% group_by(nparticipants, dtruthy) %>%
   summarize_at(vars(truthy_sig), mean)
-save(sim_results_init, sim_results_sum_init, file = "Data/ClassicTruthinessSim.Rdata")
+save(sim_results_init, sim_results_sum_init, file = here::here("Model_Development/SimData/ClassicTruthinessSim.Rdata"))
 
 ```
 ```{r}
-load("Data/ClassicTruthinessSim.Rdata")
+load(here::here("Model_Development/SimData/ClassicTruthinessSim.Rdata"))
 ggplot(sim_results_sum_init) + 
   geom_line(aes(x = dtruthy, y = truthy_sig, color = factor(nparticipants), group = nparticipants)) + 
   ylab("Proportion of trials where relatedness is significant") + 
