@@ -74,7 +74,7 @@ filter(borders, name == "Mexico") %>%
   scale_fill_brewer("Border With:", type = "qual", palette = "Dark2", guide = F) + 
   ggtitle("Mexico's Border Regions")
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_unrel_topic_rel_probative.png", opt), 
+ggsave(sprintf("Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 6, height = 4, dpi = 300)
 
 ## ---- out.width = "60%", include = F-------------------------------------
