@@ -69,7 +69,7 @@ picture_db_table <- picture_db_table %>%
 
 # ---- Options for user demographics -------------------------------------------
 
-age <- c("Under 18", "18-24", "25-34", "35-44", "45-54", "55-64", "65+") %>%
+age <- c("18-24", "25-34", "35-44", "45-54", "55-64", "65+") %>%
   factor(x = ., levels = ., ordered = T)
 education <- c("Some High School", "High School Degree (or equivalent)", 
                "Some College", "Associate degree", "Bachelor's Degree",
@@ -115,7 +115,8 @@ if (!"user" %in% tables) {
     education = sample(useroptions$education, 10, replace = T),
     study = sample(useroptions$study, 10, replace = T),
     colorblind = sample(useroptions$colorblind, 10, replace = T, 
-                        prob = c(.9, .05, .05))
+                        prob = c(.9, .05, .05)),
+    consent = T
   ) %>%
     mutate(browserFP = map_chr(paste0(userID, age, education, study, colorblind), 
                                digest::digest))
