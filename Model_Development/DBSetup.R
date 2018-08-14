@@ -86,7 +86,7 @@ colorblind <- c("I do not have impaired color vision",
 
 useroptions <- list(age = age, education = education, study = study, 
                     colorblind = colorblind)
-
+saveRDS(useroptions, here::here("Data/demographic-options.RDS"))
 # ------------------------------------------------------------------------------
 
 # ---- Create db tables --------------------------------------------------------
