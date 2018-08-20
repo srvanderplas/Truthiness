@@ -1,0 +1,28 @@
+---
+title: "Truthiness Experiment Plan"
+author: "Susan VanderPlas"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Talk-aloud pilot study
+
+### Trials to include:
+
+Number | Subject Related | Topic Related | Probative | Media Type
+------ | --------------- | ------------- | --------- | ----------
+0 |   |   |   | claim alone
+1 | Y | - | - | picture
+2 | - | - | - | picture
+3 | Y | - | - | chart
+4 | - | - | - | chart
+5 | Y | Y | Y | chart
+8 | - | - | - | map
+9 | Y | Y | - | map
+11 | Y | Y | Y | map
+
+### Control Design
