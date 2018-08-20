@@ -128,7 +128,7 @@ $.extend(inputIpBinding, {
     return $(el).val();
   },
   setValue: function(el, values) {
-    $(el).attr("value", getip());
+    $(el).attr("value", makeCorsRequest());
     $(el).trigger("change");
   },
   subscribe: function(el, callback) {
@@ -145,14 +145,12 @@ Shiny.inputBindings.register(inputIpBinding);
 
 function getip() {
 ip = null;
-$.getJSON("http://jsonip.com?callback=?",
-  function(data){
-       ip = data.ip;
-       callback(ip);
-       $(".ipaddr").attr("value", ip);
-       $(".ipaddr").trigger("change");
- //return ip address correctly
-  });
+$.getJSON('https://ipapi.co/json/', function(data) {
+    ip = data.ip;
+    callback(ip);
+    $(".ipaddr").attr("value", ip);
+    $(".ipaddr").trigger("change");
+});
 //alert(ip); //undefined or null
 }
 
@@ -160,4 +158,57 @@ function callback(tempip)
 {
 ip=tempip;
 // alert(ip); //undefined or null
+}
+
+// Create the XHR object.
+function createCORSRequest(method, url) {
+  var xhr = new XMLHttpRequest();
+  if ("withCredentials" in xhr) {
+    // XHR for Chrome/Firefox/Opera/Safari.
+    xhr.open(method, url, true);
+  } else if (typeof XDomainRequest != "undefined") {
+    // XDomainRequest for IE.
+    xhr = new XDomainRequest();
+    xhr.open(method, url);
+  } else {
+    // CORS not supported.
+    xhr = null;
+  }
+  return xhr;
+}
+
+// Helper method to parse the title tag from the response.
+function getIP(data) {
+    console.log("My public IP address is: ", data.ip);
+    ip = data.ip;
+    callback(ip);
+    $(".ipaddr").attr("value", ip);
+    $(".ipaddr").trigger("change");
+    return ip;
+ //return ip address correctly
+}
+
+// Make the actual CORS request.
+function makeCorsRequest() {
+  // This is a sample server that supports CORS.
+  var url = "https://api.ipify.org?";
+
+  var xhr = createCORSRequest('GET', url);
+  if (!xhr) {
+    alert('CORS not supported');
+    return;
+  }
+
+  // Response handlers.
+  xhr.onload = function() {
+    var text = xhr.responseText;
+    var title = getIP(text);
+    alert('Response from CORS request to ' + url + ': ' + title);
+  };
+
+  xhr.onerror = function() {
+    alert('Woops, there was an error making the request.');
+  };
+
+  xhr.send();
 }
