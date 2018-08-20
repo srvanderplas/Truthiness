@@ -215,12 +215,13 @@ ggplot() +
   geom_label_repel(aes(x = long, y = lat, label = region), data = mapsubset_avg) +
   scale_fill_gradient("Population\n(millions)", low = "#deebf7", high = "#08306b", trans = "sqrt", breaks = c(.5, 5, 20, 50, 100)) + 
   coord_map(xlim = c(-12, 25), ylim = c(36, 60)) +
-  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), 
-        legend.position = c(0, .4), legend.justification = c(0, .4), legend.direction = "vertical", legend.background = element_rect(fill = "transparent")) + 
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), 
+        axis.title = element_blank(), axis.ticks = element_blank(), 
+        legend.position = "right", legend.direction = "vertical") + 
   ggtitle("Population of Europe")
 
 ggsave(sprintf("Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt), 
-       width = 5, height = 5, dpi = 300)
+       width = 6, height = 5, dpi = 300)
 
 ## ---- out.width = "60%", fig.width = 5, fig.height = 6-------------------
 riverdata <- 
