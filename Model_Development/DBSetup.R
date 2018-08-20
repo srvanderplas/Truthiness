@@ -1,7 +1,10 @@
 library(tidyverse)
 library(DBI)
-con <- dbConnect(odbc::odbc(), .connection_string = "Driver={SQLite3};", 
+setwd(here::here("Data"))
+con <- dbConnect(odbc::odbc(), dbname = "truthinessStudy.db", 
+                 .connection_string = "Driver={SQLite3};", 
                  timeout = 10)
+setwd(here::here())
 tables <- dbListTables(con)
 
 # ---- Prep table of pictures --------------------------------------------------
@@ -57,7 +60,8 @@ picture_db_table <- merge(facts, trials) %>%
   mutate(match = str_replace(basename(imgfilename), "\\.png$|\\.jpg$", "") %>%
            all.equal(., path)) %>%
   arrange(factID, trialTypeID) %>%
-  mutate(picID = row_number())
+  mutate(picID = row_number()) %>%
+  mutate(path = basename(imgfilename))
 
 if (sum(!picture_db_table$match) > 0) {
   warning("Not all questions match!")
@@ -99,9 +103,10 @@ if (!"trial" %in% tables) {
     trialID = 1:3,
     picID = 1:3,
     userID = 1:3,
+    trialNum = 1:3,
     answer = TRUE,
-    startTime = Sys.time() - lubridate::seconds(25),
-    submitTime = Sys.time()
+    startTime = as.character(Sys.time() - lubridate::seconds(25)),
+    submitTime = as.character(Sys.time())
   )
   dbCreateTable(con, 'trial', sampleTrial)
 }
@@ -111,6 +116,7 @@ if (!"user" %in% tables) {
   sampleUser <- data_frame(
     userID = 1:10,
     browserFP = "",
+    userIP = "",
     age = sample(useroptions$age, 10, replace = T),
     education = sample(useroptions$education, 10, replace = T),
     study = sample(useroptions$study, 10, replace = T),
