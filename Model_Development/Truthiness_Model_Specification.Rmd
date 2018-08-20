@@ -1,7 +1,7 @@
 ---
 title: "Truthiness Model Specification"
 author: "Susan VanderPlas"
-date: "July 25, 2018"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: 
   html_document: 
     number_sections: yes
@@ -9,7 +9,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = F)
+knitr::opts_chunk$set(echo = F, cache = T)
 library(tidyverse)
 library(lme4)
 library(furrr)
@@ -69,7 +69,7 @@ Number | Subject Related | Topic Related | Probative | Media Type
 5 | Y | Y | Y | chart
 6 | - | Y | - | chart
 7 | Y | - | - | map
-8 | - | Y | - | map
+8 | - | - | - | map
 9 | Y | Y | - | map
 10 | - | Y | - | map
 11 | Y | Y | Y | map
