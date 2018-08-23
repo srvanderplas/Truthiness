@@ -37,7 +37,10 @@ redircode <- "Shiny.addCustomMessageHandler('noconsent', function(message) {
                       window.location = 'http://www.google.com';});"
 redircode2 <- "Shiny.addCustomMessageHandler('colorblind', function(message) {
                       window.location = 'http://www.google.com';});"
-
+redirectSetup <- tagList(
+   tags$head(tags$script(redircode)),   
+   tags$head(tags$script(redircode2))
+)
 
 inputUserid <- function(inputId, value='') {
    #   print(paste(inputId, "=", value))
@@ -72,8 +75,8 @@ consentModalContent <- bsModal(
    title = 'Study Information', trigger = '',
    size = 'large', 
    p("This study is part of academic research about how people evaluate claims.",
-     "If you choose to participate, you will decide whether 12 trivia questions ",
-     "are true or false. These questions may be accompanied by a picture."),
+     "If you choose to participate, you will decide whether 12 trivia statements ",
+     "are true or false. These statements may be accompanied by a picture."),
    p("We will collect your responses, response time, and some individualizing ",
      "information about you (anonymized IP address and browser characteristics).",
      "This information cannot be linked back to you, but is used to ensure that ",
@@ -142,8 +145,7 @@ testModalContent <- bsModal(
 # ---- UI ----------------------------------------------------------------------
 ui <- fluidPage(
    useShinyjs(),  # Set up shinyjs
-   tags$head(tags$script(redircode)),   
-   tags$head(tags$script(redircode2)), 
+   redirectSetup,
    mainPanel(
       width = 12,
       inputIp("ipid"),
@@ -184,7 +186,6 @@ server <- function(input, output, session) {
    # ------------------------------------------------------------------------------
    
    # ---- Modal Mechanics ---------------------------------------------------------
-   
    getUserID <- reactive({
       z <- dbReadTable(conn, "user")$userID
       if (length(z) == 0) {
@@ -319,7 +320,8 @@ server <- function(input, output, session) {
                          answer = ifelse(input$questionAnswer == " ", NA, 
                                          as.logical(input$questionAnswer)),
                          startTime = as.character(trial$startTime),
-                         submitTime = as.character(trial$endTime)
+                         submitTime = as.character(trial$endTime),
+                         extdata = "",
                       ), append = T)
       })
       trial$endTime <- NA
@@ -328,7 +330,7 @@ server <- function(input, output, session) {
       trial$remTime <- 25
    })
    # ------------------------------------------------------------------------------
-   
+
    output$currentTime <- renderText({
       message(sprintf("TrialTime: %d", isolate(trial$remTime)))
       if (isolate(trial$remTime) > 0) {
@@ -345,6 +347,7 @@ server <- function(input, output, session) {
       if (input$consent_submit < 1 | input$demo_submit < 1) {
          column(
             width = 10, offset = 1,
+            br(),
             tagList(
                if (input$user_consent != "YES") {
                   actionButton("show_consent", "Show Informed Consent Window")
@@ -353,8 +356,12 @@ server <- function(input, output, session) {
             )
          )
       } else if (trial$num == 0) {
-         actionButton("start_study", "Start the Study", class = "btn-primary btn-large",
-                      style = "display:block;margin:auto;margin-top:50px;")
+         column(
+            width = 10, offset = 1,
+            br(),
+            actionButton("start_study", "Start the Study", class = "btn-primary btn-large",
+                         style = "display:block;margin:auto;margin-top:50px;")
+         )
       } else if (trial$num < 13) {
          message(trial$num)
          displayTrial(userTrials[trial$num,])

@@ -106,7 +106,8 @@ if (!"trial" %in% tables) {
     trialNum = 1:3,
     answer = TRUE,
     startTime = as.character(Sys.time() - lubridate::seconds(25)),
-    submitTime = as.character(Sys.time())
+    submitTime = as.character(Sys.time()),
+    extdata = ""
   )
   dbCreateTable(con, 'trial', sampleTrial)
 }
