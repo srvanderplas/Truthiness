@@ -1,8 +1,8 @@
 ---
 title: "Egypt Borders"
-author: "Susan VanderPlas"
-date: "July 3, 2018"
-output: html_document
+output: 
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}

@@ -1,8 +1,8 @@
 ---
 title: "Switzerland Nuclear Power"
-author: "Susan VanderPlas"
-date: "July 23, 2018"
-output: html_document
+output: 
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}

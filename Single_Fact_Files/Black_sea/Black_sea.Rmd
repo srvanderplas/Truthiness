@@ -1,8 +1,8 @@
 ---
 title: "Black Sea"
-author: "Susan VanderPlas"
-date: "July 3, 2018"
-output: html_document
+output: 
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}
@@ -136,7 +136,7 @@ rs_boundaries %>%
 
 ```{r, include = F}
 
-fname <- sprintf("Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.jpg", opt)
+fname <- "Subject_Related_Nonprobative_Map.jpg"
 fsrc <- "https://upload.wikimedia.org/wikipedia/commons/f/fe/1855_Spruneri_Map_of_the_Black_Sea_or_Pontus_Euxinus_in_Ancient_Times_-_Geographicus_-_PontusEuxinus-spruneri-1855.jpg"
 if (!file.exists(fname)) {
   download.file(fsrc, destfile = fname)

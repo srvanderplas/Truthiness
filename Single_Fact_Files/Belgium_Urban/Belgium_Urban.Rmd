@@ -1,8 +1,8 @@
 ---
 title: "Belgium Urban Population"
-author: "Susan VanderPlas"
-date: "July 24, 2018"
-output: html_document
+output: 
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}
@@ -22,7 +22,7 @@ library(ggmap)
 library(tidyverse)
 
 library(geojsonio)
-belgium_italy <- geojson_read(here::here("Data/belgiumItaly.geo.json", what = "sp"))
+belgium_italy <- geojson_read(here::here("Data/belgiumItaly.geo.json"), what = "sp")
 belgium_italy_data <- data_frame(
   name = as.character(belgium_italy@data$name),
   id = rownames(belgium_italy@data)

@@ -1,8 +1,8 @@
 ---
 title: "Paraguay is Landlocked"
-author: "Susan VanderPlas"
-date: "July 3, 2018"
-output: html_document
+output: 
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}
@@ -132,8 +132,8 @@ if (!file.exists(here::here("Data/AsuncionMapTiles.Rdata"))) {
 Asuncionmaptiles %>% ggmap() + 
   theme_map() + 
   ggtitle("Asuncion, Paraguay")
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
-       width = 5, height = 5, dpi = 300)
+# ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
+#        width = 5, height = 5, dpi = 300)
 
 ```
 
@@ -153,8 +153,8 @@ if (!file.exists(here::here("Data/BeijingMapTiles.Rdata"))) {
 Beijingmaptiles %>% ggmap() + 
   theme_map() + 
   ggtitle("Beijing, China")
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
-       width = 5, height = 5, dpi = 300)
+# ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
+#        width = 5, height = 5, dpi = 300)
 ```
 
 <!-- <img src="BeijingMap.png" width="60%"/> -->

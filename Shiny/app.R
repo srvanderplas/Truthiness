@@ -18,14 +18,15 @@ library(pool) # Shiny pooled connections
 # ------------------------------------------------------------------------------
 
 # ---- Experimental Parameters -------------------------------------------------
-experiment_name <- "pilot"
-trial_time <- 26
+experiment_name <- "pilot-talk-aloud"
+trial_time <- 121
 counter_interval <- 1000
 sample_trial_types <- function() {
    c(c(0, 0, 1, 2, 3, 4, 5, 8, 9, 11), 
      sample(c(3, 4, 5, 8, 9, 11), size = 2, replace = F)) %>%
       sample(size = 12, replace = FALSE)
 }
+pre_generated_trials <- TRUE
 # ------------------------------------------------------------------------------
 
 # ---- Initial Data ------------------------------------------------------------
@@ -66,6 +67,10 @@ inputIp <- function(inputId, value=''){
                  type = "text", style = "display:none;")
    )
 }
+
+# ------------------------------------------------------------------------------
+
+# ---- Pre-generated Trials ----------------------------------------------------
 
 # ------------------------------------------------------------------------------
 
