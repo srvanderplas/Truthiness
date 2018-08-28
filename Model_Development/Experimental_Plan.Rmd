@@ -33,3 +33,4 @@ Trial Order:
     - 2 claim-alone trials
     - 1 of each (8 total) picture/chart/map trials
     - 2 replicated picture/chart/map trials
+

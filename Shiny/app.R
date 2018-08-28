@@ -7,6 +7,16 @@
 #    http://shiny.rstudio.com/
 #
 
+# ---- Packages ----------------------------------------------------------------
+library(shiny)
+library(shinyBS) # Modals
+library(shinyjs) # click() function
+library(tidyverse)
+library(here) # working directory simplicity
+library(DBI) # Databases
+library(pool) # Shiny pooled connections
+# ------------------------------------------------------------------------------
+
 # ---- Experimental Parameters -------------------------------------------------
 experiment_name <- "pilot"
 trial_time <- 26
@@ -16,16 +26,6 @@ sample_trial_types <- function() {
      sample(c(3, 4, 5, 8, 9, 11), size = 2, replace = F)) %>%
       sample(size = 12, replace = FALSE)
 }
-# ------------------------------------------------------------------------------
-
-# ---- Packages ----------------------------------------------------------------
-library(shiny)
-library(shinyBS) # Modals
-library(shinyjs) # click() function
-library(tidyverse)
-library(here) # working directory simplicity
-library(DBI) # Databases
-library(pool) # Shiny pooled connections
 # ------------------------------------------------------------------------------
 
 # ---- Initial Data ------------------------------------------------------------
