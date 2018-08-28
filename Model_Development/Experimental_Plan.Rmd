@@ -26,3 +26,10 @@ Number | Subject Related | Topic Related | Probative | Media Type
 11 | Y | Y | Y | map
 
 ### Control Design
+
+Trial Order: 
+- Randomly permute 1:12 facts
+- Separately, randomly permute trial type, with the following trials included
+    - 2 claim-alone trials
+    - 1 of each (8 total) picture/chart/map trials
+    - 2 replicated picture/chart/map trials
