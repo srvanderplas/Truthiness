@@ -173,7 +173,7 @@ server <- function(input, output, session) {
    # ---- Database Setup ----------------------------------------------------------
    setwd(here::here("Data"))
    pool <- dbPool(
-      drv = odbc::odbc(),
+      drv = odbc::odbc(), 
       dbname = "truthinessStudy.db",
       .connection_string = "Driver={SQLite3};", 
       timeout = 10
@@ -199,7 +199,6 @@ server <- function(input, output, session) {
          return(max(z) + 1)
       }
    })
-   
    
    toggleModal(session, "consentModal", toggle = "open")
    
@@ -245,13 +244,39 @@ server <- function(input, output, session) {
    # ------------------------------------------------------------------------------
    
    # ---- Sampling Scheme ------------------------------------------------------
+   qid <- reactive({
+      query <- parseQueryString(session$clientData$url_search)
+      
+      initTrials <- dbReadTable(conn, "initial_trials_participant") %>%
+         filter(!used)
+      
+      if ("ID" %in% names(query)) {
+         qid <- as.numeric(query$ID)
+      } else {
+         qid <- min(initTrials$participant)
+      }
+      message(sprintf("qid = %d", qid))
+      qid
+   })
+   
    picdb <- dbReadTable(conn, "pictures")
-   pictureOrder <- sample(unique(picdb$factCode), size = 12, replace = F)
-   trialTypes <- sample_trial_types()
+   if (!pre_generated_trials) {
+      pictureOrder <- sample(unique(picdb$factCode), size = 12, replace = F)
+      trialTypes <- sample_trial_types()
+   } else {
+      dbquery <- sprintf("SELECT * FROM initial_trials WHERE participant = %d", 
+                         isolate(qid()))
+      qdb <- dbGetQuery(conn, dbquery) %>%
+         arrange(trial_order)
+      pictureOrder <- unique(picdb$factCode)[qdb$fact]
+      trialTypes <- qdb$chart_type
+   }
+   
    userTrials <- data_frame(trialNum = 1:12,
                             factCode = pictureOrder,
                             trialTypeID = trialTypes) %>%
       left_join(picdb)
+
    # ---------------------------------------------------------------------------
    
    # ---- Trial Mechanics --------------------------------------------------------
@@ -334,10 +359,21 @@ server <- function(input, output, session) {
       trial$num <- trial$num + 1
       trial$remTime <- 25
    })
+   
+   if (pre_generated_trials) {
+      observe({
+         if (trial$num >= 11) {
+            message("Marking trials as having been completed")
+            x <- dbReadTable(conn, "initial_trials_participant")
+            x$used[x$participant == isolate(qid())] <- TRUE
+            dbWriteTable(conn, "initial_trials_participant", x, overwrite = T)
+         }
+      })
+   }
    # ------------------------------------------------------------------------------
 
    output$currentTime <- renderText({
-      message(sprintf("TrialTime: %d", isolate(trial$remTime)))
+      # message(sprintf("TrialTime: %d", isolate(trial$remTime)))
       if (isolate(trial$remTime) > 0) {
          isolate(trial$remTime <- trial$remTime - 1)
          invalidateLater(1000, session)
@@ -376,7 +412,16 @@ server <- function(input, output, session) {
             wellPanel(
                h4("Thank you for completing this experiment. Your completion code ",
                   "is: "),
-               p(input$fingerprint)
+               p(input$fingerprint),
+               if (pre_generated_trials) {
+                  tagList(
+                     br(),
+                     h4("Question Sequence ID:"),
+                     p(qid())
+                  )
+               } else {
+                  NULL
+               }
             )
          )
       }
