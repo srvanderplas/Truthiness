@@ -19,7 +19,7 @@ library(pool) # Shiny pooled connections
 
 # ---- Experimental Parameters -------------------------------------------------
 experiment_name <- "pilot-talk-aloud"
-trial_time <- 121
+trial_time <- 5 * 60 + 1
 counter_interval <- 1000
 sample_trial_types <- function() {
    c(c(0, 0, 1, 2, 3, 4, 5, 8, 9, 11), 
@@ -134,9 +134,12 @@ testModalContent <- bsModal(
    size = "large",
    p("In this study, you will be shown a series of statements, some of which ",
      "may be accompanied by an image. Indicate whether you believe the ",
-     "statement to be True or False using the input below.",
-     "During the real study questions, you will have a short amount of time to ",
-     "answer."),
+     "statement to be True or False using the input below."),
+   p(ifelse(trial_time > 121, "While you evaluate the statement, please think 
+            out-loud, describing your reasoning and thought process.", "")),
+   p(sprintf(
+      "During the real study questions, you will have %d minutes to answer.", 
+      floor(trial_time/60))),
    br(),
    selectInput("test_mnuts", label = "This statement is: ", 
                choices = c("TRUE", "FALSE"), selected = NULL, selectize = T),
@@ -254,6 +257,7 @@ server <- function(input, output, session) {
          qid <- as.numeric(query$ID)
       } else {
          qid <- min(initTrials$participant)
+         updateQueryString(sprintf("?qid=%d", qid), mode =  'push')
       }
       message(sprintf("qid = %d", qid))
       qid
