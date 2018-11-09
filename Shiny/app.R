@@ -135,8 +135,9 @@ testModalContent <- bsModal(
    p("In this study, you will be shown a series of statements, some of which ",
      "may be accompanied by an image. Indicate whether you believe the ",
      "statement to be True or False using the input below."),
-   p(ifelse(trial_time > 50, "While you evaluate the statement, please think 
-            out-loud, describing your reasoning and thought process.", "")),
+   p(ifelse(trial_time > 50, "Please begin by reading the statement out-loud. ", ""),
+     ifelse(trial_time > 50, "<b>While you evaluate the statement, please think 
+            out-loud, describing your reasoning and thought process.</b>", "")),
    p(sprintf(
       "During the real study questions, you will have %d minutes to answer.", 
       floor(trial_time/60))),
@@ -380,10 +381,10 @@ server <- function(input, output, session) {
       # message(sprintf("TrialTime: %d", isolate(trial$remTime)))
       if (isolate(trial$remTime) > 0) {
          isolate(trial$remTime <- trial$remTime - 1)
-         invalidateLater(1000, session)
       } else {
          click("questionSubmit")
       }
+      invalidateLater(1000, session)
       sprintf("%d seconds remaining", isolate(trial$remTime))
    })
    
