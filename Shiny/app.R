@@ -19,7 +19,7 @@ library(pool) # Shiny pooled connections
 
 # ---- Experimental Parameters -------------------------------------------------
 experiment_name <- "pilot-talk-aloud"
-trial_time <- 5 * 60 + 1
+trial_time <- 2 * 60 + 1
 counter_interval <- 1000
 sample_trial_types <- function() {
    c(c(0, 0, 1, 2, 3, 4, 5, 8, 9, 11), 
@@ -284,7 +284,7 @@ server <- function(input, output, session) {
    # ---------------------------------------------------------------------------
    
    # ---- Trial Mechanics --------------------------------------------------------
-   trial <- reactiveValues(num = 0, startTime  = NA, endTime = NA, remTime = 25)
+   trial <- reactiveValues(num = 0, startTime  = NA, endTime = NA, remTime = trial_time)
    
    displayTrial <- function(df) {
       trial$startTime <- lubridate::now()
@@ -361,7 +361,7 @@ server <- function(input, output, session) {
       trial$endTime <- NA
       trial$startTime <- NA
       trial$num <- trial$num + 1
-      trial$remTime <- 25
+      trial$remTime <- trial_time
    })
    
    if (pre_generated_trials) {
