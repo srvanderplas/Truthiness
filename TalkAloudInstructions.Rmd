@@ -1,0 +1,37 @@
+---
+title: "Instructions - Factual Claims Study"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This is a pilot study; any feedback you give will help us ensure that this experiment is set up well. 
+
+## Study Description
+
+This study has been designed to explore how people evaluate factual claims. You will be shown a sequence of 12 claims, which may be accompanied by a picture, map, or chart. You will have 2 minutes to evaluate each claim, but you do not have to use all of that time. At the end of the two minutes, the page will automatically advance to the next question.
+
+As you proceed through the study, please follow these steps:
+
+1. Read the claim out loud
+2. As you consider whether the claim is true or false, think out loud.    
+Don't worry about whether your thoughts are complete or correct - what we want is to understand the process you use to evaluate a claim. 
+3. Once you have decided, select the appropriate dropdown option and click "Next". 
+
+
+If at any time you are uncomfortable, you may skip a question or withdraw from the study without penalty.
+
+## Your privacy
+
+We will record your reasoning process using the computer's microphone. At no point will your demographic information, your submitted answers, or the audio recording ever be associated with your name or contact information.
+
+Audio recordings will be used to create a written transcript; these transcripts will be used to assess the reasoning process people use to evaluate factual statements. We will transcribe the audio recordings ourselves: no one else will have access to them.
+
+
+## After the study
+
+Please complete the Research Participant Receipt Form (RPRF) so that we can compensate you for your time. This information is required by the University, but will not be associated with any data collected during the study. Once you have completed this form, you will be paid \$5 and you are free to go.
+
+Thank you!
