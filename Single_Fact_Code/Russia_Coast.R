@@ -241,8 +241,8 @@ ggplot() +
   geom_cartogram(aes(x = long, y = lat, map_id = id), data = world_map, map = world_map, color = "black") + 
   geom_line(aes(x = long, y = lat, group = group), data = gridlines1) + 
   geom_line(aes(x = long, y = lat, group = group), data = gridlines2) + 
-  scale_fill_brewer("Coast\nLength", type = "qual", palette = "Dark2", na.value = "grey80") + 
-  scale_color_brewer("Coast\nLength", type = "qual", palette = "Dark2", na.value = "grey20") + 
+  scale_fill_brewer("Coast\nLength\n(Rank)", type = "qual", palette = "Dark2", na.value = "grey80") + 
+  scale_color_brewer("Coast\nLength\n(Rank)", type = "qual", palette = "Dark2", na.value = "grey20") + 
   geom_cartogram(aes(fill = factor(rank), map_id = id, color = factor(rank)), data = top10, map = world_map) + 
   geom_path(aes(x = long, y = lat, group = group), data = world_map, color = "black", size = .125) + 
   coord_map("mollweide", ylim = c(-90, 90))  + 
