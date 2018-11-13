@@ -136,8 +136,8 @@ testModalContent <- bsModal(
      "may be accompanied by an image. Indicate whether you believe the ",
      "statement to be True or False using the input below."),
    p(ifelse(trial_time > 50, "Please begin by reading the statement out-loud. ", ""),
-     ifelse(trial_time > 50, "<b>While you evaluate the statement, please think 
-            out-loud, describing your reasoning and thought process.</b>", "")),
+     ifelse(trial_time > 50, "While you evaluate the statement, please think 
+            out-loud, describing your reasoning and thought process.", "")),
    p(sprintf(
       "During the real study questions, you will have %d minutes to answer.", 
       floor(trial_time/60))),
