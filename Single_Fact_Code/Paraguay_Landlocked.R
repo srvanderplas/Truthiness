@@ -111,7 +111,7 @@ ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt)
 # newmap <- GetMap(center = c(39.91667, 116.3833), zoom = 10, destfile = "BeijingMap.png")
 
 if (!file.exists(here::here("Data/BeijingMapTiles.Rdata"))) {
-  Beijingmaptiles <- get_googlemap(center = c( -57.6333, -25.3), zoom = 10, maptype = "roadmap") 
+  Beijingmaptiles <- get_googlemap(center = c(116.3833, 39.91667), zoom = 10, maptype = "roadmap") 
   save(Beijingmaptiles, file = here::here("Data/BeijingMapTiles.Rdata"))
 } else {
   load(here::here("Data/BeijingMapTiles.Rdata"))
