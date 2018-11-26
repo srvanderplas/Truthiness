@@ -1,6 +1,5 @@
-## Participant 1 = userID 26
-
 userID, trialNum, text
+## Participant 1 = userID 26
 26, 1, "Well, OK, so, the picture says that more than three do; the picture says that one two three four five six, six countries get more than 50%, so. But it doesn't say only three countries, it says three south american countries get. It's a very broad, open ended statement in and of itself because it doesn't say only three. So I'm going to say that this one is true."
 26, 2, "I love the picture. The picture is great. I feel like I might have read the last picture wrong. This one has absolutely nothing to do with the statement. But, nuclear power is still pretty new. I believe that Switzerland would probably be one of those countries that would make nuclear power just because it's clean energy and Switzerland is kind of odd like that. One of three countries. I don't think that there are three countries that get more than 30% of their power from nuclear power plants. so I'm going to go with False on that."
 26, 3, "OK. Population. Qatar. I think that Qatar was one of the more progressive middle eastern countries, so I'm pretty sure that their neighboring countries are UAE and Saudi Arabia. So that's not true, Saudi Arabia... UAE definitely has a lot of working age women. I'm going to say that this one is false."
@@ -13,3 +12,29 @@ userID, trialNum, text
 26, 10, "OK, know it's not first, that's Russia. Alaska is the size of... the size of like everything. It's showing a wallaby. I'm super confused. Australia is also quite large, Australia, I believe is bigger than Brazil. I could see it's quite large. I'm going with true. It's large as a lot of countries out there. Brazil... those YouTube videos where they put Alaska over like everything. Going to go with True."
 26, 11, "Paraguay is in Central america. I don't think that's landlocked. If I remember correctly, it has a coast. So I'm gonna go with false on this one."
 26, 12, "Really niche... Huh. I think that this one is false. South Africa is I believe the most developed of all the African nations, which is partially why you hear about it so much, because they actually have a presence. And the more developed you are, the higher your youth population is going to be because they have increased odds of surviving both childbirth and being young. So I'm going to say this one is false."
+## Participant 2 = userID 27
+27, 1, "Well, so Belgium is a relatively small country in land mass, but I don't know how large their rural population is. The population density needed for over 95% of the population to be in urban areas. It's in northwestern europe, so probably fairly heavily populated, umm... I just don't think the population density is high enough for there to be that many people inside the urban areas."
+27, 2, "Ok, so Qatar. I can't remember a lot about that country. It's fairly heavily based in the energy industry. Surrounding countries... only really bordering Saudi Arabia. I'm assuming because there's a fairly wide gender gap in men and women working, I don't know enough to say for sure, umm, but in the absence of anything to say otherwise, I'm going to say false."
+27, 3, "Paraguay is landlocked... um. What does this graph have to do with it? Disregarding the graph, paraguay is in Central/South America, um, I think I remember something about it having a navy, but I can't say for sure. Just because of the ratio of countries that border water vs. those that don't, I'm going to say true for this question."
+27, 4, "Disregarding the graph, which doesn't seem to be related to this question at all, and considering I know almost nothing about the population of belize, um, barring any access to further knowledge, I'm going to say false on this one, just due to the proportion of the world population that does have access to electricity."
+27, 5, "Russia has a very large land mass, on the eastern border you have siberia, border the pacific ocean, a bit of coastal border on the western side. Assuming that the graph is correct, Canada would have a longer border by far, which does make sense because they have full borders with both the Pacific and Atlantic ocean. So I'm going to say false to this statement."
+27, 6, "I'm disregarding the map because it doesn't seem to be anywhere near swaziland. Considering that I know pretty much nothing about the geographic location of Swaziland. I'm going to default to false, considering that most countries would have more than one country on their border."
+27, 7, "Well, I know that there are multiple. I know that so there's Turkey to the South, um, Russia also has black sea holdings, and the baltics, that would be romania and others, I think the number should be somewhere around 7, so barring complete knowledge, I'm going to say this statement is true."
+27, 8, "Um, the graph does not seem to be applicable to this. I know that Brazil has a fairly large land mass. I know it's smaller than Russia, the US, maybe China, Canada... canada has a very large land mass too. So yeah, that sounds about right. This is true."
+27, 9, "Ok. Well, this is another one that I do not know a lot about. Um. I know that in some South American countries, oil is a very large industry, but I don't know if they use that oil to generate electricity or if they just sell it. Um. I know there's a lot of water flowing rivers down there, so it's possible. Um. Suppose there are a large number of ...inaudible... well, no, South America, not central. Barring other information, I'm going to say this is false, just because that I haven't heard of such feats going on in South America, but that doesn't mean it is impossible."
+27, 10, "So I know Egypt is a nation int he north east part of Africa. It has a northern border to the mediterranean. It has an eastern border to the bit of water that runs to the suez canal. That sounds about right, because it has land borders to the south and west, and sea borders to the north and east, so I'm going to say this statement is true."
+27, 11, "Ok, well this is another subject that I do not know much about. I haven't heard much about nuclear power in Switzerland. It's possible, I mean they have the technological and industrial ability to do it, it's a fairly small country, so it could get a fair amount of it's power from nuclear power. Given that nuclear power is a fairly well founded means of generatign power, especially in Europe, I'm going to say this one is true, barring further information."
+27, 12, "So I'm going to take this question to mean that they have the... um. that they're in the bottom 15 of population density. For like, proportion per land mass, and not any other thing they could be compared against. Um. I know that South Africa is fairly populous, and if we're going by land mass, I don't think they'd be that far down there for the proportion of population to land. Um, so I'm going to put this one as false. "
+## Participant 3 = userID 28
+28, 1, ""
+28, 2, ""
+28, 3, ""
+28, 4, ""
+28, 5, ""
+28, 6, ""
+28, 7, ""
+28, 8, ""
+28, 9, ""
+28, 10, ""
+28, 11, ""
+28, 12, ""
