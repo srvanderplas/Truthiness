@@ -130,16 +130,16 @@ While there is no chance of establishing significance with 41 participants and 1
 ```{r}
 vanilla_trials %>%
   mutate(correctAnswer = factor(correctAnswer, levels = c(0, 1), labels = c("F", "T")),
-         answer = factor(answer, levels = c(0, 1), labels = c("F", "T"))) %>%
+         answer = factor(answer, levels = c(0, 1), labels = c("F", "T")), 
+         trialType = str_remove(trialType, "_subject")) %>%
 ggplot() + 
   geom_bar(aes(x = trialType, fill = answer), position = "fill") +  
   geom_text(aes(x = trialType, y = .9, label = n), data = . %>% group_by(factCode, trialType) %>% count() %>% ungroup()) + 
   facet_wrap(~factCode) + 
-  coord_flip()
-  ylab("Proportion of trials where relatedness is significant") + 
-  xlab("True difference due to relatedness") + 
-  scale_color_discrete("# Participants") + 
-  ggtitle("Simulated Power for Classic Truthiness - Coarse")
+  coord_flip() + 
+  scale_y_continuous("Proportion of Responses") + 
+  scale_x_discrete("") + 
+  ggtitle("Vanilla Truthiness - Pilot Study")
 ```
 
 ## Chart Truthiness
