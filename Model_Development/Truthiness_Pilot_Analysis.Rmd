@@ -1,0 +1,311 @@
+---
+title: "Truthiness_Pilot_Analysis"
+author: "Susan VanderPlas"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: 
+  html_document: 
+    number_sections: yes
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, cache = T)
+library(tidyverse)
+library(magrittr)
+library(DBI)
+library(lme4)
+library(furrr)
+```
+
+# Introduction
+
+## Definitions
+
+- _subject relatedness_: The image shown is related to the subject of the claim (e.g. the country or geographic entity)
+- _topic relatedness_: The image is related to the topic of the claim (e.g. the numerical dimension of the claim)
+- _spatial-only claim_: The claim can be evaluated using only a map without any additional explicit variables (e.g. the claim deals with explicit geographic boundaries)
+- _probative value_: The image shown can be used to determine whether the claim is true or false
+    - _pictures_ do not provide any probative value
+    - _charts_ may provide probative value if they are both subject and topic related [1]
+    - _maps_ may provide probative value if they are both subject and topic related, but they are not guaranteed to provide probative information even if both subject and topic relatedness are met. 
+    
+[1] In the current specification, there is no provision for subject-related, topic-related nonprobative charts. It is not completely impossible to imagine that such charts might exist, however. 
+
+
+## Notation
+
+Let: 
+
+- $\alpha_i$, $i = 1, 2, 3$ correspond to image type (1 = picture, 2 = chart, 3 = map)
+- $\beta_j$, $j = 1, 2$ correspond to relatedness type (1 = subject, 2 = topic)
+- $\gamma$ correspond to probative value
+- $\delta_k$, $k = 1, 2$ correspond to claim type (1 = spatial-only, 2 = data)
+- $\zeta_l$, $l = 1, 2$ correspond to claim truth (1 = true, 2 = false)
+- $\eta_m$, $m = 1, ..., 12$ correspond to claim number (3 replicates of each combination of claim truth and claim type)
+- $\rho_n$, $n = 1, ...$ correspond to participant number
+
+$\delta$, $\zeta$, and $\eta$ can be collapsed into a single random effect $\eta$ for simplicity if it is not deemed important to know the effect of the actual truth of the claim.
+
+Fixed/Random Effects:
+
+- $\alpha$ fixed
+- $\beta$ fixed
+- $\gamma$ fixed
+- $\delta$ fixed
+- $\zeta$ fixed
+- $\eta$ random
+- $\rho$ random
+
+
+# Trials
+
+The following images are generated for each of 12 claims. Of the claims, 6 are spatial only (can be determined from a map without any additional variables), 6 require additional data. Within spatial classification, half of the claims are true, and half are false.  
+
+Number | Subject Related | Topic Related | Probative | Media Type
+------ | --------------- | ------------- | --------- | ----------
+0 |   |   |   | claim alone
+1 | Y | - | - | picture
+2 | - | - | - | picture
+3 | Y | - | - | chart
+4 | - | - | - | chart
+5 | Y | Y | Y | chart
+6 | - | Y | - | chart
+7 | Y | - | - | map
+8 | - | - | - | map
+9 | Y | Y | - | map
+10 | - | Y | - | map
+11 | Y | Y | Y | map
+
+# Experiment Setup
+
+## Participant Instructions
+You will be shown a sequence of twelve claims. You will have approximately 120 seconds to read each claim and evaluate whether it is true or false. Please think out loud as you reason through the claim, identifying any thoughts or pieces of information you use to make your decision. If you do not know the answer, give your best guess.
+
+# Truthiness Models
+
+The specification of effects for $\delta, \zeta, \eta, \rho$ are constant throughout the models discussed in this section and have been omitted for simplicity.
+
+## Vanilla Truthiness
+The standard truthiness paradigm compares claim evaluations made in the presence of a related or unrelated photo.
+
+Trials: 0, 1, 2
+
+$$ \text{logit}(\text{True Claim}) \propto \alpha_1 + \beta_1 1_{subj. related}$$ 
+
+### Pilot Study Results
+
+```{r, eval = F}
+logit <- function(x) 1/(1 + exp(x))
+invlogit <- function(x) log(1/x - 1)
+
+# Copy file to current working directory so that original data is not changed in 
+# any way... and because knitr paths are a pain in the butt when combined 
+# with odbc.
+file.copy(from = file.path(here::here("Data"), "Driver={SQLite3};dbname=truthinessStudy.db"),
+          to = file.path("./"), overwrite = T)
+
+con <- dbConnect(odbc::odbc(), dbname = "truthinessStudy.db", 
+                 .connection_string = "Driver={SQLite3};", 
+                 timeout = 10)
+tables <- dbListTables(con)
+
+vanilla_trials <- tbl(con, "trial") %>%
+  left_join(tbl(con, "pictures")) %>% 
+  filter(trialTypeID < 3) %>%
+  filter(startTime >= "2018-11-11 00:00:00") %>%
+  collect() %>%
+  select(userID, trialNum, startTime, submitTime, trialType, trialTypeID, factID, fact, factCode, answer, correctAnswer)
+  
+
+model <- glmer(answer ~ (1|factCode) + factor(trialType) + correctAnswer + (1|userID), 
+               data = vanilla_trials, 
+               family = "binomial")
+summary(model)
+
+```
+
+While there is no chance of establishing significance with 41 participants and 164 trial observations (4 observations per person, but spread over 12 facts, so that each fact was evaluated approximately `r vanilla_trials %>% group_by(factID) %>% count() %>% summarize(n = mean(n)) %>% extract2("n") %>% mean %>% round(2)` times and each fact x trial type was evaluated approximately `r vanilla_trials %>% group_by(factID, trialTypeID) %>% count() %>% ungroup() %>% summarize(n = mean(n)) %>% extract2("n") %>% mean %>% round(2)` times), there is some slight indication of a truthiness effect in the pilot study data.. 
+
+
+```{r}
+vanilla_trials %>%
+  mutate(correctAnswer = factor(correctAnswer, levels = c(0, 1), labels = c("F", "T")),
+         answer = factor(answer, levels = c(0, 1), labels = c("F", "T"))) %>%
+ggplot() + 
+  geom_bar(aes(x = trialType, fill = answer), position = "fill") +  
+  geom_text(aes(x = trialType, y = .9, label = n), data = . %>% group_by(factCode, trialType) %>% count() %>% ungroup()) + 
+  facet_wrap(~factCode) + 
+  coord_flip()
+  ylab("Proportion of trials where relatedness is significant") + 
+  xlab("True difference due to relatedness") + 
+  scale_color_discrete("# Participants") + 
+  ggtitle("Simulated Power for Classic Truthiness - Coarse")
+```
+
+## Chart Truthiness
+The chart truthiness paradigm compares claim evaluations made in the presence of a subject related or topic related nonprobative chart.
+
+Trials: 0, 3, 4, 6
+
+$$\text{logit}(\text{True Claim}) \propto \alpha_2 + \beta_1 1_{subj. related} + \beta_2 1_{topic\ related}$$ 
+## Map Truthiness
+The map truthiness paradigm compares claim evaluations made in the presence of a subject related or topic related nonprobative chart. This model is fully specified, that is, the interaction between subject-relatedness and topic-relatedness can be evaluated.
+
+
+Trials: 0, 7, 8, 9, 10
+
+$$\text{logit}(\text{True Claim}) \propto \alpha_3 + \beta_1 1_{subj. related} \times \beta_2 1_{topic\ related}$$ 
+
+## Item-Type Truthiness
+This model examines only the effect of subject-relatedness and does not consider topic-relatedness, as it is not feasible to get pictures which are topic-related.
+
+Trials: 0, 1, 3, 7, 2, 4, 8
+
+$$\text{logit}(\text{True Claim}) \propto \alpha * \beta_1 1_{subj. related}$$ 
+
+This model fully contains the Vanilla truthiness model, but does not contain the chart/map truthiness models because of the exclusion of the topic-related effects.
+
+## Item Type Motivation
+This model examines whether having probative images increases the probability of a claim being evaluated as true. That is, does the participant bother using the information they're given to evaluate the claim?
+If not, then we have fairly big problems...
+
+Trials: 0, 3, 4, 5, 6, 7, 8, 9, 10, 11
+
+$$\text{logit}(\text{True Claim}) \propto \alpha_{2,3} \times (\beta_1 1_{subj. related} \times \beta_2 1_{topic\ related} + \gamma 1_{probative})$$
+
+## Simplified Truthiness and Motivation
+
+This model combines truthiness and motivation exploration. 
+
+Trials: 0, 4, 3, 5, 8, 9, 11
+
+$$\begin{align}\text{logit}(\text{True Claim}) \propto & \phantom{ + }\delta\times 1_{spatial-only} + \zeta \times 1_{true\ claim} & \text{claim fixed effects}\\
+&+  \alpha_2\times 1_{chart} + \alpha_3 \times 1_{map} + \beta \times 1_{related} + \gamma \times 1_{probative}  & \text{image fixed effects}\\
+&+ \eta_m + \rho_n & \text{random effects for claim and participant}\\
+& + \epsilon_{tmn} & \text{random effect for evaluation of specific claim}\end{align}$$
+
+### Simulation
+
+```{r simplified-truthiness-model, eval = F}
+logit <- function(x) 1/(1 + exp(x))
+invlogit <- function(x) log(1/x - 1)
+
+sample_participant_trial_types <- function(){
+  sample(c(1:7, 1, sample(2:7, size = 4, replace = F)), 12, replace = F)
+}
+
+sim_eval <- function(nparticipants, dprobative, dtruthy, simrep = NULL, fullres = F) {
+  evaluations <- data_frame(participant = 1:nparticipants) %>%
+  mutate(trials = map(participant, ~bind_cols(claims, trial_types[sample_participant_trial_types(),]) %>%
+                        mutate(trial_difficulty = related*dtruthy + probative * dprobative) %>%
+                        mutate(difficulty = logit(claim_difficulty + trial_difficulty), 
+                               claim_eval = rbernoulli(length(difficulty), p = difficulty)))) %>%
+  unnest()
+
+  model <- glmer(claim_eval ~ (1|claim) + chart + related + probative + (1|participant), 
+                 data = evaluations, 
+                 family = "binomial")
+  msum <- summary(model)
+  
+  mcoef <- coef(msum) %>% as_tibble %>% mutate(var = rownames(msum$coefficients))
+  
+  tmp <- data_frame(nparticipants = nparticipants, dprobative = dprobative, dtruthy = dtruthy, 
+                    probative_sig = as.numeric(mcoef[5, 4]) < .05,
+                    truthy_sig = as.numeric(mcoef[4, 4]) < .05,
+                    fixef = list(mcoef)
+                    )
+  if (fullres) {
+    tmp <- tmp %>% mutate(evals = list(evaluations))
+  }
+  
+  if (is.null(simrep)) return(tmp)
+  
+  tmp %>% 
+    mutate(simrep = simrep)
+}
+
+
+# Generate model matrix
+claims <- expand.grid(rep = 1:3,
+                      claimtruth = c(TRUE, FALSE),
+                      claimtype = c("spatial", "data")) %>%
+  as_data_frame() %>%
+  mutate(claim = row_number(), claim_difficulty = rnorm(12, 0, 3)) %>%
+  select(claim, claimtype, claimtruth, claim_difficulty)
+
+trial_types <- tribble(~chart, ~related, ~probative,
+                       "none", F, F,
+                       "chart", F, F,
+                       "chart", T, F,
+                       "chart", T, T,
+                       "map", F, F,
+                       "map", T, F,
+                       "map", T, T)
+
+nreps <- 50
+sim_trials <- expand.grid(dtruthy = seq(-1, 1, .1), 
+                          dprobative = 0) %>%
+  as_tibble() %>%
+  mutate(nparticipants = list(data_frame(nparticipants = c(50, 100, 150, 200, 250, 300, 350, 400, 450, 500)))) %>%
+  unnest() %>%
+  mutate(simrep = list(data_frame(simrep = 1:nreps))) %>%
+  unnest()
+
+plan(multiprocess)
+sim_results <- future_pmap_dfr(sim_trials, sim_eval)
+
+sim_results_sum <- sim_results %>% group_by(nparticipants, dprobative, dtruthy) %>%
+  summarize_at(vars(probative_sig, truthy_sig), mean)
+
+
+sim_trials2 <- expand.grid(dtruthy = seq(-.6, .6, .05), 
+                          dprobative = 0) %>%
+  as_tibble() %>%
+  mutate(nparticipants = list(data_frame(nparticipants = c(300, 350, 400, 450, 500)))) %>%
+  unnest() %>%
+  mutate(simrep = list(data_frame(simrep = 1:nreps))) %>%
+  unnest()
+sim_results2 <- future_pmap_dfr(sim_trials2, sim_eval)
+
+sim_results_sum2 <- sim_results2 %>% group_by(nparticipants, dprobative, dtruthy) %>%
+  summarize_at(vars(probative_sig, truthy_sig), mean)
+save(sim_results_sum, sim_results, sim_results2, sim_results_sum2, file = here::here("Model_Development/SimData/SimpleTruthinessMotivation.Rdata"))
+```
+Simulation setup: 
+
+- 50 simulation reps per parameter combination
+- Trials allocated to participants as follows: 
+    - Each participant sees each claim once
+    - Each participant gets image-free claims twice (2)
+    - Each participant gets each chart claim once (6)
+    - The remaining 4 trials are randomly chosen from the picture conditions
+
+- Claim-specific effect randomly distributed $\sim N(0, 3)$ (that is, values generated on logit scale)
+- True effect size for truthiness generated on logit scale between -1 and 1
+- Bernoulli trial conducted for each participant/trial combination to select an answer according to the data-generating model
+
+Model: 
+- Simplified model to reduce simulation time - only manipulate truthiness, hold probative effect constant at 0    
+The power calculations for truthiness hold for probative effect as well
+- `glmer` model statement: `claim_eval ~ (1|claim) + chart + related + probative + (1|participant)`
+    - random effects for claim and participant
+    - fixed effects for chart, truthiness, and probative value
+
+```{r}
+load(here::here("Model_Development/SimData/SimpleTruthinessMotivation.Rdata"))
+ggplot(sim_results_sum) + 
+  geom_line(aes(x = dtruthy, y = truthy_sig, color = factor(nparticipants), group = nparticipants)) + 
+  ylab("Proportion of trials where relatedness is significant") + 
+  xlab("True difference due to relatedness") + 
+  scale_color_discrete("# Participants") + 
+  ggtitle("Simulated Power for glmer Truthiness Model - Coarse")
+
+ggplot(sim_results_sum2) + 
+  geom_line(aes(x = dtruthy, y = truthy_sig, color = factor(nparticipants), group = nparticipants)) + 
+  ylab("Proportion of trials where relatedness is significant") + 
+  xlab("True difference due to relatedness") + 
+  scale_color_discrete("# Participants") + 
+  ggtitle("Simulated Power for glmer Truthiness Model")
+```
+
+Conclusion: need ~350 participants to have a 75% chance of detecting a difference of 0.3 on log-odds scale. Additional participants don't actually help that much.
