@@ -136,11 +136,26 @@ vanilla_trials %>%
 ggplot() + 
   geom_bar(aes(x = trialType, fill = answer), position = "fill") +  
   geom_text(aes(x = trialType, y = .9, label = n), data = . %>% group_by(factCode, trialType) %>% count() %>% ungroup()) + 
-  facet_wrap(~factCode) + 
+  facet_wrap(~factCode) +
   coord_flip() + 
   scale_y_continuous("Proportion of Responses") + 
   scale_x_discrete("") + 
   ggtitle("Vanilla Truthiness - Pilot Study")
+```
+
+```{r}
+vanilla_trials %>%
+  mutate(correctAnswer = factor(correctAnswer, levels = c(0, 1), labels = c("F", "T")),
+         answer = factor(answer, levels = c(0, 1), labels = c("F", "T")), 
+         trialType = str_remove(trialType, "_subject")) %>%
+ggplot() + 
+  geom_bar(aes(x = trialType, fill = answer), position = "fill") +  
+  geom_text(aes(x = trialType, y = .9, label = n), data = . %>% group_by(trialType) %>% count() %>% ungroup()) + 
+  # facet_wrap(~factCode) +
+  coord_flip() + 
+  scale_y_continuous("Proportion of Responses") + 
+  scale_x_discrete("") + 
+  ggtitle("Vanilla Truthiness - Pilot Study - Overall evaluations")
 ```
 
 ## Chart Truthiness
