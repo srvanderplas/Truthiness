@@ -90,11 +90,12 @@ The standard truthiness paradigm compares claim evaluations made in the presence
 
 Trials: 0, 1, 2
 
-$$ \text{logit}(\text{True Claim}) \propto \alpha_1 + \beta_1 1_{subj. related}$$ 
+<!-- This is not the exact model we fit... fix...-->
+$$ \text{logit}(\text{True Evaluation}) \propto \alpha_1 + \beta_1 1_{subj. related}$$ 
 
 ### Pilot Study Results
 
-```{r, eval = F}
+```{r}
 logit <- function(x) 1/(1 + exp(x))
 invlogit <- function(x) log(1/x - 1)
 
