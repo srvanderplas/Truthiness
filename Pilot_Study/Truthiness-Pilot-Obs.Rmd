@@ -1,0 +1,502 @@
+---
+title: "Truthiness Data Collection"
+author: "Susan VanderPlas"
+date: "11/12/2018"
+output: html_document
+---
+
+## Participant 1
+
+- Hydroelectric power generation - 3 countries - does that mean $\geq 3$?
+- Didn't use the map much on the Qatar question
+- Completely discarded the not useful chart for Russia/coastal border
+- Belize question - underdeveloped Central America
+- Black sea - mediterranean confused for black sea?
+- Brazil size - correctly identified a wallaby distinguished from a kangaroo?
+
+## Participant 2
+
+- Doesn't seem to use the charts/graphs/images at all (at least on 1st 2 questions) but did notice the not useful graph on Q3
+- defaults to false for most things
+- "bottom 15 of population density" for South Africa question - obviously clearly mangled the question interpretation
+
+## Participant 3
+
+- might have a tendency to assume statements with unrelated information are false
+
+
+## Participant 4
+
+- "neighboring countries" is a sticking point for Qatar question
+- Paraguay is landlocked map labeled Beijing China!!! <- Issue - related map is mislabeled. !!!!! (Fixed after participant 9)
+- Need to clarify South Africa "age of 15"
+
+## Participant 5
+
+- good at figuring out that stimuli are irrelevant
+- paraguay in central america?
+- Coast length - key needs to say "rank" (fixed after participant 9)
+
+## Participant 6
+
+- South Africa - all african nations vs. chart of southern african nations - could cause confusion (didn't in this case)
+
+## Participant 7
+
+- Unrelated chart has shown up a couple of times with Belize fact... check out allocations?
+- Swaziland probative map has shown up twice?
+- Most people seem to miss "proportional" in the South African statement
+- Switzerland - need question to say "three countries in Europe"
+- Didn't recognize that the Egypt nonprobative map was actually only a part of egypt...
+
+## Participant 8
+
+- Belize - no year, so assuming it's current; confused by the breakdown between rural and urban in the probative graph, so not using it, at least by instinct
+- Trying to take into account the map projection for the Russia coast question
+- Switzerland - need question to say "three countries in Europe"!!!
+- Never heard of Swaziland
+- Expectation seems to be that maps/charts will be relevant - seems annoyed when they aren't; same doesn't seem to hold for pictures. 
+- working age probably needs to be formally defined... Qatar. Use parentheses (25-54) or something like that
+- Egypt borders - preposition issues "equal land to coastal borders"? Doesn't quite know where Egypt is... 
+
+## Participant 9
+
+- thinks germany is pro nuclear power
+- that other country with the really long border that I'm just not thinking of off the top of my head. Wants to choose false just because others have been true.
+- trying to game the sequence of TF answers
+- Not using the key on the brazil world map to infer size rank...
+- associating africa -> poverty -> belize -> poverty ? Trying to find rationalizations
+- Belgium urban - didn't seem to use the graph? Also, capitalization of the question is off...
+- South Africa probative map: issues with question phrasing clarity
+
+## Participant 10
+
+- fairly good at identifying useless charts/graphs, relatively good at introspection - what s/he knows vs. what the question is asking...
+- Egypt has a coast on the dead sea/red sea/caspian sea
+- Issues with "3 south american countries" - technically 4 do. Fix to "At least". Didn't affect outcome.
+
+## Participant 11
+
+- Lots of guessing, no major issues.
+
+## Participant 12
+
+- Belize - located in southern SA. Forest environment = no electricity?
+- Doesn't appear to realize the map is for a different variable
+- Egypt question - says it should be more specific (border with who?)
+- Brazil country - may be evaluating population instead of land size
+- Paraguay - pandas are relevant?
+- Belgium - read off of the map. 
+- Switzerland - false because chart is irrelevant?
+- Switzerland/Swaziland confusion
+- Confused by chart mismatch (Qatar)
+- South America hydro - doesn't realize the difference between % power and \# power plants
+- Black Sea - thinks there are 7 bars instead of 6
+- Russia border - false because chart didn't match
+
+## Participant 13
+
+- Egypt doesn't have coastal borders at all
+- South Africa - confused by the question - ask if age is ???    
+doesn't remember this question at all
+- Belgium - somewhere in Europe? Thinks it's rural.
+- Russia border - Russia an interior country
+- Swaziland - can read the graph successfully
+- Qatar - kinda sexist over there, so True    
+doesn't remember this question at all, or the map...
+- Brazil - China Russia, Canada, USA, are bigger so F
+- South American Hydro - "assuming the graph is true" don't know anything about hydro, so trust the graph
+- Black Sea - don't know where the black sea is located; examining map as if she's looking for the black sea there
+- Switzerland - reading graph; less than 20% nuclear power; false (assuming graph is true)
+- Belize - confused by rural/urban parts of the graph
+- Paraguay - did a presentation in HS, should remember, can remember the shape but not the location
+
+## Participant 14
+
+- Didn't recognize that Swaziland and Canada were different countries
+- Black sea - used river boundaries to infer country boundaries ... does that work here? 
+- Brazil - need to clarify question - land mass or population? Assuming land mass
+- Russia Border - read probative chart with no issues
+- Belize - read map no problem
+- Qatar - read map without any issues
+- South America Hydro - reasoned through it very well
+- Switzerland - Europe is into wind/green power, smaller countries, reasonable to believe it's true
+- South Africa - assumed false ** listen to transcript **
+- Paraguay - assuming that it's in south or latin america, majority of LA not landlocked, probably false
+
+## Participant 15
+
+- Didn't give feedback immediately for switzerland
+- Missed Russia on black sea border
+- Qatar - doesn't know where it is, but sounds middle eastern. Rights based on gender?
+- Belgium - lots of countryside, so assumed false
+- Paraguay - used chart 
+- Russia coast - Australia completely exposed, Russia only partially
+
+## Participant 16
+- Didn't know where the black sea was; decided on true
+- Brazil - not using the graph initially (but decided it was relevant later)
+- Switzerland - cat is cute but not relevant. Seems like a country that would have 30% nuclear power
+- South America - possible, but not thinking of big waterways in SA. 
+- Belgium - majority of IA's population in urban areas, so this sounds plausible
+- Belize - don't recognize the city/country off the bat; photo could be relevant; they seem to have power lines in the photo so lean towards false
+- Qatar - assumed birth rate is same, working age around the time they'd still be alive... went with true anyways
+- Russia - Canada might be a contender, but russia larger than canada (earlier question's chart). Map is relevant to the question b/c it shows Russia, but would need to look at Canada's map to double check - they may have more islands. Russia is bigger, though, so true
+- South Africa - birth rate may be really low, but going to guess false
+
+## Participant 17
+- Paraguay - in the southeast portion of SA, se of Brazil. Don't know any features, but going to guess.
+- Switzerland - CERN, innovative tech -> guess true
+- Qatar - assume 25-54% = working age; identifies that there's no gender info, only talks about population as a whole. Answer false; no way to analyze based on available data
+- South America - Amazon flows through multiple countries, don't know about size of countries. 
+- Swaziland - Eswatini - "in swaziland" - recall from geo course in HS. Guess is that it's enclosed within South Africa
+- Black Sea - black sea isn't in Africa - graphic is useless - black sea is w. asia, recall from memory: Russia, Ukraine, Kazakhstan, Turkey, Georgia, ... seems unlikely given size of countries
+- Belgium - lots of rural communities in western europe, so 95% seems much too high. Data representation not provided; image of a city in belgium isn't useful
+- Egypt - actually did map w/ bar chart - approximately equal
+- Belize - belize underdeveloped based on picture of a lion; doesn't really seem to realize the graphic isn't relevant or that belize isn't in Africa. "I'm really not sure lions live in belize, to be honest". Evaluated as False
+- Russia - world map w/ ranking of 5 countries w/ longest coast - Canada is longest based on graphic - no sources on graph. Lots of small islands in Canada, *** Meant to say FALSE *** - should fix this?
+- South Africa - identify graph as not pertinent; SA history of political turmoil, demographics in SA unique compared to other african nations, but not necessarily saying they have low proportion under 15. More developed nations = more balanced population dist'n, poor countries have high proportions of young kids due to lack of access to birth control... evaluate as true even without pertinent information
+- Brazil - 5th largest in land mass behind russia, canada, china, US. Assumes it's referring to land area; should be more clear.
+
+## Participant 18
+
+- Switzerland - need to add "In Europe" to question. Graph seems odd, not connected with Switzerland. Seems specific, so will say true
+- Brazil - "If this is Brazil" it looks pretty big.
+- Egypt - picturing it in her head, 2 land and 2 ocean borders
+- Russia - lots of land border, so answer false
+- Paraguay - thinks the country might not be correct but that paraguay is in SA and is landlocked
+- Black sea - black sea is in europe/middle east, so graph isn't relevant. 
+- South America - not sure if they can use salt water for hydro, but if so thinks it's true
+- South Africa - looking at graph - doesn't think it's relevant (but it is) thinks SA is big and that it's common for people to go there and travel, so thinks it's false
+- Belize - common place for ISU students to travel to for study abroad, wouldn't send people there if it wasn't well populated and didn't have electricity
+- Belgium - didn't recognize coliseum image. Belgium is city like, doesn't think people live in urban areas. 
+- Swaziland - country in South Africa, so thinks it's true
+- Qatar - near saudi arabia, think men in SA work but not women. 
+
+## Participant 19
+
+- Brazil size - used chart to asseses Australia vs. brazil but already had bkgd knowledge
+- Egypt - didn't know that the partial image was partial. may want to reconsider what a nonprobative topical map would look like
+- South America hydro - lots of big rivers, so true. 
+- Black sea - correct geographic location, not sure exactly how many countries. 7 is very specific - say it's false, not that many?
+- Qatar - correctly parsed language - bringing in foreign workers, would make sense that most of them are men - middle east, not progressive
+- Belgium - identified useless chart; based on knowledge of western europe and the fact that it's pretty urban - thinks it's not 95% urban, so false
+- Belize - identififed useless chart; in south america and not africa, say it's true just based on the fact that it's in south america and they have access to electricity
+- South Africa - Map of france doesn't have a title - is that a consistency issue? Say it's false because it's well developed, which means older populations because medical access is better
+- Swaziland - true because it's in the middle of south africa according to nonprobative map
+- Russia - thinks finland/sweden has a longer coastline due to indents. Correct answer, wrong reasoning
+- Paraguay - northern half of South America, not sure if it's landlocked. Know there are lots of small countries at the top of SA; thinks paraguay may be one of them. False.
+- Switzerland - correctly pronounced nuclear! below 20% according to the graph, so statement is false
+
+## Participant 20
+
+- Paraguay - used map to determine that the statement was true
+- South America - false because less developed countries
+- South Africa - seems to confuse south africa and southern africa. Doesn't notice the age range on the nonprobative map key. 
+- Brazil - India, china, a lot more african and asian countries that are big. 5th - brazil is down the list. Might be true. 
+- Belgium - it's a country, these are countries, (nonprobative chart w/ demographics in southern europe). Switzerland has chocolate, there's dutch people there and in belgium. Seems to have decided Switzerland is another name for belgium. Doesn't recognize urban isn't the same as age distribution.
+- Russia - doesn't hear people talk about going to the ocean in russia but they were in a lot of wars and they had boats, so it's true
+- Switzerland - they talk about them being neutral but they've had things to do with wars, and nuclear power is a big part of past wars. Not sure where they're located, but i think they have something to do with nuclear power plants, so that's true.
+- Belize - belize is a less developed country, but (reading graph) 100% have electrical access. so that's false. 
+- Swaziland - don't know if it's on the coast or landlocked, but it probably borders other countries, so it's false. 
+- Black sea is near mediterranian, maybe in africa. The picture looks like greece in a way, but I don't think it's in Europe. It's not a very popular sea, so maybe there's only 7 countries. 
+- Egypt - not sure I'm looking at a picture of egypt, but if I am, that could be true because its kinda square shaped and all four sides are equal, so sure, that's true. 
+
+## Participant 21
+- Belgium - seems false (too high), but it is small; don't know if it's that urbanized. Did not look at the (probative) graph
+- Russia - false because australia is completely surrounded by water
+- South America - Sounds like a true statement. Don't think SA has a lot of wind/solar/natgas/coal, but there's a lot of water
+- South Africia - graph says "years old" so may be interpreted. from movies and talking with people ... false, but going to say true, but stick with false. 
+- Qatar - list of imports not that relevant - go ahead and say true; Qatar is in the middle east, they have a larger discrepancy between the proportion of working age men and women
+- Egypt - picturing a risk map in his head
+- Swaziland - True but has no idea what the country is
+- Belize - not subject/topic related map, not on the map, say that's false because 85% is a very large number to have access to some form of electricity
+- Black sea - true; trying to picture the black sea and thinks there are at least 7 countries bordering the red sea
+- Paraguay - trying to picture a map, in south america, next to Uraguay, don't know if it's landlocked. No consideration of the probative chart.
+- Brazil - map of australia's exports (actually a chart). True because largest is in mass size and not in particular export or population.
+- Switzerland - map of nuclear plants in europe. Switzerland isn't (labeled) on the map, going to go with true because the supercollider is in switzerland and it probably needs a lot of power
+
+## Participant 22
+- Black sea - identified not-relevant chart; not sure where the black sea is...
+- Egypt - used map to make the decision
+- South America - used probative chart to make the decision, not confused by question wording
+- Switzerland - used map to make the decision
+- South Africa - probably the oldest nation, so probably true
+- Belize - not much prior knowledge, identified that the map showed percent power from fossil fuels, as well as the fact that the variable isn't totally relevant. 50% or more would be in rural areas, without direct access to electricity, so true
+- Russia - 
+- Qatar - identified the chart isn't relevant; can't think of other countries to compare to. Possible, but thinks other countries might be greater
+- Brazil - used probative chart; the graph could be possibly missing other countries, but geography knowledge isn't the greatest. Trying to think of other areas that are large... these seem right, though
+- Paraguay - requires more geography knowledge; some from Spanish class a while back. Most likely false just because there are a lot of countries with a water border
+- Swaziland - recognized the hockey player as Toronto; recognizes that it requires prior knowledge. No idea where swaziland is on the map. Swaziland is a bit obscure, so an interesting question. definitely possible, so true
+- Belgium - identified map that isn't relevant (age over 65); 95% is very large so false. 
+
+## Participant 23
+- Paraguay - seen a map of the area; south of america, not sure if other countries surround it. The picture is deceiving because it seems like there is a body of water surrounding it **may be an issue**. There's a lot of vegetation and warmth down there, so ... ** follow up and ask if landlocked is confusing **
+- Belgium - nonprobative map - 
+- South Africa - lots of ethnicities there, many people who are of american descent, lowest under 15 -> older population -> true because it's a nice place to live. probably a lot of younger adults in the central part of africa
+- Qatar - probative chart - used the chart to identify that the giant gap corresponding to Qatar in mid-age bracket
+- Brazil - know that it's big and some people from there as well. 5th largest - does that mean in the world or in South America or...? country makes me think land not the people, so even though it's big it isn't extremely big... 
+- Russia - believe this one; with a global map, you can see that russia has a huge border, they'd have to set that along a long range of area, means there's a lot more land over there. Russia is mostly landlocked on the southern part
+- Black sea - over by egypt, Israel area, don't know if they all border the black sea. (confused with red sea?) Identified that the chart wasn't relevant. 
+- South America - using a map of europe to say she believes that 50% of the electricity comes from hydro. Seems to have missed the South America part of the question. Know that europe is doing their best to go back to the natural way and do things better for the environment.
+- Swaziland - wondering why there's more young people than old people here and what happened to them. Based on the fact that it has the word land in it, going to say true. Younger people may not have access to medical care for old people so probably true.
+- Egypt - coastal borders refers to seas? in the picture it does look pretty equal, but don't know if it's ok to go based off of a picture. Would need measurements to be 100% sure that approximately equal means half and half. Going to say false.
+- Switzerland - one of the scandinavian countries, like to stay away from nuclear power plants. Switzerland isn't that big, so only one of three countries is probably false. Russia is more believable. 
+- Belize - knows where that is, probative map, very impoverished area. Same with Nicaragua, was there last year, they don't have power lines but they do have access to computers (the kids do) but that requires access to electricity. Less than 85%... i would believe that, because it could be 50 or 65%. It's pretty vague, so go with true.
+
+## Participant 24
+- Qatar - um... don't really know the area that well in Asia (assumes map is true) but I don't see Qatar, which is odd. It's talking about neighboring countries, but I don't see the picture of it, so... (doesn't seem to recognize that the variable on the chart is not relevant). It could be true; that country isn't that advanced, compared to North Korea, but I'm seeing on the map that North Korea has a lot more stability (not as a government standpoing) but I feel like women don't work as much as men in North Korea because they're controlling their population.
+- Swaziland - it's showing me canada, but I don't think it's next to canada. It doesn't sound like a country either. I would definitely say it isn't by Canada, and it's showing me the pouplation of Canada which isn't relevant. But I'm going to stay false.
+- Black sea - probative chart - graph of 5 countries and a state (unless georgia is a country), ok 6 countries, comparing the length of the black sea coastline. I feel like if 7 countries border the black sea, they might include the other country in the graph. so I'm going to say false.
+- Belize - I know a friend that went to Belize, they talked about how it's not very advanced as a country. There's a lot of people working in the hospitality area, and the  nicest parts of their country are places where people go to travel. I do believe that 85% don't have access to electricity, so I'm going to go with True
+- Belgium - probative map - urban vs rural in a city. I don't know what their landscape looks like, but based off of the graph, they're pretty dark blue, so that means they're in the 95-100% category. Based off of the graph it's true.
+- Paraguay - there's a picture of panda bears. The picture is kinda distracting, but. I'm so bad at geography. I'd take an educated guess and say false. that is based off of no knowledge. I have a 50/50 chance
+- Switzerland - probative chart - Europe is very advanced in alternate energies, and moving towards wind power, but they could still be using nuclear power. Based off of the graph, Switzerland has under 20% nuclear power, so i'll go with false
+- Russia - the graph shows russia's ethnic makeup, which has nothing to do with the question. I won't base it off of the graph. They're a pretty big country, so... I don't know what percent is connected to the ocean. Australia has a lot of coast. I'm going to go with False.
+- Egypt - pretty sure that's false, but don't quote me. Based off of where it is in Africa, I'd say maybe 30%
+- Brazil - related picture - my international studies teacher talks about Brazil because that's where she's from. It is big, so is Russia, the US, it sounds decent. I'd almost say it's bigger than that... maybe 4th. or 3rd. I don't know. I'm goign to say false.
+- South Africa - graph is talking about age distribution in Southern Africa. Based off of the graph, Mauritus has a smaller population under 15. 
+- South America - This isn't showing percentage on the map, but it does show circles for MW I don't know what that is. There are a lot of circles in brazil, I'd say maybe 2 tops, but definitely not 3, based off of the graph. 
+
+## Participant 25
+- Switzerland - I don't know if that's true or false, there's a graph here showing the population of switzerland with ages. There's not anything that would support that.
+- Belgium - one of those countries with a lot of cities. Most people live in/near the city.
+- Russia - Graph that describes India's ethnic makeup. Unrelated. Russia is along the ocean alot, but I don't know if they're the longest of any country. Probably false.
+- Black sea - not going to lie, don't know where that is, the map doesn't help because the black sea isn't labeled. could be true if the black sea is near here.
+- Qatar - map shows percentn of population 25-54 which is typical working age for men and women. Based on the population of the other countries compared to Qatar, so they probably have more people working compared to other countries. Ignored gender entirely.
+- Belize - map shows percent power from fossil fuels, belize has 25-50% from fossil fuels, but that doesn't mean they have access to electricity. This one is probably also false; from what I know belize is more of a poor country and they don't have electrical resources. Seems to have misread and thinks it's asking >85%.
+- South America - map shows hydro power gen in SA; percent hydro power for more than 3 countries is at least 50%. no source but could be accurate.
+- Brazil - baby kangaroo in the picture, don't know why. COuld be #5, pretty large country.
+- South Africa - not entirely sure what this one is saying. probably true - big part of african nations.
+- Egypt - probably true - close to the ocean from what I can remember. about half and half on the land and ocean
+- Swaziland - graph showing the border regions of south africa and mozambique. Says it only borders one country but I don't think that's true because most only border one other country.
+- Paraguay - shows population, not relevant. probably isn't landlocked from what I remember. 
+
+## Participant 26
+- Belgium - map of population >65, with almost a  fifth of the population being older, I'd imagine the claim is false because in general I picture older populations in rural areas
+- Russia - probative chart; border type land coast, according to the chart, canada has the longest coastline.
+- Egypt - false based on what I know from geography; the northern side is coastal but the other sides are landlocked
+- Qatar - probative map; reading map, about 75% population working age. Based on the proportion of males in that age range, I'd say that's true
+- South Africa - not entirely sure about south africa compared to other african nations. guess this is false based on I think South Africa is more developed, so I think that would increase the average age of the population. Oh wait. Lowest proportion. I'd still say it's false, it would be somewhere in the middle. Other more developed african countries 
+- Belize - probative chart; electrical access, according to the graph 100% have access to electricity so false.
+- South America - could be true based on the amount of support from larger countries
+- Switzerland - that could be true; switzerland is highly developed and doesn't have the same aversion to nuclear power that america does.
+- Brazil - (reading chart) the exports and the value; is this in population or land mass? that could be true, if not 5th it's probably close
+- Black Sea - not great on geography in that area. that could be true.
+- Paraguay - china's population; (laughing) ... paraguay... want to say it's not landlocked, but not entirely sure
+- Swaziland - i'd say that's false, but don't know much about it. 
+
+## Participant 27
+- Russia - false because it's not an island
+- South Africa - true, because it sounds true, but I don't really know
+- Swaziland - true, because there's only one country in that map surrounding it
+- Switzerland - I don't know much about nuclear plants, so going to say that's true
+- Paraguay - border regions chart - there's nothing on the coast
+- South America - true, because there's a lot of blue dots in more than three areas
+- Belize - sounds like it would be true.
+- Qatar - just going to assume that's true
+- Egypt - graph tells me nothing about the answer. Going to say false. 
+- Black sea - probative map - counting... one two three four five seven... true because I counted them
+- Belgium - True, most of the graph looks like they're less than 95, so false. (misread graph?)
+- Brazil - I don't think that's true... 
+
+## Participant 28
+- Paraguay - wait, this is a picture of china. it's in south america ?central america? I think there's an ocean next to it.
+- Belize - I don't know much about belize. By the looks of it (picture) it looks kind of poor, 85% is kind of a lot. So I'm going to say true
+- South America - that's true because more than 3 bars are above 50
+- Black sea - I'm not sure where the black sea is. Going to go with false.
+- Switzerland - kind of advanced. say it's true, no reasoning. not sure what cat has to do with it
+- Egypt - I know it's at the top of Africa. I know there's some coast. going to say true.
+- South Africa - going to say false
+- Swaziland - probative map. false, two countries touching it
+- Russia - that looks pretty long (nonprobative map) going to go with true
+- Brazil - true (reading map)
+- Qatar - reading probative graph - going to say true because that is a large difference
+- Belgium - Belgium's in germany, and I don't even know what germany looks like. going to say true. 
+
+(noticing for the first time eswatini in the SA graph could tip off Swaziland question answer...) 
+
+## Participant 29
+- Brazil - in south america, i have no idea how big it is but it's pretty big. Russia's in there... Mexico, maybe. ok, maybe it is. 
+- South America - dams, electricity from water, in South America. Probably true, there are a lot of river basins. From old classes, I've learned about hydro generation. 
+- Swaziland - I have no idea where that is. Only borders one country. Probably coastal. What's the likelihood that's a possibility? Probably false
+- Belgium - That seems true. Belgium in Europe, I think. Most of the population lives in urban areas. Turkey has over 90% in urban areas, and france also, so... I wouldn't be surprised.
+- Switzerland - most of the population is 25-54, about equal between males and females. I guess maybe I'm not sure what to think from the graph. If it's saying most of the population is middle age/younger, I would think that could be true. (doesn't entertain the idea that the graph is useless)
+- Qatar - I know that in this region there's a larger discrepancy between men and women. Compared to neighboring countries (looking at map of Asia)  but I would think it would have a larger discrepancy. 
+- Paraguay - I thought it had contact with an ocean but I don't know. I don't have a clue. Guessing false.
+- Black sea - looking at graph - six countries. So I don't know if they're missing one or what. I don't know who the countries are without the graph. So I guess it's false or misleading.
+- Belize - That feels like something that could be real, especially in that area, not much government regulation especially with sustainable X. That's a really large number, but I wouldn't be super surprised. probably true.
+- South Africa - I would say false. I'm not sure if these other countries. I'm confused by the graph. I would still say false.
+- Russia - looking at the map - lots of coastal area. (Not looking at the rank/key). Other countries that aren't as large as Russia but have longer perimeters. I can't see anything that would be larger. I guess I would say yes. but I'm skeptical
+- Egypt - probative chart - sure, that's equal looking at this
+
+## Participant 30
+- Swaziland - at first I thought swaziland would be in Africa, but it has a graph of Canada's population. Mostly middle age people. This really has no correlation to the statement. I could believe that though, but it's hard to only border one country, but Canada does. I guess it's not connected to greenland. Ok, probably true.
+- Russia - Mercator projection, not reliable for some things, Russia is pretty huge, but not as big as it is on the map. Australia would have to be the next one, or Antarctica, but it's a continent and not a country. I think that's false. Australia would have the longest border.
+- Brazil - Mercator projection. Africa is way bigger than greenland, even though greenland looks huge on the map. Brazil is close to the equator, so it's a natural size. Russia, China, India, US, Australia, ... pretty specific. true.
+- South America - 3 gorges dam in china, most well known hydro dam in the world. Hoover is hydroelectric too. is SA progressive in renewables? 50% is a lot though, but if it's small enough you don't have to transmit the power that far. You'd still need a ton of rivers. Lots of rivers there, but everywhere too. Probably a lot. go with true.
+- Switzerland - graph is population of the US; looks shockingly similar to the population of Canada. I don't know if I like that. 30% from nuclear power plants. In the US we talk about switzerland, the netherlands, as more progressive. Nuclear gets a bad rap now, not because they're bad but because we don't make them right. I live near a plant and that's how we get all of our money, in our town. German Merkel doesn't like them. I'd say it's true.
+- Qatar - we have a stereotype in america that women aren't as powerful in most countries even though SA is getting better. I have no idea. I'd say that's true based off of stereotypes. 
+- Egypt - shows a picture of mexico city. Well, I'm wondering if the other pictures were inaccurate. But the population of the US was pretty accurate. Not the question though. In northern africa, picturing in my head, it's on the mediterranean or maybe the gulf of oman. or is that the caspian sea? It's probably equal. The northern and eastern parts are bordered by water.
+- Black Sea - I think greece borders the black sea, no it definitely borders the mediterranean. That's really shocking, I really thought the black sea was the saltiest. But the graphs haven't been right. So idk. Seven is a lot. bordering anything seven times is a lot I think. Sharing that alone would be hard diplomatically. I think the european countries, africa, asia hog it if one country has it. 
+- South Africa - Graph here about age distribution of countries in southern africa. That's just the southern part of the african continent, but SA is one of the countries. That's the dark green bar, which would be Mauritus. Based off the graph, that's the lowest proportion. The US population one was right, but the numbers added up. The canada one was maybe weird. The mexico city one didn't make sense. I'll say false based off of this graph. 
+- Belgium - picture of the coliseum. IS that the coliseum? Looks kinda small. Looks like someone made it out of clay. I think it also had more than the first 2 stories. That's inherently false, Belgium's by germany, they invaded in WWII, when I picture northern europe I picture green pastures and lots of farms. Going to say false. 
+- Belize - I don't know where belize is, but I've heard about it in the news. I could believe that. 85% is a lot though. I remember reading about Iraq and after we invaded a lot of people didn't have access to electricity. Population is mostly middle aged or young. Small country - population in thousands. I'm going to say 85% is a lot, but it could be a third world country. I"ll say it's true. 
+- Paraguay - I don't think that's paraguay, actually. In spanish we looked at south america a lot. I think paraguay was on the western coast of south africa. But maybe it wasn't. I know Peru is on the western coast. I could see that. Say it's true. 
+
+## Participant 31
+
+- South Africa - fairly large, I think it's false. 
+- Switzerland - going to say that's true, I know Europe uses nuclear power, france is one of the larger ones. Didn't refer to the graph at all (probative)
+- Qatar - I'll say that's true, but I don't know much about it. I know that in other nations there is a large difference between the working age men and women. 
+- Belize - goign to say false; belize is a neighbor of Mexico and the United states, so it should have some access to electricity maybe?
+- Belgium - Sounds true; don't know much about belgium, but I know a lot of european countries are densely populated
+- South America - 
+- Paraguay - think I remember that it was landlocked
+- Black sea - Sure, I'll say true. There are a lot of little countries around seas, and I think it's in Europe. 
+- Swaziland - never heard of it, so guess it's true
+- Brazil - True - brazil is pretty large, and it could be up there. Squinted at the map but didn't appear to use it in the decision
+- Russia - pretty sure that is true, but I haven't studied geography that much. but it has a pretty long border and is in europe and asia
+- Egypt - I'll say false. Egypt is at the top of africa and is by water, but I'm not sure if it has countries that border both sides. I'll assume it does.
+
+
+## Participant 32
+- Qatar - in the middle east, bordered by SA and bahrain, SA just now allowed women to drive. Qatar definitely has a lot more western influences than a lot of countries. I think it's false. 
+- Russia - that graph has nothing to do with the question. only the northern part is not touching land. Island nations like australia would have more coastal border. Technically coasts are infintely long. True because it's a large country and the north doesn't touch anything but water.
+- Paraguay - true because that's definitely Paraguay. 
+- South Africa - As a country gets more developed, their population gets older. They're a pretty developed country in Africa. Nigeria, Kenya, Egypt are also pretty developed. the graph shows working age population, which isn't totally relevant. Going to say it's false, because there might be one. 
+- South America - looking at graph... ok. Know there's a lot of hydro on the Amazon. More than 50%? There are a lot of smaller countries up north in South America. Sure, that's probably true. A lot of them have a lot of rainforest, they're definitely not burning fossil fuels.
+- Brazil - Russia canada united states, that's 3, Kazakhstan, Brazil is largest in South America, but that doesn't help much. China. China's bigger, and brazil is 5th
+- Black sea - which one is that? no, that's the dead sea. Russia, Romania, Tajikistan, Azerbaijan, Ukraine, ok... I'm going to go with true. Turkey. Iran? or a different sea?
+- Belize - looking at the graph... percent with electrical access. what? This is saying that 100% have electrical access. Right? If Nicaragua doesn't make it to 100, it implies that they're making room for people that don't have electricity. And Belize is relatively developed in comparison to other c. american countries. 
+- Switzerland - laughing, that picture is of the united states. France is \#1, lots bigger in Europe, for sure gets more than 30. Switzerland is more willing to develop different energy systems. If there are 3, France, Germany, ... going with True, assuming there are only 3. 
+- Belgium - not in southern europe, so graph won't help. I don't think it has that many, but I can't name any belgium cities.
+- Swaziland - yeah, that's true, wait, no, it borders MOzambique and South Africa. Lesotho is the one that's entirely within South Africa
+- Egypt - that is egypt. approximating based on the picture, it's not the same length on bottom and top, but the top has more bumps, which gives more border length. The same goes with the east/west. But... yeah, I think this is, well, the right would be more. I think it's true. 
+
+## Participant 33
+- Missed the 1st question...
+- Brazil - identified noninformative map. Brazil is big; US is up there, what other countries? Brazil is biggest in South America for sure. Canada... but land size or population size?
+- Qatar - machinery imports make me think of factories, makes me think that the discrepancy between men and women. Transportation, Misc, Metal. I have no idea. Not sure where it's located at. Basing it off of machinery/metals, they probably have a high factory population, and that tends to be more male.
+- Swaziland - Is this even a place? I've never heard of either of these. Would assume it's an African country. Especially if it only borders one country, it's probably surrounded by water. That would mean it would be a trade destination, and I'd have heard of it if it's a trade destination. probably false.
+- Switzerland - Switzerland is pretty neutral, surrounded by mountains, don't want to be involved in politics. Map of power plants in europe; should be super-helpful. going to go with True
+- Paraguay - graph of china's population isn't helpful at all. 
+- Belize - 85% is a lot, but electricity is important. 15% of the population does have access to electricity. That seems like a very small number. Oh, I'm reading it wrong. Less than 85% of the population means only 15% wouldn't so that's ok. 
+- Black sea - there's at least 4. It's by Egypt, so that's a lot. I don't know if it's seven, probably closer to 4 or 5. 
+- South America - (Read as 3 south african). Not sure what hydroelectronic generation is - could be water generation. Brazil, Chile, ... Using water  has been around long enough. probably true.
+- Russia - definitely believe that. It's huge. It is somewhat landlocked. Do they have a country on top of them?
+
+## Participant 34
+- South America - probative chart - reading chart - false, because there are 4 countries that get more than 50% ** phrasing ambiguity**
+- Brazil - pretty big, not sure what exports have to do with it. China/India, Not sure. Say true - seems plausible. 
+- Russia - false - russia is mostly landlocked ** ask about percent interpretation?**
+- Belize - nonprobative subject-related map, poverty stricken but is probably a racist assumption. seems reasonable though.
+- South Africa - (read as South America) don't have anythign to go off, assume false
+- Qatar - I don't know. going to say false.
+- Paraguay - using the earlier question - it's in South America, but the majority of countries aren't landlocked. so False
+- Black Sea - the graph doesn't have anything to do with the border of the sea. Seems illogical to think 7 countries could border something that can't be that big. Compared to the sea between Europe and Africa, ... it's connected somehow, and it can't be that big.
+- Egypt - Say it's true - sea along northern, Nile along Eastern, as long as that counts as a coast...
+- Switzerland - reading probative map - False, percent says it's 15-20.
+- Belgium - near germany; germany is... movement in America moving from urban -> rural; kind of doing the opposite now. Probably just a lot of cities; europe doesn't have a lot of land to begin with.
+- Swaziland - Assuming the picture has anything to do with the question, it might be in Canada. It can't be in Canada, but asking about a separate country. Doesn't relate to the question. Guessing false.
+
+## Participant 35
+- Qatar - demographics in the chart - red is female, blue is male. Population on Y , age on X axis. The Qatar graph is missing the measurements on the x axis (facet labels) but taking the leap to interpret them as the same. There are more men in the 25-54 age group, which makes sense because that's the group where most people are working. True
+- Paraguay - in SA, I wish I knew more about SA geography. Shows a waterfall, doesn't mean anything because that could be a river. I think it's landlocked. It might be. I just don't have the. sure.
+- Switzerland - what makes switzerland unique/special/different from other countries that could use nuclear power plants. What else is there for them to get energy from? Wind, solar, maybe. Part of Europe. Not any big water areas in switzerland. Say false. other countries with more nuclear plants
+- Swaziland - in Africa, think it's pretty small. is it the one in South Africa? I think that's right.
+- Belize - graph with population with electricity (actually a map). Population with electricity bar (gradient) and the most purple is 100%; white is 50%. Belize is the dark color, consistent with 90-100%, so false
+- Belgium - ok, Brussels is the capital, antwerp, is it more of an urban area or rural? looks topographical with mountains and such; fewer cities in that area. It would make sense to have fewer people living there. Blue lines and grey lines - blue are rivers, grey may be states/counties/etc. White and yellow things on the graph. I'm going to say green = rural, white = city areas, land doesn't translate to \# people, but Brussels isn't overly populous.
+- Black sea - in upper part of Africa. Graph is really random - largest 10 countries in Africa by total area - seven seems high to me. Greece is Mediterranean, Baltic is by Norway, Dead sea is landlocked, Black sea is bottom area near mediterranean, near Greece/Italy/upper part of africa. Seems reasonable.
+- South America - map of Europe. Not useful. Amazon river, could do hydro. could get from wind, solar. Could be more. Going to say False. 
+- Egypt - graph is religious affiliation, 15%/85% but that doesn't have anything to do with it. Top part is shorter than bottom part, going to say false. 
+- Brazil - Canada, Russia... could think of Brazil as 5th largest. Australia. Sure, true.
+- Russia - canada may have more than russia - lots of islands
+- South Africa - map of Southern Africa, South Africa is the bottom country. Gradient is % pop 25-54. Darkest is 70%, lowest is 30. SA is in the 40-50% range. That doesn't tell you age up vs. down. The question is what percentage does the rest of the population make up? fairly developed, no major diseases or water contamination things leading to young mortality. going to say false. 
+
+## Participant 36
+- Switzerland - probative map - thinks it would be false; in a mountainous region, don't think it would have a power plant. Didn't even read the map.
+- South America - That sounds true - there isn't any other way for them to get electricity. Mostly water. (again, didn't appear to consider the map)
+- Belize - majority is located in a village area; few cities that actually have electricity, so true.
+- Black sea - I think that would be true from what I've seen on a map. I visualized all of these countries touching the black sea (gesturing to chart with 6 bars; didn't count the bars)
+- Egypt - hard to decide. Sounds true, it's close to water and it touches other countries as well.
+- Belgium - true; close to Germany and France, and from what I know those are also heavily populated areas. Belgium would also be urban (didn't look at probative map at all)
+- South Africa - I couldn't give a great guess, but from previous knowledge I'd say false. South Africa has a lot more people than other african nations.
+- Brazil - true top 10 countries are huge
+- Swaziland - belive it's located in Europe, so probably false. 
+- Paraguay - don't know what is bordering it or in the area
+- Qatar - my knowledge of the middle east from what I've seen is that there's  a large difference between men and women working compared to other countries.
+- Russia - True because it's the largest country and stretches all the way from western Europe to Alaska and has a huge border along the coast.
+
+Says he used the charts and graphs to make his decision  (but some of them weren't relevant)
+
+## Participant 37
+- Swaziland - That is not true - Mozambique and South Africa - probative chart as well as knowledge
+- Qatar - no way of knowing on this graph; Qatar has a funky looking age to gender gap
+- Russia - graph is not relevant. Canada has a longer coastal border than Russia. 
+- Belgium - two cities of 1m+ population, Brussels and Antwerp. Can't imagine that much land used for farming. 95% is definitely a stretch, though. 
+- Belize - I would assume that it's in latin america and 85% is believable. Say it's true.
+- Brazil - (ask about population vs. land) Kangaroo is native to australia Russia, Canada, US, China, Brazil. True.
+- South Africa - Africa has a population boom, Nigeria has a 7.8 birthrate, which is very high. Countries get less children as they industrialize/modernize; birthrate slows and infant mortality goes down. South Africa is industrialized, so probably true. Wouldn't be willing to bet that one of the island populations wouldn't have a higher population, so going with false
+- Paraguay - graph based on population by age and gender. Know that it's landlocked, but not b/c of the graph.
+- Black Sea - Map of Africa without neighboring bodies of water. Don't think 7 countries - Ukraine, Georgia, Turkey, Bulgaria, Romania, Greece,  Russia - so 7 and true. Not based on map.
+- South America - reading map... paraguay, colombia, ecuador, Brazil. Choosing false because 4 countries do... ** fix wording**
+- Switzerland - united states age/population graph; fairly certain switzerland is one of the countries. 
+- Egypt - border w/ mediterranean sea and red sea, so similar length to border with sudan/libya
+
+## Participant 38
+- Black sea - 7's kind of a lot, not knowledgeable in this area. I would say less than 7. Wants a slightly more zoomed-out picture. Wants to say false, will stick to that
+- Egypt - beautiful picture of a dog. Egypt is kind of small, the Nile is right next to it, but. Distracted by the corgi because he's so cute. Saying false a lot - kind of nervous. 
+- Qatar - working age population gender balance (reading map title). staring at key. Qatar is really blue - the most blue. not sure what discrepancy means, but they're the most blue of all countries. Inferring that they have the most people working. 
+- Belize - reading map; more than 85% - looks like 100% have access. so false. 
+- Swaziland - is that even a real place? The map is for Toronto, Canada. I don't see swaziland/eswatini on there. Going to say false, don't know if it even exists or not. 
+- Switzerland - That's possible, but don't think so. Where would they get their power? Not knowledgeable on power
+- Brazil - I don't know how this graph helps me with that. I feel like they're pretty big. Going to guess true, think I learned that in school. 
+- Belgium - probative chart - looks like it is true. 
+- South Africa - don't think so. Don't know. going to guess it's false.
+- Russia - false - looks like Canada (probative chart) according to this graph
+- South America - no nothing about this, so false
+- Paraguay - where is paraguay? In central america I think? This graph (china's population) isn't helping me. will say false but don't know. 0
+
+## Participant 39
+- Paraguay - probative chart - reading length of border off of the chart - I figure these are the regions around Paraguay; given the graph, if Argentina is 2500 km, Brazil is a little less than 1500 km, Bolivia... the coast is almost nil; **need to change the coast line to be transparent** 
+- Qatar - missed some discussion - going to have to guess on this one. going to go with false. 
+- Brazil - looking at graph; rereading statement; looks confused. Reading graph again. Interpreting the graph as Brazil's imports from Australia? ** Change graph title to Australia's worldwide exports ** Also interprets the Brazil statement as population-based.
+- South America - probative chart - more than 50% are over 50% from hydroelectric. True
+- Swaziland - nonprobative map - doesn't give me any information on other countries in this land mass. **May want to show more of Africa** If I assume this is just one country here, that would be true. With no other information... I could only assume that I don't recognize the land mass, so I have nothing else to work with. 
+- Belize - If I had a clear idea of where Belize was, I could use that information to make a guess, but I don't know enough to make that guess. I'm down to making a 50% guess. That's a high proportion; I'm going to go with false. Just guessing. Generally think of most countries as having access to electricity; generally assuming it was a country without as much access to electricity as us. 
+- Belgium - nonprobative related chart - given the parameters of the graph I can try to estimate it based off of the demographics. Demographics that typically live in Urban areas... 
+- Russia - unrelated map - given a map with some Indian areas. Can't figure out how I'm supposed to evaluate this with a map of India. ran out of time.
+- Egypt - proportion of land borders I'm not familiar with. Just guessing an answer. 
+- Switzerland - nuclear power seems not uncommon to me (perception). I'm not sure I would be surprised if most developed countries were utilizing nuclear power. We don't use renewable energy, at least not over here, so I'm not sure about other countries. 
+- Black Sea - Turkey, Georgia, Romaina, Ukraine, Bulgaria, - Russia isn't visible on the map as a country label. So that would be false. 
+- South Africa - the statement would mean they have a large proportion of the population over 15; given a picture of some sort of cheese, and I'm not sure why. Going to have to guess. May not realize that South Africa is a country. 
+
+
+## Participant 40
+- Black sea - geography isn't my strong suit - black sea... is that europe? I am unsure
+- Swaziland - Swaziland is also Eswatini; guessing the blue is a body of water and it's only touching one color, so it's true... but this is South Africa, so it's inside of South Africa and touching this other one, so it's false.
+- Brazil - one axis is the area, the other is the country. What's the blue color for? Interesting. **Need to add the key** counting lines... yep, it's 5th
+- Qatar - it's the darkest color, middle east population percent age 25-54; the population I'm guessing it's about 70% of what? Age 25-54. This doesn't really tell me the gender part. I would say yes, because it's so far along the spectrum that it should have the largest discrepancy between the colors, so True
+- Egypt - religious affiliation in mexico. So the chart is not helpful, because it gives me percent population with different religious affiliations in mexico while I have to think about egypt. Geography is not my strong suit, so I'll say false
+- Switzerland - the picture is insufficient, it is a kitty staring at me with very cute eyes. Anything I've learned about power plants is focused on Asian countries. That would be very cool. I want it to be true. 
+- Paraguay - ok, I have a map of beijing, and I don't see paraguay and don't think it will be on this map. I will say that it's false, I think it's an island or has some coast or something. I don't think people like to vacation in landlocked countries.
+- Russia - this is a picture of Russia; has the most land. Very cold, largest border... they do have a lot of coast. There's a lot of islands just surrounded by water, but they don't have the same landmass. So true
+- Belgium - this was a graph beforehand that would have helped me with this (no maps of Europe). I remember a graph that seems like it would help me now. This is a guess. Belgium ... again, geography not my strong suit. It's in russia. Most people like to be in urban areas, because there's no jobs, but that's a lot.
+- South America - Hydroelectric generation, where hydro is blue, the graph is beneficial. Three get more than 50%, so paraguay, ecuador, colombia, and brazil. Are any of those in South America? I think Brazil and other things of that nature. Those all sound spanish-speaking. So I think it's safe to say that at least 3 get a bunch through Hydro
+- Belize - I forgot what the order of the country is, is it first world? or more poor. Less than 85% of the population? It's a vacation spot, though, but then it would make sense to have a touristy spot with electricity. True. The photo is showing a house with electric cables. I don't know if that helps me though.
+- South Africa - graph is south africa's border regions; lowest proportion under 15 of all african nations. This graph doesn't allow me to answer the question. It's only showing me the length in KM of the borders. 
+
+## Participant 41
+- Black sea - how do those relate whatsoever? as far as I know, 7 countries could border the black sea, but these countries are all in Africa. I don't have any reason to think that's false.
+- Qatar - unrelated chart - this is implying Japan is near Qatar, or the graph is just unrelated. Assuming the two countries are neighboring, mineral and machinery are Japan's biggest imports and associated with traditionally male jobs, textiles are more female job. I have no way to evaluate the discrepancy. I don't know that Qatar is a high functioning place. I'm guessing true.
+- Switzerland - nonprobative chart - the population is pretty evenly male and female. No idea why the graph is related, but ok. What do I know about switzerland? I don't have any positive or negative opinions of them. They're in an area. I may have read somewhere that they're forward thinking in terms of green energy. So I can believe that. Wait, there are only three countries who get more than 30% from nuclear power? **Need to add in Europe** I'm going false. 
+- Belize - so all of the pictures are unrelated. That's good. Belize is Africa or South Africa; no idea why I think that. true from that guess.
+- South America - In theory there's more than three; hopefully. 
+- Paraguay - it's on the edge of south Africa, not technically landlocked; to be landlocked you have to be surrounded by land. 
+- Russia - Coastal length - this map.. going by the map alone, that's accurate. No, it's not accurate. It says Indonesia is fifth, Russia is fourth. False. Canada always wins.
+- Belgium - pretty forward. Don't think they have excessive land mass. 95% is a huge percent of the population. That seems false. 95% is just way too much
+- Egypt - basic math. Coast is 1250 roughly. Sure, that seems approximate, assuming that Sudan, Libya, Gaza, Israel are land borders.
+- Brazil - Isn't melbourne in Australia? No way to evaluate that based on given information. Is Brazil a country? 
+- Swaziland - haven't heard of either of those places, makes it sound like they're the same place. It's statistically unlikely that they border only one country. 
+- South Africa - south africa probably has a slightly better life expectancy for children. I can believe that's true; more likely it's false statistically
