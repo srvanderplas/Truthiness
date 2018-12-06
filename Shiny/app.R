@@ -223,7 +223,7 @@ server <- function(input, output, session) {
             userIP = input$ipid,
             age = input$demo_age,
             education = input$demo_education,
-            study = input$demo_study,
+            study = paste(input$demo_study, collapse = ", "),
             colorblind = input$demo_colorblind,
             consent = (input$user_consent == "YES")
          )
