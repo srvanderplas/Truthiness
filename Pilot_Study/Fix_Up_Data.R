@@ -1,5 +1,5 @@
 
-library(tidyverse)
+# library(tidyverse)
 # library(here) # working directory simplicity
 # library(DBI) # Databases
 # library(pool) # Shiny pooled connections
@@ -10,7 +10,7 @@ library(tidyverse)
 # con <- dbConnect(odbc::odbc(), dbname = "truthinessStudy.db", 
 #                  .connection_string = "Driver={SQLite3};", 
 #                  timeout = 10)
-tables <- dbListTables(con)
+# tables <- dbListTables(con)
 # on.exit(dbDisconnect(con))
 
 if ("trials" %in% tables) {
