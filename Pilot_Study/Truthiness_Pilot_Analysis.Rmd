@@ -15,6 +15,7 @@ library(magrittr)
 library(DBI)
 library(lme4)
 library(furrr)
+library(here)
 
 # Function Definitions
 
@@ -28,12 +29,18 @@ invlogit <- function(x) log(1/x - 1)
 # Copy file to current working directory so that original data is not changed in 
 # any way... and because knitr paths are a pain in the butt when combined 
 # with odbc.
-file.copy(from = file.path(here::here("Pilot_Study/Data"), "Driver={SQLite3};dbname=truthinessStudy.db"),
-          to = file.path("./Pilot_Study"), overwrite = T)
+if (!file.exists(here("Pilot_Study/Driver={SQLite3};dbname=truthinessStudy.db"))) {
+    file.copy(from = file.path(here("Pilot_Study/Data"),
+                               "Driver={SQLite3};dbname=truthinessStudy.db"),
+              to = file.path(here("Pilot_Study"),
+                             "Driver={SQLite3};dbname=truthinessStudy.db"),
+              overwrite = T)
+}
 
-con <- dbConnect(odbc::odbc(), dbname = "truthinessStudy.db", 
-                 .connection_string = "Driver={SQLite3};", 
+con <- dbConnect(odbc::odbc(), dbname = "truthinessStudy.db",
+                 .connection_string = "Driver={SQLite3};",
                  timeout = 10)
+
 tables <- dbListTables(con)
 ```
 # Introduction
@@ -136,6 +143,34 @@ tmp %>%
 
 
 ```
+
+## Fact Issues
+
+Issues with the phrasing of the facts, as identified through the pilot talk-aloud statements.
+```{r}
+conclusions <- dbReadTable(con, "pilotConclusions") %>%
+  group_by(trialType, factCode) %>%
+  summarize(otherErrors = paste(magrittr::extract(otherErrors, nchar(otherErrors) > 0), collapse = ", "),
+            issues = paste(magrittr::extract(issues, nchar(issues) > 0), collapse = ", ")) %>%
+  left_join(
+    dbReadTable(con, "pilotConclusions") %>%
+      group_by(trialType, factCode) %>%
+      summarize_if(is.numeric, mean, na.rm = T)) %>%
+  ungroup() %>%
+  arrange(factCode, trialType)
+```
+- Belgium_Urban - No major issues
+- Belize_Electricity - <85% is apparently a challenging concept. Major issues with statement parsing.
+- Black_Sea - No major issues
+- Brazil - Population vs. land size - need to rephrase to indicate land area
+- Egypt_Borders - Number of borders vs. length of borders caused some confusion. Coast = river border also caused a bit of an issue.
+- Paraguay_Landlocked - No major issues
+- Qatar_AgeDiscrepancy - No one knows where Qatar is, issues with "working age" vs. actually employed. 
+- Russia_Coast - percent border vs. length minor issues
+- SouthAfrica_Population - too many words for the concept. 
+- SouthAmerican_Hydro - need to use "at least" to indicate that it's still true if 4 countries get...
+- Swaziland_Border - confusion with Eswatini (Swaziland) indicating that they're the same thing. 
+- Switzerland_Nuclear - need to specify 3 countries in Europe, not just 3 countries.
 
 # Truthiness Models
 
