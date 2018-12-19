@@ -16,6 +16,7 @@ library(DBI)
 library(lme4)
 library(furrr)
 library(here)
+library(knitr)
 
 # Function Definitions
 
@@ -36,6 +37,9 @@ if (!file.exists(here("Pilot_Study/Driver={SQLite3};dbname=truthinessStudy.db"))
                              "Driver={SQLite3};dbname=truthinessStudy.db"),
               overwrite = T)
 }
+
+
+transcript <- read.csv("Data/PilotStudyTranscript.csv", comment = "#", quote = '\"')
 
 con <- dbConnect(odbc::odbc(), dbname = "truthinessStudy.db",
                  .connection_string = "Driver={SQLite3};",
@@ -144,7 +148,13 @@ tmp %>%
 
 ```
 
-## Fact Issues
+## Facts 
+
+```{r}
+tbl(con, "pictures") %>% select(factCode, fact) %>% collect() %>% unique() %>% arrange(factCode) %>% kable()
+```
+
+### Phrasing Issues
 
 Issues with the phrasing of the facts, as identified through the pilot talk-aloud statements.
 ```{r}
@@ -171,6 +181,22 @@ conclusions <- dbReadTable(con, "pilotConclusions") %>%
 - SouthAmerican_Hydro - need to use "at least" to indicate that it's still true if 4 countries get...
 - Swaziland_Border - confusion with Eswatini (Swaziland) indicating that they're the same thing. 
 - Switzerland_Nuclear - need to specify 3 countries in Europe, not just 3 countries.
+
+
+### Proposed new fact set
+
+1. Over 95% of Belgium's population lives in urban areas
+2. Belize - ??
+3. Seven countries border the Black Sea
+4. Brazil is the 5th largest country by area
+5. Egypt has approximately the same length of land border and coastline
+6. Paraguay is landlocked
+7. Over 50% of the population of Qatar are men between 25 and 54 years old
+8. Russia has the longest coastal border (in  km) of any country
+9. South Africa has the lowest proportion of children (under 15) of all African nations
+10. At least three South American countries get more than 50% of their electricity from hydroelectric generation
+11. Eswatini (Swaziland) is landlocked and only borders one country
+12. Switzerland is one of three European countries who get more than 30% of their power from nuclear power plants
 
 # Truthiness Models
 
