@@ -9,7 +9,7 @@ output:
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 # source(here::here("worldfactbook.R"))
-load(here::here("Data/factbook.Rdata"))
+load(here::here("Facts/Data/factbook.Rdata"))
 
 library(ggthemes)
 library(ggmap)
@@ -24,7 +24,7 @@ library(RgoogleMaps)
 
 library(tidyverse)
 
-world <- readOGR(here::here("Data/countries.geo.json"), "OGRGeoJSON", stringsAsFactors=FALSE)
+world <- readOGR(here::here("Facts/Data/countries.geo.json"), "OGRGeoJSON", stringsAsFactors=FALSE)
 world_data <- data_frame(
   name = as.character(world@data$name),
   id = rownames(world@data)
