@@ -2,8 +2,8 @@
 knitr::opts_chunk$set(echo = F, warning = F, message = F)
 
 # source(here::here("worldfactbook.R"))
-load(here::here("Data/factbook.Rdata"))
-load(here::here("Data/hydro.Rdata"))
+load(here::here("Facts/Data/factbook.Rdata"))
+load(here::here("Facts/Data/hydro.Rdata"))
 library(ggthemes)
 # library(ggmap)
 library(ggrepel)
@@ -15,7 +15,7 @@ library(ggmap)
 library(tidyverse)
 
 library(geojsonio)
-belgium_italy <- geojson_read(here::here("Data/belgiumItaly.geo.json"), what = "sp")
+belgium_italy <- geojson_read(here::here("Facts/Data/belgiumItaly.geo.json"), what = "sp")
 belgium_italy_data <- data_frame(
   name = as.character(belgium_italy@data$name),
   id = rownames(belgium_italy@data)
@@ -207,11 +207,11 @@ ggsave("Pictures_all/Belgium_Urban-map_subj_rel_topic_unrel_nonprobative.png", w
 belgiummap <- filter(belgium_italy, name == "Belgium") %>%
   arrange(id, group, order)
 belgiumbox <- c(left = min(belgiummap$long), bottom = min(belgiummap$lat), right = max(belgiummap$long), top = max(belgiummap$lat))
-if (!file.exists(here::here("Data/belgiummaptiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/belgiummaptiles.Rdata"))) {
   belgiummaptiles <- get_stamenmap(belgiumbox, zoom = 8) 
-  save(belgiummaptiles, file = here::here("Data/belgiummaptiles.Rdata"))
+  save(belgiummaptiles, file = here::here("Facts/Data/belgiummaptiles.Rdata"))
 } else {
-  load(here::here("Data/belgiummaptiles.Rdata"))
+  load(here::here("Facts/Data/belgiummaptiles.Rdata"))
 }
 belgiummaptiles %>% ggmap() + 
   geom_path(aes(x = long, y = lat, group = group), data = belgiummap, color = "red", alpha = .5, size = 2) + 
@@ -225,11 +225,11 @@ rm(belgiummap, belgiumbox, belgiummaptiles)
 italymap <- filter(belgium_italy, name == "Italy") %>%
   arrange(id, group, order)
 italybox <- c(left = min(italymap$long), bottom = min(italymap$lat), right = max(italymap$long), top = max(italymap$lat))
-if (!file.exists(here::here("Data/italymaptiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/italymaptiles.Rdata"))) {
   italymaptiles <- get_stamenmap(italybox, zoom = 6)
-  save(italymaptiles, file = here::here("Data/italymaptiles.Rdata"))
+  save(italymaptiles, file = here::here("Facts/Data/italymaptiles.Rdata"))
 } else {
-  load(here::here("Data/italymaptiles.Rdata"))
+  load(here::here("Facts/Data/italymaptiles.Rdata"))
 }
 italymaptiles %>% ggmap() + 
   geom_path(aes(x = long, y = lat, group = group), data = italymap, color = "red", alpha = .5, size = 2) + 

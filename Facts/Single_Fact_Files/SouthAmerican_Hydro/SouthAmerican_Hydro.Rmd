@@ -9,8 +9,8 @@ output:
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 # source(here::here("worldfactbook.R"))
-load(here::here("Data/factbook.Rdata"))
-load(here::here("Data/hydro.Rdata"))
+load(here::here("Facts/Data/factbook.Rdata"))
+load(here::here("Facts/Data/hydro.Rdata"))
 library(ggthemes)
 # library(ggmap)
 library(ggrepel)
@@ -36,12 +36,16 @@ world2 <- map_data("world2")
 
 #### Subject-related
 
-<img src="picture_subject_related.jpg" width="60%"/>
+```{r echo = FALSE, out.width="60%"}
+knitr::include_graphics("picture_subject_related.jpg")
+```
 <!-- Source: https://upload.wikimedia.org/wikipedia/commons/9/92/Usina_Hidroel%C3%A9trica_Itaipu_Binacional_-_Itaipu_Dam_%2817173553330%29.jpg-->
 
 #### Subject-unrelated
 
-<img src="picture_subject_unrelated.jpg" width="60%"/>
+```{r echo = FALSE, out.width="60%"}
+knitr::include_graphics("picture_subject_unrelated.jpg")
+```
 <!-- Source: https://upload.wikimedia.org/wikipedia/commons/6/66/Budapest_from_Danube_river.JPG -->
 
 ### Charts

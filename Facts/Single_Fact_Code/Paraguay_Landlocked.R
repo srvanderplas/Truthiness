@@ -4,7 +4,7 @@ opt <- "Paraguay_Landlocked"
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 # source(here::here("worldfactbook.R"))
-load(here::here("Data/factbook.Rdata"))
+load(here::here("Facts/Data/factbook.Rdata"))
 
 library(ggthemes)
 library(ggmap)
@@ -34,7 +34,7 @@ ggplot() +
   scale_fill_discrete("Gender") + 
   theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.background = element_rect(fill = "transparent"))
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -50,7 +50,7 @@ ggplot() +
   scale_fill_discrete("Gender") + 
   theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.background = element_rect(fill = "transparent"))
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 ## ---- out.width = "60%"--------------------------------------------------
 filter(borders, name == "Paraguay") %>%
@@ -66,7 +66,7 @@ filter(borders, name == "Paraguay") %>%
   scale_fill_brewer("Border With:", type = "qual", palette = "Paired", guide = F) +
   ggtitle("Paraguay's Border Regions")
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt), 
        width = 5, height = 5, dpi = 300)
 ## ---- out.width = "60%"--------------------------------------------------
 filter(borders, name == "China") %>%
@@ -88,38 +88,38 @@ filter(borders, name == "China") %>%
   scale_fill_brewer("Border With:", type = "qual", palette = "Paired", guide = F) +
   ggtitle("China's Border Regions")
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 ## ---- out.width = "60%", include = F-------------------------------------
 # newmap <- GetMap(center = c(-25.3, -57.6333), zoom = 10, destfile = "AsuncionMap.png")
 
 
-if (!file.exists(here::here("Data/AsuncionMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/AsuncionMapTiles.Rdata"))) {
   Asuncionmaptiles <- get_googlemap(center = c( -57.6333, -25.3), zoom = 10, maptype = "roadmap") 
-  save(Asuncionmaptiles, file = here::here("Data/AsuncionMapTiles.Rdata"))
+  save(Asuncionmaptiles, file = here::here("Facts/Data/AsuncionMapTiles.Rdata"))
 } else {
-  load(here::here("Data/AsuncionMapTiles.Rdata"))
+  load(here::here("Facts/Data/AsuncionMapTiles.Rdata"))
 }
 Asuncionmaptiles %>% ggmap() + 
   theme_map() + 
   ggtitle("Asuncion, Paraguay")
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
 
 ## ---- out.width = "60%", include = F-------------------------------------
 # newmap <- GetMap(center = c(39.91667, 116.3833), zoom = 10, destfile = "BeijingMap.png")
 
-if (!file.exists(here::here("Data/BeijingMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/BeijingMapTiles.Rdata"))) {
   Beijingmaptiles <- get_googlemap(center = c(116.3833, 39.91667), zoom = 10, maptype = "roadmap") 
-  save(Beijingmaptiles, file = here::here("Data/BeijingMapTiles.Rdata"))
+  save(Beijingmaptiles, file = here::here("Facts/Data/BeijingMapTiles.Rdata"))
 } else {
-  load(here::here("Data/BeijingMapTiles.Rdata"))
+  load(here::here("Facts/Data/BeijingMapTiles.Rdata"))
 }
 Beijingmaptiles %>% ggmap() + 
   theme_map() + 
   ggtitle("Beijing, China")
-ggsave(sprintf("Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
 
@@ -137,7 +137,7 @@ ggplot(data = filter(map.world, region == "Paraguay")) +
     ylim = c(lims$lat_min, lims$lat_max)) + 
   theme_map()
 
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -162,7 +162,7 @@ ggplot(data = arrange(mapsubset, group, order)) +
     ylim = c(lims$lat_min, lims$lat_max)) + 
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
 
-ggsave(sprintf("Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 rm(lims, submap, mapsubset)
 
@@ -189,7 +189,7 @@ ggplot(data = arrange(mapsubset, group, order)) +
     ylim = c(lims$lat_min*.9, lims$lat_max)) + 
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
 
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt), 
        width = 5, height = 5, dpi = 300)
 rm(lims, submap, mapsubset)
 

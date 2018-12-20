@@ -6,7 +6,7 @@ library(RgoogleMaps)
 library(tidyverse)
 
 # source(here::here("Code/worldfactbook.R"))
-load(here::here("Data/factbook.Rdata"))
+load(here::here("Facts/Data/factbook.Rdata"))
 library(ggthemes)
 library(ggmap)
 library(ggrepel)
@@ -25,7 +25,7 @@ filter(religion, name == "Egypt") %>%
   xlab("") + 
   scale_y_continuous("Percent of Population", limits = c(0, 100))
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt), 
        width = 4, height = 4, dpi = 300)
 ## ---- out.width = "60%"--------------------------------------------------
 filter(religion, name == "Mexico") %>%
@@ -40,7 +40,7 @@ filter(religion, name == "Mexico") %>%
   xlab("") + 
   scale_y_continuous("Percent of Population", limits = c(0, 100))
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt), 
        width = 6, height = 4, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -57,7 +57,7 @@ filter(borders, name == "Egypt") %>%
   scale_fill_brewer("Border With:", type = "qual", palette = "Dark2", guide = F) + 
   ggtitle("Egypt's Border Regions")
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt), 
        width = 6, height = 4, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -74,22 +74,22 @@ filter(borders, name == "Mexico") %>%
   scale_fill_brewer("Border With:", type = "qual", palette = "Dark2", guide = F) + 
   ggtitle("Mexico's Border Regions")
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 6, height = 4, dpi = 300)
 
 ## ---- out.width = "60%", include = F-------------------------------------
 # newmap <- GetMap(center = c(30.04, 31.24), zoom = 10, destfile = "CairoMap.png")
 
-if (!file.exists(here::here("Data/CairoMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/CairoMapTiles.Rdata"))) {
   cairomaptiles <- get_googlemap(center = c( 31.24, 30.04), zoom = 10, maptype = "roadmap") 
-  save(cairomaptiles, file = here::here("Data/CairoMapTiles.Rdata"))
+  save(cairomaptiles, file = here::here("Facts/Data/CairoMapTiles.Rdata"))
 } else {
-  load(here::here("Data/CairoMapTiles.Rdata"))
+  load(here::here("Facts/Data/CairoMapTiles.Rdata"))
 }
 cairomaptiles %>% ggmap() + 
   theme_map() + 
   ggtitle("Cairo, Egypt")
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
 
@@ -97,16 +97,16 @@ ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt)
 # newmap <- GetMap(center = c(19.43, -99.13), zoom = 10, destfile = "MexicoCityMap.png")
 
 
-if (!file.exists(here::here("Data/MexCityMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/MexCityMapTiles.Rdata"))) {
   mexcitymaptiles <- get_googlemap(center = c( -99.13, 19.43), zoom = 10, maptype = "roadmap") 
-  save(mexcitymaptiles, file = here::here("Data/MexCityMapTiles.Rdata"))
+  save(mexcitymaptiles, file = here::here("Facts/Data/MexCityMapTiles.Rdata"))
 } else {
-  load(here::here("Data/MexCityMapTiles.Rdata"))
+  load(here::here("Facts/Data/MexCityMapTiles.Rdata"))
 }
 mexcitymaptiles %>% ggmap() + 
   theme_map() + 
   ggtitle("Mexico City, Mexico")
-ggsave(sprintf("Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -129,7 +129,7 @@ ggplot(data = arrange(mapsubsetegypt, group, order)) +
             ylim = c(sinailims$lat_min*.95, sinailims$lat_max*1.05)) + 
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
 
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 rm(sinailims, submapegypt, mapsubsetegypt)
 
@@ -156,7 +156,7 @@ ggplot(data = arrange(mapsubset, group, order)) +
     ylim = c(lims$lat_min, lims$lat_max)) + 
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
 
-ggsave(sprintf("Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 6, height = 4.5, dpi = 300)
 rm(lims, submap, mapsubset)
 
@@ -181,7 +181,7 @@ ggplot(data = arrange(mapsubsetegypt, group, order)) +
             ylim = c(lims$lat_min*.95, lims$lat_max*1.05)) + 
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
 
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt), 
        width = 5, height = 5, dpi = 300)
 rm(lims, submapegypt, mapsubsetegypt)
 

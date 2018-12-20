@@ -3,7 +3,7 @@ opt <- "Belize_Electricity"
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 # source(here::here("worldfactbook.R"))
-load(here::here("Data/factbook.Rdata"))
+load(here::here("Facts/Data/factbook.Rdata"))
 
 library(ggthemes)
 library(ggmap)
@@ -33,7 +33,7 @@ ggplot() +
   scale_fill_discrete("Gender") + 
   theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.background = element_rect(fill = "transparent"))
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt), 
        width = 6, height = 4, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -48,7 +48,7 @@ ggplot() +
   scale_y_continuous("Population (Millions)") + 
   scale_fill_discrete("Gender") + 
   theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.background = element_rect(fill = "transparent"))
-ggsave(sprintf("Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt),
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt),
        width = 6, height = 4, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -73,7 +73,7 @@ ggplot() +
   scale_fill_discrete("Population Type") + 
   theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.background = element_rect(fill = "transparent"),
         legend.direction = "horizontal")
-ggsave(sprintf("Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt),
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt),
        width = 6, height = 4, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -101,7 +101,7 @@ ggplot() +
   scale_fill_discrete("Population Type") + 
   theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.background = element_rect(fill = "transparent"),
         legend.direction = "horizontal")
-ggsave(sprintf("Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt),
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt),
        width = 6, height = 4, dpi = 300)
 
 ## ---- out.width = "60%", include = T-------------------------------------
@@ -121,7 +121,7 @@ filter(location, simple == "Central America") %>%
   coord_map(projection = "ortho", orientation = c(12, -84, 0), xlim = c(-92.2, -77.2), ylim = c(7.22, 18.5)) +
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), legend.position = c(0, 0), legend.justification = c(0, 0), legend.background = element_rect(fill = "transparent")) +
   ggtitle("Central America")
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt),
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt),
        width = 6, height = 4, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -149,7 +149,7 @@ filter(location, name %in% countryList) %>%
   coord_map(projection = "ortho", orientation = c(1, 17, 0), xlim = c(26, 48), ylim = c(-7, 9)) +
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), legend.position = c(0, 0), legend.justification = c(0, 0), legend.background = element_rect(fill = "transparent")) +
   ggtitle("East Central Africa")
-ggsave(sprintf("Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt),
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt),
        width = 6, height = 4, dpi = 300)
 
 
@@ -172,7 +172,7 @@ filter(location, simple == "Central America") %>%
   coord_map(projection = "ortho", orientation = c(12, -84, 0), xlim = c(-92.2, -77.2), ylim = c(7.22, 18.5)) +
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), legend.position = c(0, 0), legend.justification = c(0, 0), legend.background = element_rect(fill = "transparent")) +
   ggtitle("Fossil Fuel Electrical Generation in Central America")
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt),
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt),
        width = 6, height = 4, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -204,7 +204,7 @@ filter(location, name %in% countryList) %>%
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), legend.position = c(1, 0), legend.justification = c(1, 0), legend.background = element_rect(fill = "transparent")) +
   ggtitle("Electrical Access in East Central Africa")
 
-ggsave(sprintf("Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt),
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt),
        width = 6, height = 4, dpi = 300)
 
 ## ---- out.width = "60%", message = F, warning = F------------------------
@@ -227,5 +227,5 @@ filter(location, simple == "Central America") %>%
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), legend.position = c(0, 0), legend.justification = c(0, 0), legend.background = element_rect(fill = "transparent")) +
   ggtitle("Electrical Access in Central America")
 
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt),
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt),
        width = 6, height = 4, dpi = 300)

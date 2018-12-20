@@ -8,7 +8,7 @@ output:
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 # source(here::here("worldfactbook.R"))
-load(here::here("Data/factbook.Rdata"))
+load(here::here("Facts/Data/factbook.Rdata"))
 
 library(ggthemes)
 library(ggmap)
@@ -24,7 +24,7 @@ world <- map_data("world")
 
 # http://sedac.ciesin.columbia.edu/downloads/data/energy/energy-pop-exposure-nuclear-plants-locations/energy-pop-exposure-nuclear-plants-locations.zip
 
-nuclear <- read_csv(here::here("Data/energy-pop-exposure-nuclear-plants-locations_reactors.csv")) %>%
+nuclear <- read_csv(here::here("Facts/Data/energy-pop-exposure-nuclear-plants-locations_reactors.csv")) %>%
   mutate(Country = str_replace_all(Country, c("UNITED STATES OF AMERICA" = "UNITED STATES",
                                               "CZECH REPUBLIC" = "CZECHIA", 
                                               "IRAN(.*)" = "IRAN",
@@ -45,12 +45,16 @@ nuclear <- read_csv(here::here("Data/energy-pop-exposure-nuclear-plants-location
 
 #### Subject-related
 
-<img src="picture_subject_related.jpg" width="60%"/>
+```{r echo = FALSE, out.width="60%"}
+knitr::include_graphics("picture_subject_related.jpg")
+```
 <!-- Source: https://commons.wikimedia.org/wiki/File:5325_Leibstadt,_Switzerland_-_panoramio.jpg-->
 
 #### Subject-unrelated
 
-<img src="picture_subject_unrelated.jpg" width="60%"/>
+```{r echo = FALSE, out.width="60%"}
+knitr::include_graphics("picture_subject_unrelated.jpg")
+```
 <!-- Source: https://upload.wikimedia.org/wikipedia/commons/7/75/Cute_grey_kitten.jpg -->
 
 ### Charts
@@ -152,11 +156,11 @@ electricity_all %>%
 ```{r, out.width = "60%", include = T}
 # europemap <- GetMap(center = c(50, 10), zoom = 4, destfile = "EuropeMap.png")
 
-if (!file.exists(here::here("Data/europeMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/europeMapTiles.Rdata"))) {
   europemaptiles <- get_googlemap(center = c(10, 50), zoom = 5, maptype = "terrain") 
-  save(europemaptiles, file = here::here("Data/europeMapTiles.Rdata"))
+  save(europemaptiles, file = here::here("Facts/Data/europeMapTiles.Rdata"))
 } else {
-  load(here::here("Data/europeMapTiles.Rdata"))
+  load(here::here("Facts/Data/europeMapTiles.Rdata"))
 }
 europemaptiles %>% ggmap() + 
   theme_map() + 
@@ -169,11 +173,11 @@ europemaptiles %>% ggmap() +
 #### Subject-unrelated, topic-unrelated
 ```{r, out.width = "60%", include = T}
 # usmap <- GetMap(center = c(40, -96), zoom = 4, destfile = "USMap.png")
-if (!file.exists(here::here("Data/USMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/USMapTiles.Rdata"))) {
   USmaptiles <- get_googlemap(center = c(-96, 40), zoom = 4, maptype = "terrain") 
-  save(USmaptiles, file = here::here("Data/USMapTiles.Rdata"))
+  save(USmaptiles, file = here::here("Facts/Data/USMapTiles.Rdata"))
 } else {
-  load(here::here("Data/USMapTiles.Rdata"))
+  load(here::here("Facts/Data/USMapTiles.Rdata"))
 }
 USmaptiles %>% ggmap() + 
   theme_map() + 
@@ -190,11 +194,11 @@ plants <- filter(nuclear, str_detect(Region, "Europe")) %>%
   select(name, Plant, NumReactor, Latitude, Longitude) %>%
   mutate(Latitude = jitter(Latitude, amount = .1), Longitude = jitter(Longitude, amount = .1))
 
-if (!file.exists(here::here("Data/europeMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/europeMapTiles.Rdata"))) {
   europemaptiles <- get_googlemap(center = c(10, 50), zoom = 5, maptype = "terrain") 
-  save(europemaptiles, file = here::here("Data/europeMapTiles.Rdata"))
+  save(europemaptiles, file = here::here("Facts/Data/europeMapTiles.Rdata"))
 } else {
-  load(here::here("Data/europeMapTiles.Rdata"))
+  load(here::here("Facts/Data/europeMapTiles.Rdata"))
 }
 ggmap(europemaptiles) +
   theme_void() + 
@@ -212,14 +216,14 @@ plants <- filter(nuclear, str_detect(Region, "America - (North|Latin)")) %>%
   select(name, Plant, NumReactor, Latitude, Longitude) %>%
   mutate(Latitude = jitter(Latitude, amount = .1), Longitude = jitter(Longitude, amount = .1))
 
-if (!file.exists(here::here("Data/USMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/USMapTiles.Rdata"))) {
   USmaptiles <- get_googlemap(center = c(-96, 40), zoom = 4, maptype = "terrain") 
-  save(USmaptiles, file = here::here("Data/USMapTiles.Rdata"))
+  save(USmaptiles, file = here::here("Facts/Data/USMapTiles.Rdata"))
 } else {
-  load(here::here("Data/USMapTiles.Rdata"))
+  load(here::here("Facts/Data/USMapTiles.Rdata"))
 }
 
-load(here::here("Data/USMapTiles.Rdata"))
+load(here::here("Facts/Data/USMapTiles.Rdata"))
 ggmap(USmaptiles) + 
   theme_void() + 
   geom_point(aes(x = Longitude, y = Latitude), shape = 17, alpha = .75, color = "blue", data = plants) + 

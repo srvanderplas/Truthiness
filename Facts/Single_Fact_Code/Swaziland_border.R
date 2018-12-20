@@ -4,7 +4,7 @@ opt <- "Swaziland_Border"
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 # source(here::here("worldfactbook.R"))
-load(here::here("Data/factbook.Rdata"))
+load(here::here("Facts/Data/factbook.Rdata"))
 export_col_theme <- sample(scales::hue_pal()(15), size = 15)
 
 library(ggthemes)
@@ -31,7 +31,7 @@ ggplot() +
   scale_fill_discrete("Gender") + 
   theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.background = element_rect(fill = "transparent"))
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5,  dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -47,7 +47,7 @@ ggplot() +
   scale_fill_discrete("Gender") + 
   theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.background = element_rect(fill = "transparent"))
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5,  dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -65,7 +65,7 @@ filter(borders, name == country) %>%
   scale_fill_brewer("Border With:", type = "qual", palette = "Dark2", guide = F) + 
   ggtitle(sprintf("%s's Border Regions", country))
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt), 
        width = 5, height = 5,  dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -83,38 +83,38 @@ filter(borders, name == country) %>%
   scale_fill_brewer("Border With:", type = "qual", palette = "Dark2", guide = F) + 
   ggtitle(sprintf("%s's Border Regions", country))
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 5, height = 5,  dpi = 300)
 
 ## ---- out.width = "60%", include = F-------------------------------------
 # newmap <- GetMap(center = c(-26.316667, 31.13333), zoom = 10, destfile = "EswatiniMap.png")
 
-if (!file.exists(here::here("Data/EswatiniMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/EswatiniMapTiles.Rdata"))) {
   EswatiniMaptiles <- get_googlemap(center = c(31.13333, -26.316667), zoom = 10, maptype = "roadmap") 
-  save(EswatiniMaptiles, file = here::here("Data/EswatiniMapTiles.Rdata"))
+  save(EswatiniMaptiles, file = here::here("Facts/Data/EswatiniMapTiles.Rdata"))
 } else {
-  load(here::here("Data/EswatiniMapTiles.Rdata"))
+  load(here::here("Facts/Data/EswatiniMapTiles.Rdata"))
 }
 EswatiniMaptiles %>% ggmap() + 
   theme_map() + 
   ggtitle("Mbabane, Eswatini")
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
 
 ## ---- out.width = "60%", include = F-------------------------------------
 # newmap <- GetMap(center = c(43.7, -79.4), zoom = 10, destfile = "TorontoMap.png")
 
-if (!file.exists(here::here("Data/TorontoMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/TorontoMapTiles.Rdata"))) {
   TorontoMaptiles <- get_googlemap(center = c(-79.4, 43.7), zoom = 9, maptype = "roadmap") 
-  save(TorontoMaptiles, file = here::here("Data/TorontoMapTiles.Rdata"))
+  save(TorontoMaptiles, file = here::here("Facts/Data/TorontoMapTiles.Rdata"))
 } else {
-  load(here::here("Data/TorontoMapTiles.Rdata"))
+  load(here::here("Facts/Data/TorontoMapTiles.Rdata"))
 }
 TorontoMaptiles %>% ggmap() + 
   theme_map() + 
   ggtitle("Toronto, Canada")
-ggsave(sprintf("Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -134,7 +134,7 @@ ggplot(data = filter(world, region == "Swaziland")) +
   theme(axis.text = element_blank(), axis.ticks = element_blank(), axis.title = element_blank())
 rm(lims)
 
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt), 
        width = 6, height = 4, dpi = 300)
 
 
@@ -152,7 +152,7 @@ ggplot(data = filter(world, region == "Canada")) +
   theme(axis.text = element_blank(), axis.ticks = element_blank(), axis.title = element_blank())
 rm(lims)
 
-ggsave(sprintf("Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 6, height = 4, dpi = 300)
 
 ## ---- out.width = "60%", message = F, warning = F------------------------
@@ -200,5 +200,5 @@ ggplot() +
   theme(legend.background = element_rect(fill = "white", color = "black")) + 
   theme(axis.text = element_blank(), axis.ticks = element_blank(), axis.title = element_blank())
 
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt), 
        width = 6, height = 5, dpi = 300)

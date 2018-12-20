@@ -3,7 +3,7 @@ opt <- "Qatar_AgeDiscrepancy"
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 # source(here::here("worldfactbook.R"))
-load(here::here("Data/factbook.Rdata"))
+load(here::here("Facts/Data/factbook.Rdata"))
 
 library(ggthemes)
 library(ggmap)
@@ -18,7 +18,7 @@ library(RgoogleMaps)
 
 library(tidyverse)
 
-world <- readOGR(here::here("Data/countries.geo.json"), "OGRGeoJSON", 
+world <- readOGR(here::here("Facts/Data/countries.geo.json"), "OGRGeoJSON", 
                  stringsAsFactors = FALSE)
 world_data <- data_frame(
   name = as.character(world@data$name),
@@ -31,7 +31,7 @@ rm(world_data)
 world <- map_data("world")
 world2 <- map_data("world2")
 
-load(here::here("Data/JapanQatarImports.Rdata"))
+load(here::here("Facts/Data/JapanQatarImports.Rdata"))
 export_col_theme <- sample(scales::hue_pal()(15), size = 15)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -43,7 +43,7 @@ ggplot(data = qatar_imports) +
   scale_y_continuous("Value (Billions, USD)") + 
   coord_flip()
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt), 
        width = 4, height = 6, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -55,7 +55,7 @@ ggplot(data = japan_imports) +
   scale_y_continuous("Value (Billions, USD)") + 
   coord_flip()
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt), 
        width = 4, height = 6, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -75,7 +75,7 @@ population %>%
   ggtitle("Population Demographics - Lower Arabian Peninsula") + 
   theme(legend.position = c(1, 0), legend.justification = c(1, 0), legend.background = element_rect(fill = "transparent"))
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt), 
        width = 6, height = 4, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -96,7 +96,7 @@ population %>%
   ggtitle("Population Demographics - Eastern Asia") + 
   theme(legend.position = c(1, 0), legend.justification = c(1, 0), legend.background = element_rect(fill = "transparent"))
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 6, height = 4, dpi = 300)
 
 
@@ -134,7 +134,7 @@ ggplot(data = arrange(mapsubset, group, order)) +
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), 
         legend.position = c(1, 1), legend.justification = c(1, 1), legend.direction = "horizontal", legend.background = element_rect(fill = "white")) + 
   ggtitle("Electrification in the Middle East")
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
        width = 6, height = 5, dpi = 300)
 
 rm(lims, submap, mapsubset)
@@ -180,7 +180,7 @@ ggplot(data = arrange(mapsubset, group, order)) +
         legend.position = c(1, 0), legend.justification = c(1, 0), legend.background = element_rect(fill = "transparent")) + 
   ggtitle("Electrification in East Asia")
 
-ggsave(sprintf("Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt), 
        width = 6, height = 5, dpi = 300)
 rm(lims, submap, mapsubset)
 
@@ -221,7 +221,7 @@ ggplot(data = arrange(mapsubset, group, order)) +
         legend.position = c(1, 1), legend.justification = c(1, 1), legend.direction = "horizontal", legend.background = element_rect(fill = "white")) + 
   ggtitle("Middle East Population, % Age 25-54")
 
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt), 
        width = 6, height = 5, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -269,7 +269,7 @@ ggplot(data = arrange(mapsubset, group, order)) +
         legend.position = c(1, 0), legend.justification = c(1, 0), legend.background = element_rect(fill = "transparent")) + 
   ggtitle("Working-Age Population Gender Balance")
 
-ggsave(sprintf("Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 6, height = 5, dpi = 300)
 # rm(lims, submap, mapsubset)
 
@@ -315,7 +315,7 @@ ggplot() +
         legend.position = c(1, 1), legend.justification = c(1, 1), legend.direction = "horizontal", legend.background = element_rect(fill = "white")) + 
   ggtitle("Working-Age Population Gender Balance")
 
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt), 
        width = 5, height = 5, dpi = 300)
 rm(lims, submap, mapsubset)
 

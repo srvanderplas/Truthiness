@@ -1,0 +1,13 @@
+for i in $(ls ); do
+  sed -re "s|OGRGeoJSON|countries.geo|g" $i > $i.tmp && mv $i.tmp $i
+  sed -re "s|here::here([(\"]{2})Data|here::here\1Facts/Data|g" $i > $i.tmp && mv $i.tmp $i
+  sed -re "s|sprintf([(\"]{2})Pictures_all|sprintf\1Facts/Pictures_all|g" $i > $i.tmp && mv $i.tmp $i  
+done
+
+for i in $(find . -name "*.Rmd"); do
+  sed -re 's|.img src=.(.*\.jpg)..*?(width=.*)..|```\{r echo = FALSE, out.\2\}\nknitr::include_graphics\("\1"\)\n```|g' $i > $i.tmp && mv $i.tmp $i
+  sed -re "s|OGRGeoJSON|countries.geo|g" $i > $i.tmp && mv $i.tmp $i
+  sed -re "s|here::here([(\"]{2})Data|here::here\1Facts/Data|g" $i > $i.tmp && mv $i.tmp $i
+  sed -re "s|sprintf([(\"]{2})Pictures_all|sprintf\1Facts/Pictures_all|g" $i > $i.tmp && mv $i.tmp $i  
+done
+

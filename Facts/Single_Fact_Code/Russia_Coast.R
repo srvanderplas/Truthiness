@@ -3,7 +3,7 @@ opt <- "Russia_Coast"
 ## ----setup, include=FALSE, echo = F, warning = F, message = F------------
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
-load(here::here("Data/factbook.Rdata"))
+load(here::here("Facts/Data/factbook.Rdata"))
 
 library(ggthemes)
 library(ggmap)
@@ -18,7 +18,7 @@ library(RgoogleMaps)
 
 library(tidyverse)
 
-world <- readOGR(here::here("Data/countries.geo.json"), "OGRGeoJSON", stringsAsFactors=FALSE)
+world <- readOGR(here::here("Facts/Data/countries.geo.json"), "countries.geo", stringsAsFactors=FALSE)
 world_data <- data_frame(
   name = as.character(world@data$name),
   id = rownames(world@data)
@@ -41,7 +41,7 @@ ggplot() +
   scale_fill_brewer(guide = F, type = "qual", palette = "Dark2") + 
   theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.background = element_rect(fill = "transparent"))
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -54,7 +54,7 @@ ggplot() +
   scale_fill_brewer(guide = F, type = "qual", palette = "Dark2") + 
   theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.background = element_rect(fill = "transparent"))
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -77,7 +77,7 @@ borders %>%
   theme(legend.position = c(1, 1), legend.justification = c(1, 1), 
         legend.direction = "horizontal", legend.background = element_rect(fill = "transparent"))
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt), 
        width = 6, height = 4, dpi = 300)
 
 
@@ -103,36 +103,36 @@ borders %>%
   ggtitle("East Asia's Longest Borders") + 
   theme(legend.position = c(1, 1), legend.justification = c(1, 1), legend.direction = "horizontal", legend.background = element_rect(fill = "transparent"))
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 6, height = 4, dpi = 300)
 
 ## ---- out.width = "60%", include = F-------------------------------------
 # newmap <- GetMap(center = c(59.9375, 30.308611), zoom = 10, destfile = "StPetersburgMap.png")
-if (!file.exists(here::here("Data/StPetersburgMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/StPetersburgMapTiles.Rdata"))) {
   StPetersburgmaptiles <- get_googlemap(center = c(30.308611, 59.9375), zoom = 10, maptype = "roadmap") 
-  save(StPetersburgmaptiles, file = here::here("Data/StPetersburgMapTiles.Rdata"))
+  save(StPetersburgmaptiles, file = here::here("Facts/Data/StPetersburgMapTiles.Rdata"))
 } else {
-  load(here::here("Data/StPetersburgMapTiles.Rdata"))
+  load(here::here("Facts/Data/StPetersburgMapTiles.Rdata"))
 }
 StPetersburgmaptiles %>% ggmap() + 
   theme_map() + 
   ggtitle("St. Petersburg, Russia")
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
 
 ## ---- out.width = "60%", include = F-------------------------------------
 # newmap <- GetMap(center = c(28.613889, 77.208889), zoom = 10, destfile = "NewDelhiMap.png")
-if (!file.exists(here::here("Data/DelhiMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/DelhiMapTiles.Rdata"))) {
   Delhimaptiles <- get_googlemap(center = c(77.208889, 28.613889), zoom = 10, maptype = "roadmap") 
-  save(Delhimaptiles, file = here::here("Data/DelhiMapTiles.Rdata"))
+  save(Delhimaptiles, file = here::here("Facts/Data/DelhiMapTiles.Rdata"))
 } else {
-  load(here::here("Data/DelhiMapTiles.Rdata"))
+  load(here::here("Facts/Data/DelhiMapTiles.Rdata"))
 }
 Delhimaptiles %>% ggmap() + 
   theme_map() + 
   ggtitle("New Delhi, India")
-ggsave(sprintf("Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -172,7 +172,7 @@ ggplot() +
   # theme_map() +
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
 
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt), 
        width = 8, height = 4, dpi = 300)
 rm(lims, submap, mapsubset)
 
@@ -206,7 +206,7 @@ ggplot(data = arrange(mapsubset, group, order)) +
             ylim = c(fixed_lims$lat_min, fixed_lims$lat_max)) +
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
 
-ggsave(sprintf("Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 4, height = 4, dpi = 300)
 rm(lims, submap, mapsubset)
 
@@ -249,5 +249,5 @@ ggplot() +
   theme(legend.background = element_rect(fill = "white", color = "black"))
 
 
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt), 
        width = 8, height = 5, dpi = 300)

@@ -9,7 +9,7 @@ output:
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 # source(here::here("worldfactbook.R"))
-load(here::here("Data/factbook.Rdata"))
+load(here::here("Facts/Data/factbook.Rdata"))
 export_col_theme <- sample(scales::hue_pal()(15), size = 15)
 
 library(ggthemes)
@@ -25,7 +25,7 @@ library(RgoogleMaps)
 
 library(tidyverse)
 
-world <- readOGR(here::here("Data/countries.geo.json"), "OGRGeoJSON", stringsAsFactors = FALSE)
+world <- readOGR(here::here("Facts/Data/countries.geo.json"), "countries.geo", stringsAsFactors = FALSE)
 world_data <- data_frame(
   name = as.character(world@data$name),
   id = rownames(world@data)
@@ -45,12 +45,16 @@ world2 <- map_data("world2")
 
 #### Subject-related
 
-<img src="picture_subject_related.jpg" width="60%"/>
+```{r echo = FALSE, out.width="60%"}
+knitr::include_graphics("picture_subject_related.jpg")
+```
 <!-- Source: https://upload.wikimedia.org/wikipedia/commons/c/cc/South_africa_-_zulu_reed_dance_ceremony_%286563648943%29.jpg-->
 
 #### Subject-unrelated
 
-<img src="picture_subject_unrelated.jpg" width="60%"/>
+```{r echo = FALSE, out.width="60%"}
+knitr::include_graphics("picture_subject_unrelated.jpg")
+```
 <!-- Source: https://upload.wikimedia.org/wikipedia/commons/d/dc/Coulommiers_lait_cru.jpg -->
 
 ### Charts
@@ -140,11 +144,11 @@ filter(location, str_detect(desc, region)) %>%
 ```{r, out.width = "60%"}
 x <- filter(location, name == "South Africa")
 # newmap <- GetMap(center = c(x$label_lat, x$label_long), zoom = 5, destfile = "SouthAfricaMap.png")
-if (!file.exists(here::here("Data/SouthAfricaMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/SouthAfricaMapTiles.Rdata"))) {
   SouthAfricamaptiles <- get_googlemap(center = c( x$label_long, x$label_lat), zoom = 5, maptype = "roadmap") 
-  save(SouthAfricamaptiles, file = here::here("Data/SouthAfricaMapTiles.Rdata"))
+  save(SouthAfricamaptiles, file = here::here("Facts/Data/SouthAfricaMapTiles.Rdata"))
 } else {
-  load(here::here("Data/SouthAfricaMapTiles.Rdata"))
+  load(here::here("Facts/Data/SouthAfricaMapTiles.Rdata"))
 }
 SouthAfricamaptiles %>% ggmap() + 
   theme_map() 
@@ -157,11 +161,11 @@ SouthAfricamaptiles %>% ggmap() +
 ```{r, out.width = "60%"}
 x <- filter(location, name == "France")
 # newmap <- GetMap(center = c(x$label_lat+1, x$label_long), zoom = 6, destfile = "FranceMap.png")
-if (!file.exists(here::here("Data/FranceMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/FranceMapTiles.Rdata"))) {
   Francemaptiles <- get_googlemap(center = c( x$label_long, x$label_lat), zoom = 6, maptype = "roadmap") 
-  save(Francemaptiles, file = here::here("Data/FranceMapTiles.Rdata"))
+  save(Francemaptiles, file = here::here("Facts/Data/FranceMapTiles.Rdata"))
 } else {
-  load(here::here("Data/FranceMapTiles.Rdata"))
+  load(here::here("Facts/Data/FranceMapTiles.Rdata"))
 }
 Francemaptiles %>% ggmap() + 
   theme_map() 

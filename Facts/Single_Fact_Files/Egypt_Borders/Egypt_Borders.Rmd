@@ -11,7 +11,7 @@ library(RgoogleMaps)
 library(tidyverse)
 
 # source(here::here("Code/worldfactbook.R"))
-load(here::here("Data/factbook.Rdata"))
+load(here::here("Facts/Data/factbook.Rdata"))
 library(ggthemes)
 library(ggmap)
 library(ggrepel)
@@ -25,12 +25,16 @@ map.world <- map_data("world")
 
 #### Subject-related
 
-<img src="picture_subject_related.jpg" width="60%"/>
+```{r echo = FALSE, out.width="60%"}
+knitr::include_graphics("picture_subject_related.jpg")
+```
 <!-- Source: https://commons.wikimedia.org/wiki/File:All_Gizah_Pyramids.jpg-->
 
 #### Subject-unrelated
 
-<img src="picture_subject_unrelated.jpg" width="60%"/>
+```{r echo = FALSE, out.width="60%"}
+knitr::include_graphics("picture_subject_unrelated.jpg")
+```
 <!-- Source: https://www.pexels.com/photo/pembroke-welsh-corgi-lying-on-the-sand-under-white-cloud-blue-sky-164186/ -->
 
 ### Charts
@@ -108,11 +112,11 @@ filter(borders, name == "Mexico") %>%
 ```{r, out.width = "60%", include = T}
 # newmap <- GetMap(center = c(30.04, 31.24), zoom = 10, destfile = "CairoMap.png")
 
-if (!file.exists(here::here("Data/CairoMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/CairoMapTiles.Rdata"))) {
   cairomaptiles <- get_googlemap(center = c( 31.24, 30.04), zoom = 10, maptype = "roadmap") 
-  save(cairomaptiles, file = here::here("Data/CairoMapTiles.Rdata"))
+  save(cairomaptiles, file = here::here("Facts/Data/CairoMapTiles.Rdata"))
 } else {
-  load(here::here("Data/CairoMapTiles.Rdata"))
+  load(here::here("Facts/Data/CairoMapTiles.Rdata"))
 }
 cairomaptiles %>% ggmap() + 
   theme_map() + 
@@ -127,11 +131,11 @@ cairomaptiles %>% ggmap() +
 # newmap <- GetMap(center = c(19.43, -99.13), zoom = 10, destfile = "MexicoCityMap.png")
 
 
-if (!file.exists(here::here("Data/MexCityMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/MexCityMapTiles.Rdata"))) {
   mexcitymaptiles <- get_googlemap(center = c( -99.13, 19.43), zoom = 10, maptype = "roadmap") 
-  save(mexcitymaptiles, file = here::here("Data/MexCityMapTiles.Rdata"))
+  save(mexcitymaptiles, file = here::here("Facts/Data/MexCityMapTiles.Rdata"))
 } else {
-  load(here::here("Data/MexCityMapTiles.Rdata"))
+  load(here::here("Facts/Data/MexCityMapTiles.Rdata"))
 }
 mexcitymaptiles %>% ggmap() + 
   theme_map() + 

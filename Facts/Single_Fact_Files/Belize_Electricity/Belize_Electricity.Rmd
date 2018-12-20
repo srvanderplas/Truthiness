@@ -9,7 +9,7 @@ output:
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 # source(here::here("worldfactbook.R"))
-load(here::here("Data/factbook.Rdata"))
+load(here::here("Facts/Data/factbook.Rdata"))
 
 library(ggthemes)
 library(ggmap)
@@ -34,12 +34,16 @@ library(tidyverse)
 
 #### Subject-related
 
-<img src="picture_subject_related.jpg" width="60%"/>
+```{r echo = FALSE, out.width="60%"}
+knitr::include_graphics("picture_subject_related.jpg")
+```
 <!-- Source: http://1.bp.blogspot.com/-p0OBR72bu6c/UH8kh7emMfI/AAAAAAAAEbo/DmN6K0qk4bc/s1600/028.JPG-->
 
 #### Subject-unrelated
 
-<img src="picture_subject_unrelated.jpg" width="60%"/>
+```{r echo = FALSE, out.width="60%"}
+knitr::include_graphics("picture_subject_unrelated.jpg")
+```
 <!-- Source: https://upload.wikimedia.org/wikipedia/commons/b/b4/African_lion%2C_Panthera_leo_at_Krugersdorp_Game_Park%2C_South_Africa_%2830479241254%29.jpg -->
 
 ### Charts

@@ -9,8 +9,8 @@ output:
 knitr::opts_chunk$set(echo = F, warning = F, message = F)
 
 # source(here::here("worldfactbook.R"))
-load(here::here("Data/factbook.Rdata"))
-load(here::here("Data/hydro.Rdata"))
+load(here::here("Facts/Data/factbook.Rdata"))
+load(here::here("Facts/Data/hydro.Rdata"))
 library(ggthemes)
 # library(ggmap)
 library(ggrepel)
@@ -22,7 +22,7 @@ library(ggmap)
 library(tidyverse)
 
 library(geojsonio)
-belgium_italy <- geojson_read(here::here("Data/belgiumItaly.geo.json"), what = "sp")
+belgium_italy <- geojson_read(here::here("Facts/Data/belgiumItaly.geo.json"), what = "sp")
 belgium_italy_data <- data_frame(
   name = as.character(belgium_italy@data$name),
   id = rownames(belgium_italy@data)
@@ -43,12 +43,16 @@ world <- map_data("world")
 
 #### Subject-related
 
-<img src="picture_subject_related.jpg" width="60%"/>
+```{r echo = FALSE, out.width="60%"}
+knitr::include_graphics("picture_subject_related.jpg")
+```
 <!-- Source: https://upload.wikimedia.org/wikipedia/commons/d/d3/2007_07_Belgium_Brussels_06_%28cropped%29.jpg-->
 
 #### Subject-unrelated
 
-<img src="picture_subject_unrelated.jpg" width="60%"/>
+```{r echo = FALSE, out.width="60%"}
+knitr::include_graphics("picture_subject_unrelated.jpg")
+```
 <!-- Source: https://upload.wikimedia.org/wikipedia/commons/1/12/Flickr_-_%E2%80%A6trialsanderrors_-_The_Colosseum%2C_Rome%2C_Italy%2C_ca._1896.jpg -->
 
 ### Charts
@@ -243,11 +247,11 @@ tmp %>%
 belgiummap <- filter(belgium_italy, name == "Belgium") %>%
   arrange(id, group, order)
 belgiumbox <- c(left = min(belgiummap$long), bottom = min(belgiummap$lat), right = max(belgiummap$long), top = max(belgiummap$lat))
-if (!file.exists(here::here("Data/belgiummaptiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/belgiummaptiles.Rdata"))) {
   belgiummaptiles <- get_stamenmap(belgiumbox, zoom = 8) 
-  save(belgiummaptiles, file = here::here("Data/belgiummaptiles.Rdata"))
+  save(belgiummaptiles, file = here::here("Facts/Data/belgiummaptiles.Rdata"))
 } else {
-  load(here::here("Data/belgiummaptiles.Rdata"))
+  load(here::here("Facts/Data/belgiummaptiles.Rdata"))
 }
 belgiummaptiles %>% ggmap() + 
   geom_path(aes(x = long, y = lat, group = group), data = belgiummap, color = "red", alpha = .5) + 
@@ -263,11 +267,11 @@ rm(belgiummap, belgiumbox, belgiummaptiles)
 italymap <- filter(belgium_italy, name == "Italy") %>%
   arrange(id, group, order)
 italybox <- c(left = min(italymap$long), bottom = min(italymap$lat), right = max(italymap$long), top = max(italymap$lat))
-if (!file.exists(here::here("Data/italymaptiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/italymaptiles.Rdata"))) {
   italymaptiles <- get_stamenmap(italybox, zoom = 6)
-  save(italymaptiles, file = here::here("Data/italymaptiles.Rdata"))
+  save(italymaptiles, file = here::here("Facts/Data/italymaptiles.Rdata"))
 } else {
-  load(here::here("Data/italymaptiles.Rdata"))
+  load(here::here("Facts/Data/italymaptiles.Rdata"))
 }
 italymaptiles %>% ggmap() + 
   geom_path(aes(x = long, y = lat, group = group), data = italymap, color = "red", alpha = .5) + 

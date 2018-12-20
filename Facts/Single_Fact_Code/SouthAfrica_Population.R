@@ -4,7 +4,7 @@ opt <- "SouthAfrica_Population"
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 # source(here::here("worldfactbook.R"))
-load(here::here("Data/factbook.Rdata"))
+load(here::here("Facts/Data/factbook.Rdata"))
 export_col_theme <- sample(scales::hue_pal()(15), size = 15)
 
 library(ggthemes)
@@ -20,7 +20,7 @@ library(RgoogleMaps)
 
 library(tidyverse)
 
-world <- readOGR(here::here("Data/countries.geo.json"), "OGRGeoJSON", stringsAsFactors = FALSE)
+world <- readOGR(here::here("Facts/Data/countries.geo.json"), "OGRGeoJSON", stringsAsFactors = FALSE)
 world_data <- data_frame(
   name = as.character(world@data$name),
   id = rownames(world@data)
@@ -47,7 +47,7 @@ filter(borders, name == country) %>%
   scale_fill_brewer("Border With:", type = "qual", palette = "Dark2", guide = F) + 
   ggtitle(sprintf("%s's Border Regions", country))
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -65,7 +65,7 @@ filter(borders2, name == country) %>%
   scale_fill_brewer("Border With:", type = "qual", palette = "Paired", guide = F) + 
   ggtitle(sprintf("%s's Border Regions", country))
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt), 
        width = 7, height = 4, dpi = 300)
 
 
@@ -86,7 +86,7 @@ filter(location, str_detect(desc, region)) %>%
   ylab("% Population") + 
   theme(axis.title.y = element_blank()) + 
   coord_flip()
-ggsave(sprintf("Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt), 
        width = 6, height = 5, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -106,35 +106,35 @@ filter(location, str_detect(desc, region)) %>%
   ylab("% Population") + 
   theme(axis.title.y = element_blank()) + 
   coord_flip()
-ggsave(sprintf("Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 6, height = 5, dpi = 300)
 
 ## ---- out.width = "60%", include = F-------------------------------------
 x <- filter(location, name == "South Africa")
 # newmap <- GetMap(center = c(x$label_lat, x$label_long), zoom = 5, destfile = "SouthAfricaMap.png")
-if (!file.exists(here::here("Data/SouthAfricaMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/SouthAfricaMapTiles.Rdata"))) {
   SouthAfricamaptiles <- get_googlemap(center = c( x$label_long, x$label_lat), zoom = 5, maptype = "roadmap") 
-  save(SouthAfricamaptiles, file = here::here("Data/SouthAfricaMapTiles.Rdata"))
+  save(SouthAfricamaptiles, file = here::here("Facts/Data/SouthAfricaMapTiles.Rdata"))
 } else {
-  load(here::here("Data/SouthAfricaMapTiles.Rdata"))
+  load(here::here("Facts/Data/SouthAfricaMapTiles.Rdata"))
 }
 SouthAfricamaptiles %>% ggmap() + 
   theme_map() 
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
 ## ---- out.width = "60%", include = F-------------------------------------
 x <- filter(location, name == "France")
 # newmap <- GetMap(center = c(x$label_lat+1, x$label_long), zoom = 6, destfile = "FranceMap.png")
-if (!file.exists(here::here("Data/FranceMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/FranceMapTiles.Rdata"))) {
   Francemaptiles <- get_googlemap(center = c( x$label_long, x$label_lat), zoom = 6, maptype = "roadmap") 
-  save(Francemaptiles, file = here::here("Data/FranceMapTiles.Rdata"))
+  save(Francemaptiles, file = here::here("Facts/Data/FranceMapTiles.Rdata"))
 } else {
-  load(here::here("Data/FranceMapTiles.Rdata"))
+  load(here::here("Facts/Data/FranceMapTiles.Rdata"))
 }
 Francemaptiles %>% ggmap() + 
   theme_map() 
-ggsave(sprintf("Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -165,7 +165,7 @@ tmp %>%
   ggtitle("Southern Africa Working-Age Population") + 
   theme(legend.position = c(1, 0), legend.justification = c(1, 0))
 
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt), 
        width = 7, height = 4, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -197,7 +197,7 @@ tmp %>%
   theme(legend.position = c(0, .6), legend.justification = c(0, .6), legend.direction = "vertical",
         legend.background = element_rect(fill = "white"))
 
-ggsave(sprintf("Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 4, height = 6.5, dpi = 300)
 
 ## ---- out.width = "60%", message = F, warning = F------------------------
@@ -227,6 +227,6 @@ tmp %>%
   scale_fill_gradient("% Population\n0-14", low = "white", high = "darkgreen", limits = c(15, 50)) + 
   ggtitle("Population under 15 years old")
 
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt), 
        width = 7, height = 4, dpi = 300)
 

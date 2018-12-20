@@ -24,7 +24,7 @@ library(RgoogleMaps)
 
 library(tidyverse)
 
-world <- readOGR(here::here("Facts/Data/countries.geo.json"), "OGRGeoJSON", stringsAsFactors=FALSE)
+world <- readOGR(here::here("Facts/Data/countries.geo.json"), "countries.geo", stringsAsFactors=FALSE)
 world_data <- data_frame(
   name = as.character(world@data$name),
   id = rownames(world@data)
@@ -36,7 +36,7 @@ rm(world_data)
 world <- map_data("world")
 world2 <- map_data("world2")
 
-load(here::here("Data/JapanQatarImports.Rdata"))
+load(here::here("Facts/Data/JapanQatarImports.Rdata"))
 export_col_theme <- sample(scales::hue_pal()(15), size = 15)
 ```
 
@@ -46,12 +46,16 @@ export_col_theme <- sample(scales::hue_pal()(15), size = 15)
 
 #### Subject-related
 
-<img src="picture_subject_related.jpg" width="60%"/>
+```{r echo = FALSE, out.width="60%"}
+knitr::include_graphics("picture_subject_related.jpg")
+```
 <!-- Source: https://www.goodfreephotos.com/albums/qatar/doha-west-bay-area-in-qatar.jpg-->
 
 #### Subject-unrelated
 
-<img src="picture_subject_unrelated.jpg" width="60%"/>
+```{r echo = FALSE, out.width="60%"}
+knitr::include_graphics("picture_subject_unrelated.jpg")
+```
 <!-- Source: https://upload.wikimedia.org/wikipedia/commons/c/cf/Shinjuku_skyline%2C_Tokyo_-_Sony_A7R_%2811831328835%29.jpg/ -->
 
 ### Charts

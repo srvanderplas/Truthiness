@@ -9,7 +9,7 @@ output:
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 # source(here::here("worldfactbook.R"))
-load(here::here("Data/factbook.Rdata"))
+load(here::here("Facts/Data/factbook.Rdata"))
 
 library(ggthemes)
 library(ggmap)
@@ -37,8 +37,8 @@ rm(world_data)
 world <- map_data("world")
 world2 <- map_data("world2")
 
-load(here::here("Data/Salinity.Rdata"))
-load(here::here("Data/SeaBorders.Rdata"))
+load(here::here("Facts/Data/Salinity.Rdata"))
+load(here::here("Facts/Data/SeaBorders.Rdata"))
 ```
 
 ## Seven countries border the Black Sea
@@ -48,12 +48,16 @@ load(here::here("Data/SeaBorders.Rdata"))
 
 #### Subject-related
 
-<img src="picture_subject_related.jpg" width="60%"/>
+```{r echo = FALSE, out.width="60%"}
+knitr::include_graphics("picture_subject_related.jpg")
+```
 <!-- Source: https://upload.wikimedia.org/wikipedia/commons/5/5f/Zonguldak_58.jpg-->
 
 #### Subject-unrelated
 
-<img src="picture_subject_unrelated.jpg" width="60%"/>
+```{r echo = FALSE, out.width="60%"}
+knitr::include_graphics("picture_subject_unrelated.jpg")
+```
 <!-- Source: https://upload.wikimedia.org/wikipedia/commons/0/0d/River-Nile-near-Aswan.jpg -->
 
 ### Charts
@@ -143,7 +147,9 @@ if (!file.exists(fname)) {
 }
 ```
 
-<img src="Subject_Related_Nonprobative_Map.jpg" width="60%"/>
+```{r echo = FALSE, out.width="60%"}
+knitr::include_graphics("Subject_Related_Nonprobative_Map.jpg")
+```
 
 #### Subject-unrelated, topic-unrelated
 
@@ -182,11 +188,11 @@ location %>% filter(simple == "Africa") %>%
 
 # newmap <- GetMap(center = c(44, 34.75), zoom = 6, destfile = "BlackSeaMap.png", maptype = "satellite")
 
-if (!file.exists(here::here("Data/BlackSeaMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/BlackSeaMapTiles.Rdata"))) {
   blackseamaptiles <- get_googlemap(center = c(34.75, 44), zoom = 6, maptype = "satellite") 
-  save(blackseamaptiles, file = here::here("Data/BlackSeaMapTiles.Rdata"))
+  save(blackseamaptiles, file = here::here("Facts/Data/BlackSeaMapTiles.Rdata"))
 } else {
-  load(here::here("Data/BlackSeaMapTiles.Rdata"))
+  load(here::here("Facts/Data/BlackSeaMapTiles.Rdata"))
 }
 blackseamaptiles %>% ggmap() + 
   theme_map() + 
@@ -202,11 +208,11 @@ blackseamaptiles %>% ggmap() +
 
 # newmap <- GetMap(center = c(22, 38), zoom = 6, destfile = "RedSeaMap.png", maptype = "satellite")
 
-if (!file.exists(here::here("Data/BlackSeaMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/BlackSeaMapTiles.Rdata"))) {
   redseamaptiles <- get_googlemap(center = c(38, 22), zoom = 5, maptype = "satellite") 
-  save(redseamaptiles, file = here::here("Data/RedSeaMap.Rdata"))
+  save(redseamaptiles, file = here::here("Facts/Data/RedSeaMap.Rdata"))
 } else {
-  load(here::here("Data/RedSeaMap.Rdata"))
+  load(here::here("Facts/Data/RedSeaMap.Rdata"))
 }
 redseamaptiles %>% ggmap() + 
   theme_map() + 
@@ -219,11 +225,11 @@ redseamaptiles %>% ggmap() +
 
 ```{r, out.width = "60%"}
 # newmap <- GetMap(center = c(44, 34.75), zoom = 5, destfile = "BlackSeaMapLabeled.png")
-if (!file.exists(here::here("Data/BlackSeaMapTiles2.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/BlackSeaMapTiles2.Rdata"))) {
   blackseamaptiles2 <- get_googlemap(center = c(34.75, 44), zoom = 5, maptype = "terrain", language = "en-EN") 
-  save(blackseamaptiles2, file = here::here("Data/BlackSeaMapTiles2.Rdata"))
+  save(blackseamaptiles2, file = here::here("Facts/Data/BlackSeaMapTiles2.Rdata"))
 } else {
-  load(here::here("Data/BlackSeaMapTiles2.Rdata"))
+  load(here::here("Facts/Data/BlackSeaMapTiles2.Rdata"))
 }
 blackseamaptiles2 %>% ggmap() + 
   theme_map() + 

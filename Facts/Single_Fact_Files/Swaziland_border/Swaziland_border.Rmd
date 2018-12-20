@@ -8,7 +8,7 @@ output:
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 # source(here::here("worldfactbook.R"))
-load(here::here("Data/factbook.Rdata"))
+load(here::here("Facts/Data/factbook.Rdata"))
 export_col_theme <- sample(scales::hue_pal()(15), size = 15)
 
 library(ggthemes)
@@ -30,12 +30,16 @@ world2 <- map_data("world2")
 
 #### Subject-related
 
-<img src="picture_subject_related.jpg" width="40%"/>
+```{r echo = FALSE, out.width="40%"}
+knitr::include_graphics("picture_subject_related.jpg")
+```
 <!-- Source: https://upload.wikimedia.org/wikipedia/commons/e/e3/Mswati_III_King_of_Swaziland.JPG-->
 
 #### Subject-unrelated
 
-<img src="picture_subject_unrelated.jpg" width="60%"/>
+```{r echo = FALSE, out.width="60%"}
+knitr::include_graphics("picture_subject_unrelated.jpg")
+```
 <!-- Source: https://upload.wikimedia.org/wikipedia/commons/2/2d/Pavel_Kubina_Maple_Leafs.jpg -->
 
 ### Charts
@@ -115,11 +119,11 @@ filter(borders, name == country) %>%
 ```{r, out.width = "60%"}
 # newmap <- GetMap(center = c(-26.316667, 31.13333), zoom = 10, destfile = "EswatiniMap.png")
 
-if (!file.exists(here::here("Data/EswatiniMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/EswatiniMapTiles.Rdata"))) {
   EswatiniMaptiles <- get_googlemap(center = c(31.13333, -26.316667), zoom = 10, maptype = "roadmap") 
-  save(EswatiniMaptiles, file = here::here("Data/EswatiniMapTiles.Rdata"))
+  save(EswatiniMaptiles, file = here::here("Facts/Data/EswatiniMapTiles.Rdata"))
 } else {
-  load(here::here("Data/EswatiniMapTiles.Rdata"))
+  load(here::here("Facts/Data/EswatiniMapTiles.Rdata"))
 }
 EswatiniMaptiles %>% ggmap() + 
   theme_map() + 
@@ -133,11 +137,11 @@ EswatiniMaptiles %>% ggmap() +
 ```{r, out.width = "60%"}
 # newmap <- GetMap(center = c(43.7, -79.4), zoom = 10, destfile = "TorontoMap.png")
 
-if (!file.exists(here::here("Data/TorontoMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/TorontoMapTiles.Rdata"))) {
   TorontoMaptiles <- get_googlemap(center = c(-79.4, 43.7), zoom = 9, maptype = "roadmap") 
-  save(TorontoMaptiles, file = here::here("Data/TorontoMapTiles.Rdata"))
+  save(TorontoMaptiles, file = here::here("Facts/Data/TorontoMapTiles.Rdata"))
 } else {
-  load(here::here("Data/TorontoMapTiles.Rdata"))
+  load(here::here("Facts/Data/TorontoMapTiles.Rdata"))
 }
 TorontoMaptiles %>% ggmap() + 
   theme_map() + 
@@ -149,7 +153,7 @@ TorontoMaptiles %>% ggmap() +
 #### Subject-related, topic-related (Non-probative)
 
 ```{r, out.width = "60%"}
-continents <- sf::st_read(here::here("Data/Continents/Africa.shp"), type = 3) %>%
+continents <- sf::st_read(here::here("Facts/Data/Continents/Africa.shp"), type = 3) %>%
   st_crop(c(xmin = 13, xmax = 36, ymin = -36, ymax = -22)) %>%
   st_union()
 

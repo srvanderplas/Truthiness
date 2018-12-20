@@ -10,8 +10,8 @@ output:
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 # source(here::here("worldfactbook.R"))
-load(here::here("Data/factbook.Rdata"))
-load(here::here("Data/BrazilAusExports.Rdata"))
+load(here::here("Facts/Data/factbook.Rdata"))
+load(here::here("Facts/Data/BrazilAusExports.Rdata"))
 export_col_theme <- sample(scales::hue_pal()(15), size = 15)
 
 library(ggthemes)
@@ -37,12 +37,16 @@ library(tidyverse)
 
 #### Subject-related
 
-<img src="picture_subject_related.jpg" width="60%"/>
+```{r echo = FALSE, out.width="60%"}
+knitr::include_graphics("picture_subject_related.jpg")
+```
 <!-- Source: https://upload.wikimedia.org/wikipedia/commons/a/ae/Christ_on_Corcovado_mountain.JPG-->
 
 #### Subject-unrelated
 
-<img src="picture_subject_unrelated.jpg" width="60%"/>
+```{r echo = FALSE, out.width="60%"}
+knitr::include_graphics("picture_subject_unrelated.jpg")
+```
 <!-- Source: https://upload.wikimedia.org/wikipedia/commons/9/9a/Petrogale_xanthopus_-_Monarto_1.JPG -->
 
 ### Charts
@@ -119,11 +123,11 @@ areas %>%
 # newmap <- GetMap(center = c(-22.9083, -43.1963), zoom = 10, destfile = "RioMap.png")
 
 
-if (!file.exists(here::here("Data/RioMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/RioMapTiles.Rdata"))) {
   riomaptiles <- get_googlemap(center = c(-43.1963, -22.7083), zoom = 10, maptype = "roadmap") 
-  save(riomaptiles, file = here::here("Data/RioMapTiles.Rdata"))
+  save(riomaptiles, file = here::here("Facts/Data/RioMapTiles.Rdata"))
 } else {
-  load(here::here("Data/RioMapTiles.Rdata"))
+  load(here::here("Facts/Data/RioMapTiles.Rdata"))
 }
 riomaptiles %>% ggmap() + 
   theme_map() + 
@@ -137,11 +141,11 @@ riomaptiles %>% ggmap() +
 ```{r, out.width = "60%", include = F}
 # newmap <- GetMap(center = c(-37.8136, 144.9631), zoom = 10, destfile = "MelbourneMap.png")
 
-if (!file.exists(here::here("Data/MelbourneMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/MelbourneMapTiles.Rdata"))) {
   melbournemaptiles <- get_googlemap(center = c(144.9631, -37.8136), zoom = 10, maptype = "roadmap") 
-  save(melbournemaptiles, file = here::here("Data/MelbourneMapTiles.Rdata"))
+  save(melbournemaptiles, file = here::here("Facts/Data/MelbourneMapTiles.Rdata"))
 } else {
-  load(here::here("Data/MelbourneMapTiles.Rdata"))
+  load(here::here("Facts/Data/MelbourneMapTiles.Rdata"))
 }
 melbournemaptiles %>% ggmap() + 
   theme_map() + 
@@ -208,7 +212,7 @@ rm(lims, submap, mapsubset)
 
 ```{r, out.width = "60%", include = F}
 
-world <- readOGR(here::here("Data/countries.geo.json"), "OGRGeoJSON", stringsAsFactors=FALSE)
+world <- readOGR(here::here("Facts/Data/countries.geo.json"), "countries.geo", stringsAsFactors=FALSE)
 world_data <- data_frame(
   name = as.character(world@data$name),
   id = rownames(world@data)
@@ -216,7 +220,7 @@ world_data <- data_frame(
 
 world_map <- fortify(world)
 
-plates_map <- readOGR(here::here("Data/plates.json"), "OGRGeoJSON", stringsAsFactors = F) %>% fortify()
+plates_map <- readOGR(here::here("Facts/Data/plates.json"), "plates", stringsAsFactors = F) %>% fortify()
 ```
 ```{r, out.width = "60%", message = F, warning = F}
 

@@ -4,8 +4,8 @@ opt <- "SouthAmerican_Hydro"
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 # source(here::here("worldfactbook.R"))
-load(here::here("Data/factbook.Rdata"))
-load(here::here("Data/hydro.Rdata"))
+load(here::here("Facts/Data/factbook.Rdata"))
+load(here::here("Facts/Data/hydro.Rdata"))
 library(ggthemes)
 library(ggrepel)
 # 
@@ -38,7 +38,7 @@ ggplot() +
   scale_y_continuous("Population (Millions)") + 
   coord_flip()
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 6, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -61,7 +61,7 @@ ggplot() +
   scale_y_continuous("Population (Millions)") + 
   coord_flip()
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 6, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -90,7 +90,7 @@ ggplot() +
   scale_y_continuous("Percent Electric Generation") + 
   theme(legend.position = "bottom")
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt), 
        width = 6, height = 5, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -121,7 +121,7 @@ ggplot() +
   scale_y_continuous("Percent Electric Generation") + 
   theme(legend.position = "bottom")
 
-ggsave(sprintf("Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 6, height = 5, dpi = 300)
 
 ## ---- out.width = "60%", include = T, fig.width = 5, fig.height = 6------
@@ -173,7 +173,7 @@ ggplot() +
         legend.position = c(1, 0), legend.justification = c(1, 0), legend.direction = "vertical", legend.background = element_rect(fill = "transparent")) + 
   ggtitle("Population of South America")
 
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
        width = 4, height = 6, dpi = 300)
 
 
@@ -220,7 +220,7 @@ ggplot() +
         legend.position = "right", legend.direction = "vertical") + 
   ggtitle("Population of Europe")
 
-ggsave(sprintf("Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt), 
        width = 6, height = 5, dpi = 300)
 
 ## ---- out.width = "60%", fig.width = 5, fig.height = 6-------------------
@@ -265,7 +265,7 @@ ggplot() +
   scale_size_continuous("Capacity(MW)", breaks = c(10, 100, 1000), trans = "log10", range = c(.1, 3)) + 
   ggtitle("Hydroelectric power plants")
 
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt), 
        width = 4, height = 6, dpi = 300)
 
 
@@ -340,7 +340,7 @@ ggplot() +
         legend.position = c(0, .4), legend.justification = c(0, .4), legend.direction = "vertical", legend.background = element_rect(fill = "white")) + 
   ggtitle("Hydroelectric Power Generation in Europe")
 
-ggsave(sprintf("Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
 
@@ -386,5 +386,5 @@ ggplot() +
   ggtitle("Hydroelectric Power Generation\nin South America")
 
 
-ggsave(sprintf("Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt), 
        width = 4, height = 6, dpi = 300)

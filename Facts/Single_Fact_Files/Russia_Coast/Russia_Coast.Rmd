@@ -8,7 +8,7 @@ output:
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
-load(here::here("Data/factbook.Rdata"))
+load(here::here("Facts/Data/factbook.Rdata"))
 
 library(ggthemes)
 library(ggmap)
@@ -23,7 +23,7 @@ library(RgoogleMaps)
 
 library(tidyverse)
 
-world <- readOGR(here::here("Data/countries.geo.json"), "OGRGeoJSON", stringsAsFactors=FALSE)
+world <- readOGR(here::here("Facts/Data/countries.geo.json"), "countries.geo", stringsAsFactors=FALSE)
 world_data <- data_frame(
   name = as.character(world@data$name),
   id = rownames(world@data)
@@ -42,12 +42,16 @@ world2 <- map_data("world2")
 
 #### Subject-related
 
-<img src="picture_subject_related.jpg" width="60%"/>
+```{r echo = FALSE, out.width="60%"}
+knitr::include_graphics("picture_subject_related.jpg")
+```
 <!-- Source: https://upload.wikimedia.org/wikipedia/commons/b/bc/St._Basil%27s_Cathedral%2C_Moscow.jpg -->
 
 #### Subject-unrelated
 
-<img src="picture_subject_unrelated.jpg" width="60%"/>
+```{r echo = FALSE, out.width="60%"}
+knitr::include_graphics("picture_subject_unrelated.jpg")
+```
 <!-- Source: https://www.goodfreephotos.com/albums/india/other/man-riding-an-elephant-in-jaipur-india.jpg -->
 
 ### Charts
@@ -132,11 +136,11 @@ borders %>%
 
 ```{r, out.width = "60%", include = F}
 # newmap <- GetMap(center = c(59.9375, 30.308611), zoom = 10, destfile = "StPetersburgMap.png")
-if (!file.exists(here::here("Data/StPetersburgMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/StPetersburgMapTiles.Rdata"))) {
   StPetersburgmaptiles <- get_googlemap(center = c(30.308611, 59.9375), zoom = 10, maptype = "roadmap") 
-  save(StPetersburgmaptiles, file = here::here("Data/StPetersburgMapTiles.Rdata"))
+  save(StPetersburgmaptiles, file = here::here("Facts/Data/StPetersburgMapTiles.Rdata"))
 } else {
-  load(here::here("Data/StPetersburgMapTiles.Rdata"))
+  load(here::here("Facts/Data/StPetersburgMapTiles.Rdata"))
 }
 StPetersburgmaptiles %>% ggmap() + 
   theme_map() + 
@@ -149,11 +153,11 @@ StPetersburgmaptiles %>% ggmap() +
 
 ```{r, out.width = "60%", include = F}
 # newmap <- GetMap(center = c(28.613889, 77.208889), zoom = 10, destfile = "NewDelhiMap.png")
-if (!file.exists(here::here("Data/DelhiMapTiles.Rdata"))) {
+if (!file.exists(here::here("Facts/Data/DelhiMapTiles.Rdata"))) {
   Delhimaptiles <- get_googlemap(center = c(77.208889, 28.613889), zoom = 10, maptype = "roadmap") 
-  save(Delhimaptiles, file = here::here("Data/DelhiMapTiles.Rdata"))
+  save(Delhimaptiles, file = here::here("Facts/Data/DelhiMapTiles.Rdata"))
 } else {
-  load(here::here("Data/DelhiMapTiles.Rdata"))
+  load(here::here("Facts/Data/DelhiMapTiles.Rdata"))
 }
 Delhimaptiles %>% ggmap() + 
   theme_map() + 
