@@ -6,8 +6,42 @@ done
 
 for i in $(find . -name "*.Rmd"); do
   sed -re 's|.img src=.(.*\.jpg)..*?(width=.*)..|```\{r echo = FALSE, out.\2\}\nknitr::include_graphics\("\1"\)\n```|g' $i > $i.tmp && mv $i.tmp $i
+  sed -re 's|  sprintf([(\"]{2})Facts/Pictures_all/|  here::here(sprintf("Facts/Pictures_all/|g' $i > $i.tmp && mv $i.tmp $i
+  sed -re 's|, opt[)],|, opt)),|g' $i > $i.tmp && mv $i.tmp $i
+  sed -re 's|ggsave[(]sprintf[(\"]{2}Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png[\"], opt[)], |ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt)), |g' $i > $i.tmp && mv $i.tmp $i
   sed -re "s|OGRGeoJSON|countries.geo|g" $i > $i.tmp && mv $i.tmp $i
   sed -re "s|here::here([(\"]{2})Data|here::here\1Facts/Data|g" $i > $i.tmp && mv $i.tmp $i
   sed -re "s|sprintf([(\"]{2})Pictures_all|sprintf\1Facts/Pictures_all|g" $i > $i.tmp && mv $i.tmp $i  
 done
 
+for i in $(find . -name "*.Rmd"); do
+  sed -re 's|ggsave[(]here::here[(]sprintf[(\"]{2}Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png[\"], opt[)]{2}, |ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt), |g' $i > $i.tmp && mv $i.tmp $i
+done
+
+for i in $(find . -name "*.Rmd"); do
+  sed -re 's|ggsave[(]sprintf[(]here::here[(][\"]Facts/Pictures_all/(.*\.png)[\"][)], opt[)]{2}, |ggsave(sprintf(here::here("Facts/Pictures_all/\1"), opt), |g'  $i > $i.tmp && mv $i.tmp $i
+done
+
+
+for i in $(find . -name "*.Rmd"); do
+  sed -e 's|sprintf(here::here(|here::here(sprintf(|g' $i > $i.tmp && \
+  sed -e 's|), opt)),|, opt)),|g' $i.tmp > $i.tmp2 && mv $i.tmp2 $i && rm $i.tmp
+done
+
+
+for i in $(find . -name "*.Rmd"); do
+  sed -e 's|, opt)) |, opt)), |g' $i > $i.tmp && mv $i.tmp $i
+done
+
+for i in $(find . -name "*.Rmd"); do
+  sed -re 's|ggsave[(](here::here)?sprintf[(]([\"]Facts/Pictures_all/.*[\"]), opt[))]{2},|ggsave(here::here(sprintf(\2, opt)),|g' $i > $i.tmp && mv $i.tmp $i
+done
+
+
+for i in $(find . -name "*.Rmd"); do
+  sed -re 's|ggsave[(]sprintf[(]([\"]Facts/Pictures_all/.*[\"]), opt[)],|ggsave(here::here(sprintf(\1, opt)),|g' $i > $i.tmp && mv $i.tmp $i
+done
+
+for i in $(find . -name "*.Rmd"); do
+  sed -e 's|file.copy(|tmp <- file.copy(|g' $i > $i.tmp && mv $i.tmp $i
+done
