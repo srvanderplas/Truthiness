@@ -1,5 +1,6 @@
-## ----setup, include=FALSE, echo = F, warning = F, message = F------------
 opt <- "Russia_Coast"
+
+## ----setup, include=FALSE, echo = F, warning = F, message = F------------
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 load(here::here("Facts/Data/factbook.Rdata"))
@@ -29,20 +30,6 @@ rm(world_data)
 world <- map_data("world")
 world2 <- map_data("world2")
 
-## ----echo = FALSE, out.width="60%"---------------------------------------
-tmp <- file.copy(
-  here::here(paste0("Facts/Single_Fact_Files/", opt, "/", "picture_subject_related.jpg")),
-  here::here(sprintf("Facts/Pictures_all/%s-picture_subject_related.jpg", opt)), 
-  overwrite = T)
-knitr::include_graphics("picture_subject_related.jpg")
-
-## ----echo = FALSE, out.width="60%"---------------------------------------
-tmp <- file.copy(
-  here::here(paste0("Facts/Single_Fact_Files/", opt, "/", "picture_subject_unrelated.jpg")),
-  here::here(sprintf("Facts/Pictures_all/%s-picture_subject_unrelated.jpg", opt)), 
-  overwrite = T)
-knitr::include_graphics("picture_subject_unrelated.jpg")
-
 ## ---- out.width = "60%"--------------------------------------------------
 filter(ethnicity, name == "Russia") %>%
   mutate(ethnicity = factor(ethnicity, levels = c("Bashkir", "Chechen", "Chuvash", "Russian", "Tatar", "Ukrainian", "Other"))) %>%
@@ -53,7 +40,8 @@ ggplot() +
   scale_y_continuous("Percent of Population") + 
   scale_fill_brewer(guide = F, type = "qual", palette = "Dark2") + 
   theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.background = element_rect(fill = "transparent"))
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt)), 
+
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -65,9 +53,9 @@ ggplot() +
   scale_y_continuous("Percent of Population") + 
   scale_fill_brewer(guide = F, type = "qual", palette = "Dark2") + 
   theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.background = element_rect(fill = "transparent"))
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt)), 
-       width = 5, height = 5, dpi = 300)
 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt), 
+       width = 5, height = 5, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
 borders %>%
@@ -86,8 +74,10 @@ borders %>%
   xlab("") + 
   ylab("Length (km)") + 
   ggtitle("World's Longest Borders") + 
-  theme(legend.position = c(1, 1), legend.justification = c(1, 1), legend.direction = "horizontal", legend.background = element_rect(fill = "transparent"))
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt)), 
+  theme(legend.position = c(1, 1), legend.justification = c(1, 1), 
+        legend.direction = "horizontal", legend.background = element_rect(fill = "transparent"))
+
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt), 
        width = 6, height = 4, dpi = 300)
 
 
@@ -110,9 +100,10 @@ borders %>%
   scale_fill_wsj(name = "Border Type") + 
   xlab("") + 
   ylab("Length (km)") + 
-  ggtitle("Asia's Longest Borders") + 
+  ggtitle("East Asia's Longest Borders") + 
   theme(legend.position = c(1, 1), legend.justification = c(1, 1), legend.direction = "horizontal", legend.background = element_rect(fill = "transparent"))
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt)), 
+
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 6, height = 4, dpi = 300)
 
 ## ---- out.width = "60%", include = F-------------------------------------
@@ -126,8 +117,9 @@ if (!file.exists(here::here("Facts/Data/StPetersburgMapTiles.Rdata"))) {
 StPetersburgmaptiles %>% ggmap() + 
   theme_map() + 
   ggtitle("St. Petersburg, Russia")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt)), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
+
 
 ## ---- out.width = "60%", include = F-------------------------------------
 # newmap <- GetMap(center = c(28.613889, 77.208889), zoom = 10, destfile = "NewDelhiMap.png")
@@ -140,7 +132,7 @@ if (!file.exists(here::here("Facts/Data/DelhiMapTiles.Rdata"))) {
 Delhimaptiles %>% ggmap() + 
   theme_map() + 
   ggtitle("New Delhi, India")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt)), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -180,7 +172,7 @@ ggplot() +
   # theme_map() +
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
 
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt)), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt), 
        width = 8, height = 4, dpi = 300)
 rm(lims, submap, mapsubset)
 
@@ -214,7 +206,7 @@ ggplot(data = arrange(mapsubset, group, order)) +
             ylim = c(fixed_lims$lat_min, fixed_lims$lat_max)) +
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
 
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt)), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 4, height = 4, dpi = 300)
 rm(lims, submap, mapsubset)
 
@@ -242,6 +234,7 @@ gridlines2 <- expand.grid(long = c(-180, -150, -120, -90, -60, -30, 0, 30, 60, 9
   as_data_frame() %>%
   mutate(group = group_indices(., long)) %>%
   arrange(long)
+      
 
 ggplot() + 
   theme_map() + 
@@ -254,6 +247,7 @@ ggplot() +
   geom_path(aes(x = long, y = lat, group = group), data = world_map, color = "black", size = .125) + 
   coord_map("mollweide", ylim = c(-90, 90))  + 
   theme(legend.background = element_rect(fill = "white", color = "black"))
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt)), 
-       width = 8, height = 5, dpi = 300)
 
+
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt), 
+       width = 8, height = 5, dpi = 300)

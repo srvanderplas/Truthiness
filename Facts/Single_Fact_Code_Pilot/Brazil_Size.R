@@ -1,5 +1,7 @@
-## ----setup, include=FALSE, echo = F, warning = F, message = F------------
 opt <- "Brazil_Size"
+
+## ----setup, include=FALSE, echo = F, warning = F, message = F------------
+
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 # source(here::here("worldfactbook.R"))
@@ -22,20 +24,6 @@ library(RgoogleMaps)
 library(tidyverse)
 
 
-## ----echo = FALSE, out.width="60%"---------------------------------------
-tmp <- file.copy(
-  here::here(paste0("Facts/Single_Fact_Files/", opt, "/", "picture_subject_related.jpg")),
-  here::here(sprintf("Facts/Pictures_all/%s-picture_subject_related.jpg", opt)), 
-  overwrite = T)
-knitr::include_graphics("picture_subject_related.jpg")
-
-## ----echo = FALSE, out.width="60%"---------------------------------------
-tmp <- file.copy(
-  here::here(paste0("Facts/Single_Fact_Files/", opt, "/", "picture_subject_unrelated.jpg")),
-  here::here(sprintf("Facts/Pictures_all/%s-picture_subject_unrelated.jpg", opt)), 
-  overwrite = T)
-knitr::include_graphics("picture_subject_unrelated.jpg")
-
 ## ---- out.width = "60%"--------------------------------------------------
 ggplot(data = brazil_exports) + 
   geom_col(aes(x = ProductCategory, y = TotalTradeMil/1000, fill = ProductCategory)) + 
@@ -44,7 +32,8 @@ ggplot(data = brazil_exports) +
   xlab("") + 
   scale_y_continuous("Value (Billions, USD)") + 
   coord_flip()
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt)), 
+
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 6, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -55,8 +44,10 @@ ggplot(data = aus_exports) +
   xlab("") + 
   scale_y_continuous("Value (Billions, USD)") + 
   coord_flip()
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt)), 
+
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 6, dpi = 300)
+
 
 ## ---- out.width = "60%"--------------------------------------------------
 areas %>%
@@ -71,8 +62,10 @@ areas %>%
   xlab("") + 
   ylab("Area (square km)") + 
   scale_fill_manual(guide = F, values = c("steelblue1", "springgreen4")) + 
-  ggtitle("Largest 10 Countries, by Total Area")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt)), 
+  ggtitle("Largest 10 Countries, by Total Area") + 
+  theme(axis.text.y = element_text(angle = 90, hjust = 0.5))
+
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt), 
        width = 6.5, height =4.5, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -92,8 +85,10 @@ areas %>%
   xlab("") + 
   ylab("Area (square km)") + 
   scale_fill_manual(guide = F, values = c("steelblue1", "springgreen4")) + 
-  ggtitle("Largest 10 Countries in Europe, by Total Area")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt)), 
+  ggtitle("Largest 10 Countries in Europe, by Total Area") + 
+  theme(axis.text.y = element_text(angle = 90, hjust = 0.5))
+
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 6.5, height =4.5, dpi = 300)
 
 ## ---- out.width = "60%", include = F-------------------------------------
@@ -109,11 +104,13 @@ if (!file.exists(here::here("Facts/Data/RioMapTiles.Rdata"))) {
 riomaptiles %>% ggmap() + 
   theme_map() + 
   ggtitle("Rio de Janiero, Brazil")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt)), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
+
 
 ## ---- out.width = "60%", include = F-------------------------------------
 # newmap <- GetMap(center = c(-37.8136, 144.9631), zoom = 10, destfile = "MelbourneMap.png")
+
 
 if (!file.exists(here::here("Facts/Data/MelbourneMapTiles.Rdata"))) {
   melbournemaptiles <- get_googlemap(center = c(144.9631, -37.8136), zoom = 10, maptype = "roadmap") 
@@ -124,7 +121,7 @@ if (!file.exists(here::here("Facts/Data/MelbourneMapTiles.Rdata"))) {
 melbournemaptiles %>% ggmap() + 
   theme_map() + 
   ggtitle("Melbourne, Australia")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt)), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -145,7 +142,7 @@ ggplot(data = arrange(mapsubsetbrazil, group, order)) +
             ylim = c(brazillims$lat_min*1.08, brazillims$lat_max*2)) + 
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
 
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt)), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
 rm(brazillims, submapbrazil, mapsubsetbrazil)
@@ -174,14 +171,14 @@ ggplot(data = arrange(mapsubset, group, order)) +
     ylim = c(lims$lat_min, lims$lat_max) * c(1.05, .95)) + 
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
 
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt)), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 5, height = 4, dpi = 300)
 rm(lims, submap, mapsubset)
 
 
 ## ---- out.width = "60%", include = F-------------------------------------
 
-world <- readOGR(here::here("Facts/Data/countries.geo.json"), "countries.geo", stringsAsFactors=FALSE)
+world <- readOGR(here::here("Facts/Data/countries.geo.json"), "OGRGeoJSON", stringsAsFactors=FALSE)
 world_data <- data_frame(
   name = as.character(world@data$name),
   id = rownames(world@data)
@@ -189,7 +186,7 @@ world_data <- data_frame(
 
 world_map <- fortify(world)
 
-plates_map <- readOGR(here::here("Facts/Data/plates.json"), "plates", stringsAsFactors = F) %>% fortify()
+plates_map <- readOGR(here::here("Facts/Data/plates.json"), "OGRGeoJSON", stringsAsFactors = F) %>% fortify()
 
 ## ---- out.width = "60%", message = F, warning = F------------------------
 
@@ -210,6 +207,6 @@ ggplot() +
   coord_map("mollweide") + 
   scale_fill_ptol("Largest\nCountries\nBy Area", na.value = "grey80") + 
   theme_map()
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt)), 
-       width = 9, height = 5, dpi = 600)
 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt), 
+       width = 9, height = 5, dpi = 600)

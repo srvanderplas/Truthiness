@@ -1,5 +1,6 @@
-## ----setup, include=FALSE, echo = F, warning = F, message = F------------
 opt <- "Black_sea"
+
+## ----setup, include=FALSE, echo = F, warning = F, message = F------------
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 # source(here::here("worldfactbook.R"))
@@ -34,20 +35,6 @@ world2 <- map_data("world2")
 load(here::here("Facts/Data/Salinity.Rdata"))
 load(here::here("Facts/Data/SeaBorders.Rdata"))
 
-## ----echo = FALSE, out.width="60%"---------------------------------------
-tmp <- file.copy(
-  here::here(paste0("Facts/Single_Fact_Files/", opt, "/", "picture_subject_related.jpg")),
-  here::here(sprintf("Facts/Pictures_all/%s-picture_subject_related.jpg", opt)), 
-  overwrite = T)
-knitr::include_graphics("picture_subject_related.jpg")
-
-## ----echo = FALSE, out.width="60%"---------------------------------------
-tmp <- file.copy(
-  here::here(paste0("Facts/Single_Fact_Files/", opt, "/", "picture_subject_unrelated.jpg")),
-  here::here(sprintf("Facts/Pictures_all/%s-picture_subject_unrelated.jpg", opt)), 
-  overwrite = T)
-knitr::include_graphics("picture_subject_unrelated.jpg")
-
 ## ---- out.width = "60%"--------------------------------------------------
 salinity %>%
   filter(type %in% c("Mediterranean sea", "Inland sea", "Ocean")) %>%
@@ -58,7 +45,8 @@ ggplot() +
   xlab("") + 
   scale_y_continuous("Salinity (g/kg)") + 
   scale_fill_discrete(guide = F) 
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt)), 
+
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt), 
        width = 6, height = 4, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -83,7 +71,8 @@ areas %>%
   ylab("Area (square km)") + 
   scale_fill_manual(guide = F, values = c("steelblue1", "springgreen4")) + 
   ggtitle("Largest 10 Countries in Africa, by Total Area")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt)), 
+
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt), 
        width = 6, height = 4, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -98,7 +87,7 @@ bs_boundaries %>%
   ylab("Length of Black Sea Coastline (km)") + 
   scale_fill_manual(guide = F, values = c("steelblue1", "springgreen4")) + 
   ggtitle("Black Sea Nations")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt)), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt), 
        width = 6, height = 4, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -114,23 +103,16 @@ rs_boundaries %>%
   scale_fill_manual(guide = F, values = c("steelblue1", "springgreen4")) + 
   ggtitle("Red Sea Nations")
 
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt)), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 6, height = 4, dpi = 300)
 
-## ---- include = F--------------------------------------------------------
+## ---- Subj Related Nonprobative Map
 
-fname <- "Subject_Related_Nonprobative_Map.jpg"
+fname <- sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.jpg", opt)
 fsrc <- "https://upload.wikimedia.org/wikipedia/commons/f/fe/1855_Spruneri_Map_of_the_Black_Sea_or_Pontus_Euxinus_in_Ancient_Times_-_Geographicus_-_PontusEuxinus-spruneri-1855.jpg"
 if (!file.exists(fname)) {
   download.file(fsrc, destfile = fname)
 }
-
-## ----echo = FALSE, out.width="60%"---------------------------------------
-tmp <- file.copy(
-  here::here(paste0("Facts/Single_Fact_Files/", opt, "/", "Subject_Related_Nonprobative_Map.jpg")),
-  here::here(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.jpg", opt)), 
-  overwrite = T)
-knitr::include_graphics("Subject_Related_Nonprobative_Map.jpg")
 
 ## ---- out.width = "60%", include = T-------------------------------------
 africalabels <- location %>% filter(simple == "Africa") %>%
@@ -157,11 +139,11 @@ location %>% filter(simple == "Africa") %>%
   ggplot() + 
   geom_polygon(aes(x = long, y = lat, group = group), fill = "white", color = "black") + 
   geom_text(aes(x = label_long, y = label_lat, label = name), data = africalabels, size = 2.5) + 
-  coord_map(ylim = c(-35, 40)) + 
+  coord_map(ylim = c(-35, 37.5)) + 
   theme_map()
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt)), 
-       width = 5, height = 5, dpi = 300)
 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt), 
+       width = 5, height = 5, dpi = 300)
 ## ---- out.width = "60%"--------------------------------------------------
 
 # newmap <- GetMap(center = c(44, 34.75), zoom = 6, destfile = "BlackSeaMap.png", maptype = "satellite")
@@ -175,7 +157,7 @@ if (!file.exists(here::here("Facts/Data/BlackSeaMapTiles.Rdata"))) {
 blackseamaptiles %>% ggmap() + 
   theme_map() + 
   ggtitle("Black Sea Region")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt)), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
 
@@ -192,10 +174,11 @@ if (!file.exists(here::here("Facts/Data/BlackSeaMapTiles.Rdata"))) {
 redseamaptiles %>% ggmap() + 
   theme_map() + 
   ggtitle("Red Sea Region")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt)), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
+
 # newmap <- GetMap(center = c(44, 34.75), zoom = 5, destfile = "BlackSeaMapLabeled.png")
 if (!file.exists(here::here("Facts/Data/BlackSeaMapTiles2.Rdata"))) {
   blackseamaptiles2 <- get_googlemap(center = c(34.75, 44), zoom = 5, maptype = "terrain", language = "en-EN") 
@@ -206,4 +189,6 @@ if (!file.exists(here::here("Facts/Data/BlackSeaMapTiles2.Rdata"))) {
 blackseamaptiles2 %>% ggmap() + 
   theme_map() + 
   ggtitle("Black Sea Region")
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt), 
+       width = 5, height = 5, dpi = 300)
 

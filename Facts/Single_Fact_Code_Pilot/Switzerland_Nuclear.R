@@ -1,23 +1,16 @@
-## ----setup, include=FALSE, echo = F, warning = F, message = F------------
 opt <- "Switzerland_Nuclear"
 
+## ----setup, include=FALSE, echo = F, warning = F, message = F------------
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 # source(here::here("worldfactbook.R"))
 load(here::here("Facts/Data/factbook.Rdata"))
-
+# 
 library(ggthemes)
 library(ggmap)
-library(ggrepel)
-library(ggalt)
-map.world <- map_data("world")
 
-library(RgoogleMaps)
-library(rworldmap)
 library(tidyverse)
 
 world <- map_data("world")
-
-# http://sedac.ciesin.columbia.edu/downloads/data/energy/energy-pop-exposure-nuclear-plants-locations/energy-pop-exposure-nuclear-plants-locations.zip
 
 nuclear <- read_csv(here::here("Facts/Data/energy-pop-exposure-nuclear-plants-locations_reactors.csv")) %>%
   mutate(Country = str_replace_all(Country, c("UNITED STATES OF AMERICA" = "UNITED STATES",
@@ -31,21 +24,6 @@ nuclear <- read_csv(here::here("Facts/Data/energy-pop-exposure-nuclear-plants-lo
   filter(Status == "Operational")
 
 
-
-## ----echo = FALSE, out.width="60%"---------------------------------------
-tmp  <- file.copy(
-  here::here(paste0("Facts/Single_Fact_Files/", opt, "/", "picture_subject_related.jpg")),
-  here::here(sprintf("Facts/Pictures_all/%s-picture_subject_related.jpg", opt)), 
-  overwrite = T)
-knitr::include_graphics("picture_subject_related.jpg")
-
-## ----echo = FALSE, out.width="60%"---------------------------------------
-tmp  <- file.copy(
-  here::here(paste0("Facts/Single_Fact_Files/", opt, "/", "picture_subject_unrelated.jpg")),
-  here::here(sprintf("Facts/Pictures_all/%s-picture_subject_unrelated.jpg", opt)), 
-  overwrite = T)
-knitr::include_graphics("picture_subject_unrelated.jpg")
-
 ## ---- out.width = "60%"--------------------------------------------------
 filter(population, name == "Switzerland") %>%
   select(name, age, Female, Male) %>%
@@ -58,9 +36,9 @@ ggplot() +
   scale_y_continuous("Population (Thousands)") + 
   scale_fill_discrete("Gender") + 
   theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.background = element_rect(fill = "transparent"))
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt)), 
-       width = 5, height = 5, dpi = 300)
 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt), 
+       width = 5, height = 5, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
 filter(population, name == "United States") %>%
@@ -74,7 +52,7 @@ ggplot() +
   scale_y_continuous("Population (Millions)") + 
   scale_fill_discrete("Gender") + 
   theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.background = element_rect(fill = "transparent"))
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt)), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -101,11 +79,11 @@ electricity_all %>%
   xlab("") + 
   scale_fill_manual("Type", values = c("Fossil" = "grey40", "Hydroelectric" = "#4292c6", "Nuclear" = "#ec7014", "Renewables" = "#41ab5d", "Other" = "#f768a1")) + 
   scale_y_continuous("Percent of Electrical Generation", breaks = c(0, 20, 40, 60, 80, 100), minor_breaks = seq(0, 100, by = 10)) + 
-  theme(legend.position = "bottom") + 
+  theme(legend.position = "bottom", axis.title.x = element_blank()) + 
   ggtitle("Electrical Generation in Europe")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt)), 
-       width = 7.5, height = 5, dpi = 300)
 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt), 
+       width = 7.5, height = 5, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
 electricity_all %>%
@@ -117,7 +95,7 @@ electricity_all %>%
   select(name, Fossil = FossilFuels, Hydroelectric = HydroelectricPlants, Nuclear = NuclearFuels, Renewables = OtherRenewableSources) %>%
   arrange(desc(Nuclear)) %>%
   mutate(Other = 0) %>%
-  mutate(name = factor(name, levels = name, labels = str_replace(name, " ", "\n"))) %>%
+  mutate(name = factor(name, levels = name, labels = str_replace_all(name, c(" " = "\n", "Saint\\nPierre\\nand\\nMiquelon" = "Saint Pierre\nand Miquelon")))) %>%
   gather(key = "Type", value = value, -name) %>%
   mutate(Type = factor(Type, levels = c("Nuclear", "Renewables", "Hydroelectric", "Other", "Fossil"))) %>%
   group_by(name) %>%
@@ -129,11 +107,10 @@ electricity_all %>%
   xlab("") + 
   ylab("Percent of Electrical Generation") + 
   scale_fill_manual("Type", values = c("Fossil" = "grey40", "Hydroelectric" = "#4292c6", "Nuclear" = "#ec7014", "Renewables" = "#41ab5d", "Other" = "#f768a1")) + 
-  theme(legend.position = "bottom") + 
+  theme(legend.position = "bottom", axis.title.x = element_blank()) + 
   ggtitle("Electrical Generation in North America")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt)), 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 6, height = 5, dpi = 300)
-
 
 ## ---- out.width = "60%", include = T-------------------------------------
 # europemap <- GetMap(center = c(50, 10), zoom = 4, destfile = "EuropeMap.png")
@@ -147,8 +124,9 @@ if (!file.exists(here::here("Facts/Data/europeMapTiles.Rdata"))) {
 europemaptiles %>% ggmap() + 
   theme_map() + 
   ggtitle("Europe")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt)), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
+
 
 ## ---- out.width = "60%", include = T-------------------------------------
 # usmap <- GetMap(center = c(40, -96), zoom = 4, destfile = "USMap.png")
@@ -161,10 +139,11 @@ if (!file.exists(here::here("Facts/Data/USMapTiles.Rdata"))) {
 USmaptiles %>% ggmap() + 
   theme_map() + 
   ggtitle("United States")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt)), 
+
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
-## ---- out.width = "60%"--------------------------------------------------
+## ---- out.width = "80%"--------------------------------------------------
 plants <- filter(nuclear, str_detect(Region, "Europe")) %>%
   filter(!is.na(Latitude)) %>%
   select(name, Plant, NumReactor, Latitude, Longitude) %>%
@@ -181,10 +160,11 @@ ggmap(europemaptiles) +
   geom_point(aes(x = Longitude, y = Latitude), shape = 17, alpha = .75, color = "blue", data = plants) + 
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), legend.background = element_rect(fill = "transparent")) +
   ggtitle("Nuclear Power Plants in Europe")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt)), 
+
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
-## ---- out.width = "60%"--------------------------------------------------
+## ---- out.width = "80%"--------------------------------------------------
 plants <- filter(nuclear, str_detect(Region, "America - (North|Latin)")) %>%
   filter(!is.na(Latitude)) %>%
   select(name, Plant, NumReactor, Latitude, Longitude) %>%
@@ -203,8 +183,9 @@ ggmap(USmaptiles) +
   geom_point(aes(x = Longitude, y = Latitude), shape = 17, alpha = .75, color = "blue", data = plants) + 
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), legend.background = element_rect(fill = "transparent")) +
   ggtitle("Nuclear Power Plants in North America")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt)), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
+
 
 ## ---- out.width = "60%", message = F, warning = F------------------------
 europe_nuke <- filter(location, simple == "Europe" | name == "Russia") %>%
@@ -240,7 +221,5 @@ ggplot(data = europe_nuke_map) +
   scale_fill_manual("% Electricity\nfrom Nuclear", values = colorpal, na.value = "grey", drop = F) + 
   geom_text(aes(x = label_long, y = label_lat, label = name), data = europe_nuke_labels, hjust = .5, vjust = .5, size = 2.75)
 
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt)), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt), 
        width = 6, height = 6, dpi = 300)
-
-

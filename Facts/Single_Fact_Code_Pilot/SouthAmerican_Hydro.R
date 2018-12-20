@@ -1,40 +1,24 @@
+opt <- "SouthAmerican_Hydro"
+
 ## ----setup, include=FALSE, echo = F, warning = F, message = F------------
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
-opt <- "SouthAmerican_Hydro"
 
 # source(here::here("worldfactbook.R"))
 load(here::here("Facts/Data/factbook.Rdata"))
 load(here::here("Facts/Data/hydro.Rdata"))
 library(ggthemes)
-# library(ggmap)
 library(ggrepel)
-# library(ggalt)
-map.world <- map_data("world")
-
-library(rworldmap)
-library(sp)
-library(proj4)
-library(rgdal)
-library(RgoogleMaps)
+# 
+# library(rworldmap)
+# library(sp)
+# library(proj4)
+# library(rgdal)
+# library(RgoogleMaps)
 
 library(tidyverse)
 world <- map_data("world")
 world2 <- map_data("world2")
 
-
-## ----echo = FALSE, out.width="60%"---------------------------------------
-tmp  <- file.copy(
-  here::here(paste0("Facts/Single_Fact_Files/", opt, "/", "picture_subject_related.jpg")),
-  here::here(sprintf("Facts/Pictures_all/%s-picture_subject_related.jpg", opt)), 
-  overwrite = T)
-knitr::include_graphics("picture_subject_related.jpg")
-
-## ----echo = FALSE, out.width="60%"---------------------------------------
-tmp  <- file.copy(
-  here::here(paste0("Facts/Single_Fact_Files/", opt, "/", "picture_subject_unrelated.jpg")),
-  here::here(sprintf("Facts/Pictures_all/%s-picture_subject_unrelated.jpg", opt)), 
-  overwrite = T)
-knitr::include_graphics("picture_subject_unrelated.jpg")
 
 ## ---- out.width = "60%"--------------------------------------------------
 population %>% 
@@ -53,7 +37,8 @@ ggplot() +
   xlab("") + 
   scale_y_continuous("Population (Millions)") + 
   coord_flip()
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt)), 
+
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt), 
        width = 5, height = 6, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -75,9 +60,9 @@ ggplot() +
   xlab("") + 
   scale_y_continuous("Population (Millions)") + 
   coord_flip()
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt)), 
-       width = 5, height = 6, dpi = 300)
 
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt), 
+       width = 5, height = 6, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
 electricity_all %>% 
@@ -104,7 +89,8 @@ ggplot() +
   xlab("") + 
   scale_y_continuous("Percent Electric Generation") + 
   theme(legend.position = "bottom")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt)), 
+
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt), 
        width = 6, height = 5, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -134,7 +120,8 @@ ggplot() +
   xlab("") + 
   scale_y_continuous("Percent Electric Generation") + 
   theme(legend.position = "bottom")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt)), 
+
+ggsave(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 6, height = 5, dpi = 300)
 
 ## ---- out.width = "60%", include = T, fig.width = 5, fig.height = 6------
@@ -185,8 +172,10 @@ ggplot() +
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), 
         legend.position = c(1, 0), legend.justification = c(1, 0), legend.direction = "vertical", legend.background = element_rect(fill = "transparent")) + 
   ggtitle("Population of South America")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt)), 
+
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt), 
        width = 4, height = 6, dpi = 300)
+
 
 ## ---- out.width = "60%", include = T-------------------------------------
 datasubset <- population %>% 
@@ -226,13 +215,17 @@ ggplot() +
   geom_label_repel(aes(x = long, y = lat, label = region), data = mapsubset_avg) +
   scale_fill_gradient("Population\n(millions)", low = "#deebf7", high = "#08306b", trans = "sqrt", breaks = c(.5, 5, 20, 50, 100)) + 
   coord_map(xlim = c(-12, 25), ylim = c(36, 60)) +
-  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), 
-        legend.position = c(0, .4), legend.justification = c(0, .4), legend.direction = "vertical", legend.background = element_rect(fill = "transparent")) + 
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(), 
+        axis.title = element_blank(), axis.ticks = element_blank(), 
+        legend.position = "right", legend.direction = "vertical") + 
   ggtitle("Population of Europe")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt)), 
+
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt), 
        width = 6, height = 5, dpi = 300)
 
 ## ---- out.width = "60%", fig.width = 5, fig.height = 6-------------------
+riverdata <- 
+
 datasubset <- filter(location, simple == "South America") %>%
   mutate(name = str_replace(name, "South Georgia(.*)", "South Georgia") %>%
            str_replace("Falkland Islands(.*)", "Falkland Islands"))
@@ -272,12 +265,40 @@ ggplot() +
   scale_size_continuous("Capacity(MW)", breaks = c(10, 100, 1000), trans = "log10", range = c(.1, 3)) + 
   ggtitle("Hydroelectric power plants")
 
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt)), 
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt), 
        width = 4, height = 6, dpi = 300)
 
 
-
 ## ---- out.width = "60%"--------------------------------------------------
+# datasubset <- filter(location, simple == "Europe" | name == "Russia") %>%
+#   mutate(name = str_replace(name, "United Kingdom", "UK") %>%
+#            str_replace("Czechia", "Czech Republic"))
+# 
+# lims <- filter(world, region %in% datasubset$name) %>%
+#   filter(is.na(subregion )) %>%
+#   summarize(long_min = min(long), long_max = max(long), lat_min = min(lat), lat_max = max(lat))
+# 
+# submap <- filter(world, long > -15, long < 25, lat < 70, lat > 37)
+# 
+# mapsubset <- filter(world, region %in% submap$region & group %in% submap$group) %>%
+#   arrange(group, order)
+# 
+# mapsubset_avg <- submap %>%
+#   filter(region %in% datasubset$name) %>%
+#   unique() %>%
+#   group_by(region) %>%
+#   summarize(long = median(long), lat = median(lat))%>%
+#   mutate(region = str_replace_all(region, " ", "\n"))
+# 
+# hydro_sub <- filter(hydro_plants, long > -12, long < 25, lat > 36, lat < 60)
+# 
+# ggplot() + 
+#   geom_polygon(aes(x = long, y = lat, group = group), fill = "white", color = "grey50", data = mapsubset) + 
+#   geom_point(aes(x = long, y = lat, size = capacity_MW), color = "blue", alpha = .5, data = hydro_sub, shape = 1) + 
+#   coord_map(xlim = c(-12, 25), ylim = c(36, 60)) +
+#   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank()) + 
+#   scale_size_continuous("Capacity(MW)") + 
+#   ggtitle("Hydroelectric power plants")
 datasubset <- electricity_all %>% 
   right_join(
     filter(location, simple == "Europe" | name == "Russia") %>% select(name), by = c("name")
@@ -318,7 +339,8 @@ ggplot() +
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), 
         legend.position = c(0, .4), legend.justification = c(0, .4), legend.direction = "vertical", legend.background = element_rect(fill = "white")) + 
   ggtitle("Hydroelectric Power Generation in Europe")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt)), 
+
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt), 
        width = 5, height = 5, dpi = 300)
 
 
@@ -363,7 +385,6 @@ ggplot() +
         legend.position = c(1, 0), legend.justification = c(1, 0), legend.direction = "vertical", legend.background = element_rect(fill = "transparent")) + 
   ggtitle("Hydroelectric Power Generation\nin South America")
 
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt)), 
+
+ggsave(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt), 
        width = 4, height = 6, dpi = 300)
-
-

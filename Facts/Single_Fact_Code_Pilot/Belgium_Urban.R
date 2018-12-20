@@ -1,5 +1,4 @@
 ## ----setup, include=FALSE, echo = F, warning = F, message = F------------
-opt <- "Belgium_Urban"
 knitr::opts_chunk$set(echo = F, warning = F, message = F)
 
 # source(here::here("worldfactbook.R"))
@@ -29,20 +28,6 @@ rm(belgium_italy_data)
 
 world <- map_data("world")
 
-## ----echo = FALSE, out.width="60%"---------------------------------------
-tmp  <- file.copy(
-  here::here(paste0("Facts/Single_Fact_Files/", opt, "/", "picture_subject_related.jpg")),
-  here::here(sprintf("Facts/Pictures_all/%s-picture_subject_related.jpg", opt)), 
-  overwrite = T)
-knitr::include_graphics("picture_subject_related.jpg")
-
-## ----echo = FALSE, out.width="60%"---------------------------------------
-tmp  <- file.copy(
-  here::here(paste0("Facts/Single_Fact_Files/", opt, "/", "picture_subject_unrelated.jpg")),
-  here::here(sprintf("Facts/Pictures_all/%s-picture_subject_unrelated.jpg", opt)), 
-  overwrite = T)
-knitr::include_graphics("picture_subject_unrelated.jpg")
-
 ## ---- out.width = "60%"--------------------------------------------------
 cc <- c("Belgium", "Netherlands", "United Kingdom")
 unnest(borders2) %>%
@@ -62,7 +47,7 @@ ggplot() +
   xlab("") + 
   scale_y_continuous("% Population") + 
   coord_flip()
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt)), width = 6, height = 4, dpi = 300)
+ggsave("Pictures_all/Belgium_Urban-chart_subj_rel_topic_unrel_nonprobative.png", width = 6, height = 4, dpi = 300)
 
 ## ---- out.width = "60%"--------------------------------------------------
 unnest(borders2) %>%
@@ -81,8 +66,9 @@ ggplot() +
   xlab("") + 
   scale_y_continuous("% Population") + 
   coord_flip()
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt)), 
+ggsave("Pictures_all/Belgium_Urban-chart_subj_unrel_topic_unrel_nonprobative.png", 
        width = 6, height = 5, dpi = 300)
+
 
 ## ---- out.width = "60%"--------------------------------------------------
 cc <- c("Belgium", "Netherlands", "United Kingdom")
@@ -105,14 +91,15 @@ unnest(borders2) %>%
   xlab("") + 
   scale_y_continuous("% Population") + 
   coord_flip()
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt)), 
-       width = 6, height = 4, dpi = 300)
+ggsave("Pictures_all/Belgium_Urban-chart_subj_rel_topic_rel_probative.png", width = 6, height = 4, dpi = 300)
+
 
 ## ---- out.width = "60%"--------------------------------------------------
 cc <- c("Greece", "Italy")
 unnest(borders2) %>%
   filter(country %in% cc) %>%
   bind_rows(data_frame(name = cc, country = cc)) %>%
+  filter(name != "Holy See (Vatican City)") %>%
   select(name) %>%
   unique() %>%
   arrange(name) %>%
@@ -129,8 +116,7 @@ unnest(borders2) %>%
   xlab("") + 
   scale_y_continuous("% Population") + 
   coord_flip()
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt)), 
-       width = 6, height = 5, dpi = 300)
+ggsave("Pictures_all/Belgium_Urban-chart_subj_unrel_topic_rel_nonprobative.png", width = 6, height = 5, dpi = 300)
 
 ## ---- out.width = "60%", include = T-------------------------------------
 region <- "Europe"
@@ -173,8 +159,7 @@ tmp %>%
   theme(axis.text = element_blank(), axis.ticks = element_blank(), axis.title = element_blank()) + 
   scale_fill_discrete("% Population 65+") + 
   ggtitle("Population Over 65")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt)),
-       width = 6, height = 4, dpi = 300)
+ggsave("Pictures_all/Belgium_Urban-map_subj_unrel_topic_unrel_nonprobative.png", width = 6, height = 4, dpi = 300)
 
 ## ---- out.width = "60%", include = T-------------------------------------
 region <- "Europe"
@@ -215,8 +200,8 @@ tmp %>%
   theme(axis.text = element_blank(), axis.ticks = element_blank(), axis.title = element_blank()) + 
   scale_fill_discrete("% Population 65+") + 
   ggtitle("Population Over 65")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt)),
-       width = 6, height = 4, dpi = 300)
+ggsave("Pictures_all/Belgium_Urban-map_subj_rel_topic_unrel_nonprobative.png", width = 6, height = 4, dpi = 300)
+
 
 ## ---- out.width = "60%"--------------------------------------------------
 belgiummap <- filter(belgium_italy, name == "Belgium") %>%
@@ -229,11 +214,11 @@ if (!file.exists(here::here("Facts/Data/belgiummaptiles.Rdata"))) {
   load(here::here("Facts/Data/belgiummaptiles.Rdata"))
 }
 belgiummaptiles %>% ggmap() + 
-  geom_path(aes(x = long, y = lat, group = group), data = belgiummap, color = "red", alpha = .5) + 
+  geom_path(aes(x = long, y = lat, group = group), data = belgiummap, color = "red", alpha = .5, size = 2) + 
   theme_map() + 
   ggtitle("Belgium")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt)), 
-       width = 5, height = 4, dpi = 300)
+ggsave("Pictures_all/Belgium_Urban-map_subj_rel_topic_rel_nonprobative.png", width = 5, height = 4, dpi = 300)
+
 rm(belgiummap, belgiumbox, belgiummaptiles)
 
 ## ---- out.width = "60%"--------------------------------------------------
@@ -247,11 +232,10 @@ if (!file.exists(here::here("Facts/Data/italymaptiles.Rdata"))) {
   load(here::here("Facts/Data/italymaptiles.Rdata"))
 }
 italymaptiles %>% ggmap() + 
-  geom_path(aes(x = long, y = lat, group = group), data = italymap, color = "red", alpha = .5) + 
+  geom_path(aes(x = long, y = lat, group = group), data = italymap, color = "red", alpha = .5, size = 2) + 
   theme_map() + 
   ggtitle("Italy")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt)), 
-       width = 5, height = 4, dpi = 300)
+ggsave("Pictures_all/Belgium_Urban-map_subj_unrel_topic_rel_nonprobative.png", width = 5, height = 4, dpi = 300)
 
 rm(italymap, italymaptiles, italybox)
 
@@ -293,8 +277,5 @@ tmp %>%
   theme(axis.text = element_blank(), axis.ticks = element_blank(), axis.title = element_blank(), legend.direction = "horizontal", legend.position = "bottom") + 
   scale_fill_brewer("% Population\nin Urban Areas") + 
   ggtitle("Urbanization in Europe")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt)), 
-       width = 6, height = 6, dpi = 300)
-
-
+ggsave("Pictures_all/Belgium_Urban-map_subj_rel_topic_rel_probative.png", width = 6, height = 6, dpi = 300)
 
