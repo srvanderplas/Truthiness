@@ -97,25 +97,43 @@ ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_unrel_no
 #### Subject-related, Topic-related (Probative)
 
 ```{r, out.width = "60%"}
+# location %>% 
+#   filter(simple == "Central America") %>%
+#   select(name, urbanPct) %>%
+#   left_join(electricity_all) %>%
+#   select(name, urbanPct, urban_elec, rural_elec, total_elec) %>%
+#   mutate(urban_elec = urbanPct*urban_elec/100, 
+#          rural_elec = (100 - urbanPct)*rural_elec/100) %>%
+#   select(-urbanPct) %>%
+#   arrange(desc(total_elec)) %>%
+#   mutate(name = factor(name, levels = name)) %>%
+#   gather(key = popType, value = value, -name, -total_elec) %>%
+#   mutate(popType = str_replace(popType, "_elec", "") %>% str_to_title) %>%
+#   mutate(value = as.numeric(value)) %>%
+# ggplot() + 
+#   geom_col(aes(x = name, y = value, fill = popType), position = "stack", color = "black") + 
+#   ggtitle("Electricity Access in Central America") + 
+#   xlab("") + 
+#   scale_y_continuous("% with Electrical Access") + 
+#   scale_fill_discrete("Population Type") + 
+#   theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.background = element_rect(fill = "transparent"),
+#         legend.direction = "horizontal")
+# ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt)),
+#        width = 6, height = 4, dpi = 300)
 location %>% 
   filter(simple == "Central America") %>%
   select(name, urbanPct) %>%
   left_join(electricity_all) %>%
-  select(name, urbanPct, urban_elec, rural_elec, total_elec) %>%
-  mutate(urban_elec = urbanPct*urban_elec/100, 
-         rural_elec = (100 - urbanPct)*rural_elec/100) %>%
-  select(-urbanPct) %>%
+  select(name, urbanPct, total_elec) %>%
   arrange(desc(total_elec)) %>%
   mutate(name = factor(name, levels = name)) %>%
-  gather(key = popType, value = value, -name, -total_elec) %>%
-  mutate(popType = str_replace(popType, "_elec", "") %>% str_to_title) %>%
-  mutate(value = as.numeric(value)) %>%
+  mutate(value = as.numeric(total_elec)) %>%
 ggplot() + 
-  geom_col(aes(x = name, y = value, fill = popType), position = "stack", color = "black") + 
+  geom_col(aes(x = name, y = value), position = "stack", color = "black") + 
   ggtitle("Electricity Access in Central America") + 
   xlab("") + 
   scale_y_continuous("% with Electrical Access") + 
-  scale_fill_discrete("Population Type") + 
+  # scale_fill_discrete("Population Type") + 
   theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.background = element_rect(fill = "transparent"),
         legend.direction = "horizontal")
 ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt)),
@@ -125,32 +143,51 @@ ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_rel_probat
 #### Subject-unrelated, Topic-related 
 
 ```{r, out.width = "60%"}
+# electricity_all %>%
+#   filter(name %in% c("Congo, Democratic Republic of the", "Zambia", "Malawi",
+#                      "Rwanda", "Burundi", "Tanzania", "Uganda",
+#                      "Kenya", "South Sudan", "Ethiopia", "Somalia")) %>%
+#   left_join(select(location, name, urbanPct)) %>%
+#   select(name, urbanPct, urban_elec, rural_elec, total_elec) %>%
+#   mutate(urban_elec = urbanPct*urban_elec/100,
+#          rural_elec = (100 - urbanPct)*rural_elec/100) %>%
+#   select(-urbanPct) %>%
+#   mutate(total2 = urban_elec + rural_elec) %>%
+#   arrange(desc(total2)) %>%
+#   mutate(name = factor(name, levels = name, labels = str_replace(name, "Congo, Democratic Republic of the", "Dem. Rep.\nof the\nCongo") %>%
+#                          str_replace("South Sudan", "South\nSudan"))) %>%
+#   gather(key = popType, value = value, -name, -total_elec, -total2) %>%
+#   mutate(popType = str_replace(popType, "_elec", "") %>% str_to_title) %>%
+#   mutate(value = as.numeric(value)) %>%
+# ggplot() +
+#   geom_col(aes(x = name, y = value, fill = popType), position = "stack", color = "black") +
+#   ggtitle("Electricity Access in East Central Africa") +
+#   xlab("") +
+#   scale_y_continuous("% with Electrical Access") +
+#   scale_fill_discrete("Population Type") +
+#   theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.background = element_rect(fill = "transparent"),
+#         legend.direction = "horizontal")
+# ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt)),
+#        width = 6, height = 4, dpi = 300)
 electricity_all %>%
-  filter(name %in% c("Congo, Democratic Republic of the", "Zambia", "Malawi", 
-                     "Rwanda", "Burundi", "Tanzania", "Uganda", 
+  filter(name %in% c("Congo, Democratic Republic of the", "Zambia", "Malawi",
+                     "Rwanda", "Burundi", "Tanzania", "Uganda",
                      "Kenya", "South Sudan", "Ethiopia", "Somalia")) %>%
   left_join(select(location, name, urbanPct)) %>%
-  select(name, urbanPct, urban_elec, rural_elec, total_elec) %>%
-  mutate(urban_elec = urbanPct*urban_elec/100, 
-         rural_elec = (100 - urbanPct)*rural_elec/100) %>%
-  select(-urbanPct) %>%
-  mutate(total2 = urban_elec + rural_elec) %>%
-  arrange(desc(total2)) %>%
+  select(name, urbanPct, total_elec) %>%
+  arrange(desc(total_elec)) %>%
   mutate(name = factor(name, levels = name, labels = str_replace(name, "Congo, Democratic Republic of the", "Dem. Rep.\nof the\nCongo") %>%
                          str_replace("South Sudan", "South\nSudan"))) %>%
-  gather(key = popType, value = value, -name, -total_elec, -total2) %>%
-  mutate(popType = str_replace(popType, "_elec", "") %>% str_to_title) %>%
-  mutate(value = as.numeric(value)) %>%
+  mutate(name = factor(name, levels = name)) %>%
+  mutate(value = as.numeric(total_elec)) %>%
 ggplot() + 
-  geom_col(aes(x = name, y = value, fill = popType), position = "stack", color = "black") + 
-  ggtitle("Electricity Access in East Central Africa") + 
+  geom_col(aes(x = name, y = value), position = "stack", color = "black") + 
+  ggtitle("Electricity Access in East Central Africa") +
   xlab("") + 
-  scale_y_continuous("% with Electrical Access") + 
-  scale_fill_discrete("Population Type") + 
+  scale_y_continuous("% with Electrical Access", limits = c(0, 100)) + 
+  # scale_fill_discrete("Population Type") + 
   theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.background = element_rect(fill = "transparent"),
         legend.direction = "horizontal")
-ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt)),
-       width = 6, height = 4, dpi = 300)
 ```
 
 ### Maps
