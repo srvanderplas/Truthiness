@@ -172,7 +172,7 @@ conclusions <- dbReadTable(con, "pilotConclusions") %>%
 - Belgium_Urban - No major issues
 - Belize_Electricity - <85% is apparently a challenging concept. Major issues with statement parsing.
 - Black_Sea - No major issues
-- Brazil - Population vs. land size - need to rephrase to indicate land area
+- Brazil_Size - Population vs. land size - need to rephrase to indicate land area
 - Egypt_Borders - Number of borders vs. length of borders caused some confusion. Coast = river border also caused a bit of an issue.
 - Paraguay_Landlocked - No major issues
 - Qatar_AgeDiscrepancy - No one knows where Qatar is, issues with "working age" vs. actually employed. 
@@ -195,8 +195,43 @@ conclusions <- dbReadTable(con, "pilotConclusions") %>%
 8. Russia has the longest coastal border (in  km) of any country
 9. South Africa has the lowest proportion of children (under 15) of all African nations
 10. At least three South American countries get more than 50% of their electricity from hydroelectric generation
-11. Eswatini (Swaziland) is landlocked and only borders one country
+11. Eswatini, also known as Swaziland, is landlocked and only borders one country
 12. Switzerland is one of three European countries who get more than 30% of their power from nuclear power plants
+
+### Specific plot-related issues
+- Belgium_Urban - No major issues
+    - Related picture not mentioned
+- Belize_Electricity 
+    - Probative chart - Rural/urban split (extraneous information) caused confusion
+- Black_Sea 
+    - Unrelated picture - not mentioned, may associate pyramids = Egypt = Red sea
+    - Nonprobative map - Should zoom out a bit
+    - Probative map - Russia not labeled as a country - use R generated map?
+    - Subject unrelated, Topic unrelated nonprobative map - cross-contamination with Egypt's shape. Use Mediterranean or Caspian instead?
+- Brazil_Size
+    - Related picture not mentioned 
+    - Unrelated picture - Association between Kangaroo and Australia (priming issue)
+- Egypt_Borders
+    - Related picture not mentioned
+    - Subject related, topic related nonprobative map - Sinai peninsula seen as all of Egypt
+- Paraguay_Landlocked - No major issues
+- Qatar_AgeDiscrepancy
+    - Related picture not mentioned
+    - Unrelated picture not mentioned
+- Russia_Coast - No major issues
+    - Unrelated picture not mentioned
+- SouthAfrica_Population
+    - Related picture not mentioned
+    - Unrelated picture not mentioned
+    - Probative map - Mauritus isn't salient enough - may need to label it? - also not mentioned
+- SouthAmerican_Hydro
+    - Unrelated picture not mentioned
+    - Subject related, topic related nonprobative map - bin hydro spatially to handle capacity overlap
+- Swaziland_Border
+    - Related picture not mentioned
+    - Subject related, topic related nonprobative map - need to zoom out and figure out how to make it obvious that it's a picture of a continent
+- Switzerland_Nuclear - No major issues
+
 
 # Truthiness Models
 
