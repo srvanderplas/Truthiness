@@ -61,6 +61,8 @@ knitr::include_graphics("picture_subject_related.jpg")
 #### Subject-unrelated
 
 ```{r echo = FALSE, out.width="60%"}
+source <- "https://upload.wikimedia.org/wikipedia/commons/6/63/Jungle_Ruins_%283325672691%29.jpg"
+tmp <- download.file(source, here::here(paste0("Facts/Single_Fact_Files/", opt, "/", "picture_subject_unrelated.jpg")), overwrite = T)
 tmp <- file.copy(
   here::here(paste0("Facts/Single_Fact_Files/", opt, "/", "picture_subject_unrelated.jpg")),
   here::here(sprintf("Facts/Pictures_all/%s-picture_subject_unrelated.jpg", opt)), 
@@ -68,6 +70,7 @@ tmp <- file.copy(
 knitr::include_graphics("picture_subject_unrelated.jpg")
 ```
 <!-- Source: https://upload.wikimedia.org/wikipedia/commons/0/0d/River-Nile-near-Aswan.jpg -->
+<!-- Fixed after pilot study to a non-Egypt picture to avoid suggesting the mediterranean/red sea. In the pilot, no one mentioned the picture. -->
 
 ### Charts
 
