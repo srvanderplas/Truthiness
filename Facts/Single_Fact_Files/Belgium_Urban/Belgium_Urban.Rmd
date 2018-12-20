@@ -45,13 +45,16 @@ world <- map_data("world")
 #### Subject-related
 
 ```{r echo = FALSE, out.width="60%"}
+source <- "https://www.goodfreephotos.com/cache/belgium/brussels/brussels-plaza-in-belgium-hdr.jpg"
+download.file(source, here::here(paste0("Facts/Single_Fact_Files/", opt, "/", "picture_subject_related.jpg")))
 tmp  <- file.copy(
   here::here(paste0("Facts/Single_Fact_Files/", opt, "/", "picture_subject_related.jpg")),
   here::here(sprintf("Facts/Pictures_all/%s-picture_subject_related.jpg", opt)), 
   overwrite = T)
 knitr::include_graphics("picture_subject_related.jpg")
 ```
-<!-- Source: https://upload.wikimedia.org/wikipedia/commons/d/d3/2007_07_Belgium_Brussels_06_%28cropped%29.jpg-->
+<!-- Pilot study Source: https://upload.wikimedia.org/wikipedia/commons/d/d3/2007_07_Belgium_Brussels_06_%28cropped%29.jpg-->
+<!-- Fixed after pilot study to find a more iconic view because no one mentioned the picture. -->
 
 #### Subject-unrelated
 
