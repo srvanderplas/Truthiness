@@ -45,3 +45,7 @@ done
 for i in $(find . -name "*.Rmd"); do
   sed -e 's|file.copy(|tmp <- file.copy(|g' $i > $i.tmp && mv $i.tmp $i
 done
+
+for i in $(find . -name "*.Rmd"); do
+  sed -e 's|tmp <- tmp|tmp |g' $i > $i.tmp && mv $i.tmp $i
+done
