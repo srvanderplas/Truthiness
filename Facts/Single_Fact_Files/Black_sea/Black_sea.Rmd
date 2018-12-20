@@ -6,6 +6,7 @@ output:
 ---
 
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}
+opt <- "Black_sea"
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 # source(here::here("worldfactbook.R"))
@@ -49,6 +50,10 @@ load(here::here("Facts/Data/SeaBorders.Rdata"))
 #### Subject-related
 
 ```{r echo = FALSE, out.width="60%"}
+tmp <- file.copy(
+  here::here(paste0("Facts/Single_Fact_Files/", opt, "/", "picture_subject_related.jpg")),
+  here::here(sprintf("Facts/Pictures_all/%s-picture_subject_related.jpg", opt)), 
+  overwrite = T)
 knitr::include_graphics("picture_subject_related.jpg")
 ```
 <!-- Source: https://upload.wikimedia.org/wikipedia/commons/5/5f/Zonguldak_58.jpg-->
@@ -56,6 +61,10 @@ knitr::include_graphics("picture_subject_related.jpg")
 #### Subject-unrelated
 
 ```{r echo = FALSE, out.width="60%"}
+tmp <- file.copy(
+  here::here(paste0("Facts/Single_Fact_Files/", opt, "/", "picture_subject_unrelated.jpg")),
+  here::here(sprintf("Facts/Pictures_all/%s-picture_subject_unrelated.jpg", opt)), 
+  overwrite = T)
 knitr::include_graphics("picture_subject_unrelated.jpg")
 ```
 <!-- Source: https://upload.wikimedia.org/wikipedia/commons/0/0d/River-Nile-near-Aswan.jpg -->
@@ -74,6 +83,8 @@ ggplot() +
   xlab("") + 
   scale_y_continuous("Salinity (g/kg)") + 
   scale_fill_discrete(guide = F) 
+ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt)), 
+       width = 6, height = 4, dpi = 300)
 ```
 
 #### Subject-unrelated, Topic-unrelated
@@ -100,6 +111,8 @@ areas %>%
   ylab("Area (square km)") + 
   scale_fill_manual(guide = F, values = c("steelblue1", "springgreen4")) + 
   ggtitle("Largest 10 Countries in Africa, by Total Area")
+ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt)), 
+       width = 6, height = 4, dpi = 300)
 ```
 
 #### Subject-related, Topic-related (Probative)
@@ -116,6 +129,8 @@ bs_boundaries %>%
   ylab("Length of Black Sea Coastline (km)") + 
   scale_fill_manual(guide = F, values = c("steelblue1", "springgreen4")) + 
   ggtitle("Black Sea Nations")
+ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt)), 
+       width = 6, height = 4, dpi = 300)
 ```
 
 #### Subject-unrelated, Topic-related 
@@ -132,6 +147,9 @@ rs_boundaries %>%
   ylab("Length of Red Sea Coastline (km)") + 
   scale_fill_manual(guide = F, values = c("steelblue1", "springgreen4")) + 
   ggtitle("Red Sea Nations")
+
+ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt)), 
+       width = 6, height = 4, dpi = 300)
 ```
 
 ### Maps
@@ -148,6 +166,10 @@ if (!file.exists(fname)) {
 ```
 
 ```{r echo = FALSE, out.width="60%"}
+tmp <- file.copy(
+  here::here(paste0("Facts/Single_Fact_Files/", opt, "/", "Subject_Related_Nonprobative_Map.jpg")),
+  here::here(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.jpg", opt)), 
+  overwrite = T)
 knitr::include_graphics("Subject_Related_Nonprobative_Map.jpg")
 ```
 
@@ -180,6 +202,8 @@ location %>% filter(simple == "Africa") %>%
   geom_text(aes(x = label_long, y = label_lat, label = name), data = africalabels, size = 2.5) + 
   coord_map(ylim = c(-35, 40)) + 
   theme_map()
+ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt)), 
+       width = 5, height = 5, dpi = 300)
 ```
 
 #### Subject-related, topic-related (Non-probative)
@@ -197,6 +221,8 @@ if (!file.exists(here::here("Facts/Data/BlackSeaMapTiles.Rdata"))) {
 blackseamaptiles %>% ggmap() + 
   theme_map() + 
   ggtitle("Black Sea Region")
+ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt)), 
+       width = 5, height = 5, dpi = 300)
 
 ```
 
@@ -217,6 +243,8 @@ if (!file.exists(here::here("Facts/Data/BlackSeaMapTiles.Rdata"))) {
 redseamaptiles %>% ggmap() + 
   theme_map() + 
   ggtitle("Red Sea Region")
+ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt)), 
+       width = 5, height = 5, dpi = 300)
 ```
 
 <!-- <img src="RedSeaMap.png" width = "60%"/> -->

@@ -6,6 +6,7 @@ output:
 ---
 
 ```{r setup, include=FALSE, echo = F, warning = F, message = F}
+opt <- "Belize_Electricity"
 knitr::opts_chunk$set(echo = F, warning = F, message = F, dpi = 300)
 
 # source(here::here("worldfactbook.R"))
@@ -35,6 +36,10 @@ library(tidyverse)
 #### Subject-related
 
 ```{r echo = FALSE, out.width="60%"}
+tmp <- file.copy(
+  here::here(paste0("Facts/Single_Fact_Files/", opt, "/", "picture_subject_related.jpg")),
+  here::here(sprintf("Facts/Pictures_all/%s-picture_subject_related.jpg", opt)), 
+  overwrite = T)
 knitr::include_graphics("picture_subject_related.jpg")
 ```
 <!-- Source: http://1.bp.blogspot.com/-p0OBR72bu6c/UH8kh7emMfI/AAAAAAAAEbo/DmN6K0qk4bc/s1600/028.JPG-->
@@ -42,6 +47,10 @@ knitr::include_graphics("picture_subject_related.jpg")
 #### Subject-unrelated
 
 ```{r echo = FALSE, out.width="60%"}
+tmp <- file.copy(
+  here::here(paste0("Facts/Single_Fact_Files/", opt, "/", "picture_subject_unrelated.jpg")),
+  here::here(sprintf("Facts/Pictures_all/%s-picture_subject_unrelated.jpg", opt)), 
+  overwrite = T)
 knitr::include_graphics("picture_subject_unrelated.jpg")
 ```
 <!-- Source: https://upload.wikimedia.org/wikipedia/commons/b/b4/African_lion%2C_Panthera_leo_at_Krugersdorp_Game_Park%2C_South_Africa_%2830479241254%29.jpg -->
@@ -62,6 +71,8 @@ ggplot() +
   scale_y_continuous("Population (Thousands)") + 
   scale_fill_discrete("Gender") + 
   theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.background = element_rect(fill = "transparent"))
+ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_unrel_nonprobative.png", opt)), 
+       width = 6, height = 4, dpi = 300)
 ```
 
 #### Subject-unrelated, Topic-unrelated
@@ -78,6 +89,9 @@ ggplot() +
   scale_y_continuous("Population (Millions)") + 
   scale_fill_discrete("Gender") + 
   theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.background = element_rect(fill = "transparent"))
+ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_unrel_nonprobative.png", opt)),
+       width = 6, height = 4, dpi = 300)
+
 ```
 
 #### Subject-related, Topic-related (Probative)
@@ -104,6 +118,8 @@ ggplot() +
   scale_fill_discrete("Population Type") + 
   theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.background = element_rect(fill = "transparent"),
         legend.direction = "horizontal")
+ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_rel_topic_rel_probative.png", opt)),
+       width = 6, height = 4, dpi = 300)
 ```
 
 #### Subject-unrelated, Topic-related 
@@ -133,6 +149,8 @@ ggplot() +
   scale_fill_discrete("Population Type") + 
   theme(legend.position = c(1, 1), legend.justification = c(1,1), legend.background = element_rect(fill = "transparent"),
         legend.direction = "horizontal")
+ggsave(here::here(sprintf("Facts/Pictures_all/%s-chart_subj_unrel_topic_rel_nonprobative.png", opt)),
+       width = 6, height = 4, dpi = 300)
 ```
 
 ### Maps
@@ -156,6 +174,8 @@ filter(location, simple == "Central America") %>%
   coord_map(projection = "ortho", orientation = c(12, -84, 0), xlim = c(-92.2, -77.2), ylim = c(7.22, 18.5)) +
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), legend.position = c(0, 0), legend.justification = c(0, 0), legend.background = element_rect(fill = "transparent")) +
   ggtitle("Central America")
+ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_unrel_nonprobative.png", opt)),
+       width = 6, height = 4, dpi = 300)
 ```
 
 <!-- <img src="BelizeMap.png" width="60%"/> -->
@@ -188,6 +208,8 @@ filter(location, name %in% countryList) %>%
   coord_map(projection = "ortho", orientation = c(1, 17, 0), xlim = c(26, 48), ylim = c(-7, 9)) +
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), legend.position = c(0, 0), legend.justification = c(0, 0), legend.background = element_rect(fill = "transparent")) +
   ggtitle("East Central Africa")
+ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_unrel_nonprobative.png", opt)),
+       width = 6, height = 4, dpi = 300)
 ```
 
 <!-- <img src="KenyaMap.png" width="60%"/> -->
@@ -213,6 +235,8 @@ filter(location, simple == "Central America") %>%
   coord_map(projection = "ortho", orientation = c(12, -84, 0), xlim = c(-92.2, -77.2), ylim = c(7.22, 18.5)) +
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), legend.position = c(0, 0), legend.justification = c(0, 0), legend.background = element_rect(fill = "transparent")) +
   ggtitle("Fossil Fuel Electrical Generation in Central America")
+ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_nonprobative.png", opt)),
+       width = 6, height = 4, dpi = 300)
 ```
 
 
@@ -246,6 +270,8 @@ filter(location, name %in% countryList) %>%
   coord_map(projection = "ortho", orientation = c(1, 17, 0), xlim = c(26, 48), ylim = c(-7, 9)) +
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), legend.position = c(1, 0), legend.justification = c(1, 0), legend.background = element_rect(fill = "transparent")) +
   ggtitle("Electrical Access in East Central Africa")
+ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_unrel_topic_rel_nonprobative.png", opt)),
+       width = 6, height = 4, dpi = 300)
 ```
 
 #### Subject-related, topic-related (probative)
@@ -269,4 +295,6 @@ filter(location, simple == "Central America") %>%
   coord_map(projection = "ortho", orientation = c(12, -84, 0), xlim = c(-92.2, -77.2), ylim = c(7.22, 18.5)) +
   theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), legend.position = c(0, 0), legend.justification = c(0, 0), legend.background = element_rect(fill = "transparent")) +
   ggtitle("Electrical Access in Central America")
+ggsave(here::here(sprintf("Facts/Pictures_all/%s-map_subj_rel_topic_rel_probative.png", opt)),
+       width = 6, height = 4, dpi = 300)
 ```
